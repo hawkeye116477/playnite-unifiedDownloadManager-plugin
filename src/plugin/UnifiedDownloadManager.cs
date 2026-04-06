@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerNS.Models;
 using CommonPlugin.Enums;
+using System.Linq;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -142,7 +143,46 @@ namespace UnifiedDownloadManagerNS
 
         public override void OnApplicationStopped(OnApplicationStoppedEventArgs args)
         {
-            // Add code to be executed when Playnite is shutting down.
+            bool downloadsChanged = false;
+            bool settingsChanged = false;
+            var settings = GetSettings();
+            if (settings != null)
+            {
+                if (settings.AutoRemoveCompletedDownloads != ClearCacheTime.Never)
+                {
+                    var nextRemovingCompletedDownloadsTime = settings.NextRemovingCompletedDownloadsTime;
+                    if (nextRemovingCompletedDownloadsTime != 0)
+                    {
+                        DateTimeOffset now = DateTime.UtcNow;
+                        if (now.ToUnixTimeSeconds() >= nextRemovingCompletedDownloadsTime)
+                        {
+                            foreach (var downloadItem in Manager.Downloads.ToList())
+                            {
+                                if (downloadItem.status == UnifiedDownloadStatus.Completed)
+                                {
+                                    Manager.Downloads.Remove(downloadItem);
+                                    downloadsChanged = true;
+                                }
+                            }
+                            settings.NextRemovingCompletedDownloadsTime = GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
+                            settingsChanged = true;
+                        }
+                    }
+                    else
+                    {
+                        settings.NextRemovingCompletedDownloadsTime = GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
+                        settingsChanged = true;
+                    }
+                }
+            }
+            if (settingsChanged)
+            {
+                SavePluginSettings(settings);
+            }
+            if (downloadsChanged)
+            {
+                SaveManagerData();
+            }
         }
 
 
