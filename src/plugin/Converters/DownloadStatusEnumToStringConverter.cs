@@ -14,22 +14,22 @@ namespace UnifiedDownloadManager.Converters
             switch (value)
             {
                 case UnifiedDownloadStatus.Queued:
-                    value = LocalizationManager.Instance.GetString(LOC.CommonDownloadQueued);
+                    value = LocalizationManager.Instance.GetString(LOC.UdmDownloadQueued);
                     break;
                 case UnifiedDownloadStatus.Running:
-                    value = LocalizationManager.Instance.GetString(LOC.CommonDownloadRunning);
+                    value = LocalizationManager.Instance.GetString(LOC.UdmDownloadRunning);
                     break;
                 case UnifiedDownloadStatus.Canceled:
-                    value = LocalizationManager.Instance.GetString(LOC.CommonDownloadCanceled);
+                    value = LocalizationManager.Instance.GetString(LOC.UdmDownloadCanceled);
                     break;
                 case UnifiedDownloadStatus.Paused:
-                    value = LocalizationManager.Instance.GetString(LOC.CommonDownloadPaused);
+                    value = LocalizationManager.Instance.GetString(LOC.UdmDownloadPaused);
                     break;
                 case UnifiedDownloadStatus.Completed:
-                    value = LocalizationManager.Instance.GetString(LOC.CommonDownloadCompleted);
+                    value = LocalizationManager.Instance.GetString(LOC.UdmDownloadCompleted);
                     break;
                 case UnifiedDownloadStatus.Error:
-                    value = LocalizationManager.Instance.GetString(LOC.CommonDownloadPaused);
+                    value = LocalizationManager.Instance.GetString(LOC.UdmDownloadPaused);
                     break;
             }
             return value;

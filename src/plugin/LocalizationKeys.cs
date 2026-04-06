@@ -6,157 +6,121 @@ namespace System
     public static class LOC
     {
         /// <summary>
-        /// Launch games in offline mode if possible
+        /// Downloaded
         /// </summary>
-        public const string LegendaryLaunchOffline = "legendary-launch-offline";
+        public const string UdmDownloaded = "udm-downloaded";
         /// <summary>
-        /// Enable offline mode
+        /// ETA:
         /// </summary>
-        public const string LegendaryEnableOfflineMode = "legendary-enable-offline-mode";
+        public const string UdmEta = "udm-eta";
         /// <summary>
-        /// Offline mode
+        /// Download Speed:
         /// </summary>
-        public const string LegendaryOfflineMode = "legendary-offline-mode";
+        public const string UdmDownloadSpeed = "udm-download-speed";
         /// <summary>
-        /// Preferred CDN
+        /// Disk Usage:
         /// </summary>
-        public const string LegendaryPreferredCdn = "legendary-preferred-cdn";
+        public const string UdmDiskSpeed = "udm-disk-speed";
         /// <summary>
-        /// Disable HTTPS (useful for CDNs e.g. LanCache)
+        /// Elapsed:
         /// </summary>
-        public const string LegendaryHttpOnlyDownload = "legendary-http-only-download";
+        public const string UdmElapsed = "udm-elapsed";
         /// <summary>
-        /// Enable reordering optimization
+        /// Pause
         /// </summary>
-        public const string LegendaryEnableReordering = "legendary-enable-reordering";
+        public const string UdmPauseDownload = "udm-pause-download";
         /// <summary>
-        /// This can reduce RAM requirements during download (may not work properly for some titles).
+        /// Resume
         /// </summary>
-        public const string LegendaryEnableReorderingToolTip = "legendary-enable-reordering-tool-tip";
+        public const string UdmResumeDownload = "udm-resume-download";
         /// <summary>
-        /// EOS Overlay
+        /// Paused
         /// </summary>
-        public const string LegendaryEosOverlay = "legendary-eos-overlay";
+        public const string UdmDownloadPaused = "udm-download-paused";
         /// <summary>
-        /// Ignore free space
+        /// Download Manager
         /// </summary>
-        public const string LegendaryIgnoreFreeSpace = "legendary-ignore-free-space";
+        public const string UdmDownloadManager = "udm-download-manager";
         /// <summary>
-        /// Do not abort if not enough free space is available.
+        /// Status
         /// </summary>
-        public const string LegendaryIgnoreFreeSpaceToolTip = "legendary-ignore-free-space-tool-tip";
+        public const string UdmDownloadStatus = "udm-download-status";
         /// <summary>
-        /// Current shared memory cache is smaller than required: {$currentMemory} &lt; {$requiredMemory}. Try to enable reordering optimization to reduce memory usage or increase maximum amount of shared memory.
+        /// Progress
         /// </summary>
-        public const string LegendaryMemoryError = "legendary-memory-error";
+        public const string UdmProgress = "udm-progress";
         /// <summary>
-        /// No linked {$companyAccount} account found! Link your account via your browser and try again.
+        /// Completed
         /// </summary>
-        public const string LegendaryNoLinkedAccount = "legendary-no-linked-account";
+        public const string UdmDownloadCompletedColumn = "udm-download-completed-column";
         /// <summary>
-        /// All games have already been activated on your {$companyAccount} account.
+        /// Queued
         /// </summary>
-        public const string LegendaryAllActivatedUbisoft = "legendary-all-activated-ubisoft";
+        public const string UdmDownloadQueued = "udm-download-queued";
         /// <summary>
-        /// Are you sure you want to activate games on your {$companyAccount} account?
+        /// Running
         /// </summary>
-        public const string LegendaryContinueActivation = "legendary-continue-activation";
+        public const string UdmDownloadRunning = "udm-download-running";
         /// <summary>
-        /// All games have been successfully activated on your {$companyAccount} account.
+        /// Canceled
         /// </summary>
-        public const string LegendaryGamesActivateSuccess = "legendary-games-activate-success";
+        public const string UdmDownloadCanceled = "udm-download-canceled";
         /// <summary>
-        /// Activate games
+        /// Completed
         /// </summary>
-        public const string LegendaryActivateGames = "legendary-activate-games";
+        public const string UdmDownloadCompleted = "udm-download-completed";
         /// <summary>
-        /// Failed to activate games on your {$companyAccount} account. Reason: {$reason}.
+        /// Remove entry
         /// </summary>
-        public const string LegendaryGamesActivateFailure = "legendary-games-activate-failure";
+        public const string UdmRemoveEntry = "udm-remove-entry";
         /// <summary>
-        /// No available EA Games.
+        /// Move entry to top
         /// </summary>
-        public const string LegendaryNoAvailableEaGames = "legendary-no-available-ea-games";
+        public const string UdmMoveEntryTop = "udm-move-entry-top";
         /// <summary>
-        /// Do you want to activate next game?
+        /// Move entry up
         /// </summary>
-        public const string LegendaryActivateNextConfirm = "legendary-activate-next-confirm";
+        public const string UdmMoveEntryUp = "udm-move-entry-up";
         /// <summary>
-        /// It is currently unknown which game requires activation, so an attempt will be made to activate everything. If EA App asks you to install game rather than to activate, then it has already been activated and the dialog can be dismissed.
+        /// Move entry down
         /// </summary>
-        public const string LegendaryEaNotice = "legendary-ea-notice";
+        public const string UdmMoveEntryDown = "udm-move-entry-down";
         /// <summary>
-        /// May the Force be with you, Padawan.
+        /// Move entry to bottom
         /// </summary>
-        public const string LegendaryStarWarsMessage = "legendary-star-wars-message";
+        public const string UdmMoveEntryBottom = "udm-move-entry-bottom";
         /// <summary>
-        /// Import games requiring {$thirdPartyLauncherName}
+        /// Remove completed downloads
         /// </summary>
-        public const string LegendaryImportThirdPartyLauncherGames = "legendary-import-third-party-launcher-games";
+        public const string UdmRemoveCompletedDownloads = "udm-remove-completed-downloads";
         /// <summary>
-        /// These types of games doesn't require Legendary and not all of them can be installed via it. It's recommended to go to Additional services =&gt; {$thirdPartyLauncherName} =&gt; Activate games, and then install them directly via {$thirdPartyLauncherName}.
+        /// Are you sure you want to remove all completed downloads from list?
         /// </summary>
-        public const string LegendaryThirdPartyLauncherImportWarn = "legendary-third-party-launcher-import-warn";
+        public const string UdmRemoveCompletedDownloadsConfirm = "udm-remove-completed-downloads-confirm";
         /// <summary>
-        /// {$count ->}<br/>
-		/// one: {$gameTitle} requires direct installation via {$thirdPartyLauncherName}.<br/>
-		/// other: Following games require direct installation via {$thirdPartyLauncherName}: {$gameTitle}.
+        /// Are you sure you want to remove selected entries from list?
         /// </summary>
-        public const string LegendaryRequiredInstallViaThirdPartyLauncherError = "legendary-required-install-via-third-party-launcher-error";
+        public const string UdmRemoveSelectedEntriesConfirm = "udm-remove-selected-entries-confirm";
         /// <summary>
-        /// Install prerequisites ({$prerequisiteName})
+        /// Select all entries
         /// </summary>
-        public const string LegendaryInstallPrerequisites = "legendary-install-prerequisites";
+        public const string UdmSelectAllEntries = "udm-select-all-entries";
         /// <summary>
-        /// {$count ->}<br/>
-		/// one: {$gameTitle} requires installation of {$thirdPartyLauncherName}. It's recommended to go to Plugin settings =&gt; Additional services =&gt; {$thirdPartyLauncherName} =&gt; Activate games, and then install it directly via {$thirdPartyLauncherName}.<br/>
-		/// other: Following games require installation of {$thirdPartyLauncherName}: {$gameTitle}. It's recommended to go to Plugin settings =&gt; Additional services =&gt; {$thirdPartyLauncherName} =&gt; Activate games, and then install them directly via {$thirdPartyLauncherName}.
+        /// Edit entry properties
         /// </summary>
-        public const string LegendaryRequiredInstallOfThirdPartyLauncher = "legendary-required-install-of-third-party-launcher";
+        public const string UdmEditSelectedDownloadProperties = "udm-edit-selected-download-properties";
         /// <summary>
-        /// Installing prerequisites ({$prerequisiteName})...
+        /// Open download directory
         /// </summary>
-        public const string LegendaryInstallingPrerequisites = "legendary-installing-prerequisites";
+        public const string UdmOpenDownloadDirectory = "udm-open-download-directory";
         /// <summary>
-        /// Authenticate using alternative method
+        /// The specified path does not exist.
         /// </summary>
-        public const string LegendaryAuthenticateAlternativeLabel = "legendary-authenticate-alternative-label";
+        public const string UdmPathNotExistsError = "udm-path-not-exists-error";
         /// <summary>
-        /// 1. Login to Epic Games Store in your web browser.
+        /// Are you sure you want to remove {$entryName} from list?
         /// </summary>
-        public const string LegendaryAlternativeAuthInstructionsFirst = "legendary-alternative-auth-instructions-first";
-        /// <summary>
-        /// 2. Navigate to authentication code URL, which is shown on the input box below.
-        /// </summary>
-        public const string LegendaryAlternativeAuthInstructionsSecond = "legendary-alternative-auth-instructions-second";
-        /// <summary>
-        /// 3. Paste your "authorizationCode" value in the input box below and click on the "authenticate" button.
-        /// </summary>
-        public const string LegendaryAlternativeAuthInstructionsThird = "legendary-alternative-auth-instructions-third";
-        /// <summary>
-        /// Disable
-        /// </summary>
-        public const string LegendaryDisable = "legendary-disable";
-        /// <summary>
-        /// Enable
-        /// </summary>
-        public const string LegendaryEnable = "legendary-enable";
-        /// <summary>
-        /// Failed to import game. Reason: {$reason}.
-        /// </summary>
-        public const string LegendaryGameImportFailure = "legendary-game-import-failure";
-        /// <summary>
-        /// Language (code in RFC 1766 format)
-        /// </summary>
-        public const string LegendaryLanguageCode = "legendary-language-code";
-        /// <summary>
-        /// Check all DLCs
-        /// </summary>
-        public const string LegendaryCheckAllDlcs = "legendary-check-all-dlcs";
-        /// <summary>
-        /// Additional services
-        /// </summary>
-        public const string LegendaryAdditionalServices = "legendary-additional-services";
+        public const string UdmRemoveEntryConfirm = "udm-remove-entry-confirm";
         /// <summary>
         /// Sync game saves to the cloud
         /// </summary>
@@ -366,26 +330,6 @@ namespace System
         /// </summary>
         public const string CommonAfterInstalling = "common-after-installing";
         /// <summary>
-        /// Downloaded
-        /// </summary>
-        public const string CommonDownloaded = "common-downloaded";
-        /// <summary>
-        /// ETA:
-        /// </summary>
-        public const string CommonEta = "common-eta";
-        /// <summary>
-        /// Download Speed:
-        /// </summary>
-        public const string CommonDownloadSpeed = "common-download-speed";
-        /// <summary>
-        /// Disk Usage:
-        /// </summary>
-        public const string CommonDiskSpeed = "common-disk-speed";
-        /// <summary>
-        /// Elapsed:
-        /// </summary>
-        public const string CommonElapsed = "common-elapsed";
-        /// <summary>
         /// Verifying...
         /// </summary>
         public const string CommonVerifying = "common-verifying";
@@ -409,18 +353,6 @@ namespace System
         /// Finishing repair...
         /// </summary>
         public const string CommonFinishingRepair = "common-finishing-repair";
-        /// <summary>
-        /// Pause
-        /// </summary>
-        public const string CommonPauseDownload = "common-pause-download";
-        /// <summary>
-        /// Resume
-        /// </summary>
-        public const string CommonResumeDownload = "common-resume-download";
-        /// <summary>
-        /// Paused
-        /// </summary>
-        public const string CommonDownloadPaused = "common-download-paused";
         /// <summary>
         /// Installation finished. Have fun.
         /// </summary>
@@ -450,77 +382,9 @@ namespace System
         /// </summary>
         public const string CommonImportFinished = "common-import-finished";
         /// <summary>
-        /// Download Manager
-        /// </summary>
-        public const string CommonDownloadManager = "common-download-manager";
-        /// <summary>
-        /// Status
-        /// </summary>
-        public const string CommonDownloadStatus = "common-download-status";
-        /// <summary>
-        /// Progress
-        /// </summary>
-        public const string CommonProgress = "common-progress";
-        /// <summary>
-        /// Completed
-        /// </summary>
-        public const string CommonDownloadCompletedColumn = "common-download-completed-column";
-        /// <summary>
-        /// Queued
-        /// </summary>
-        public const string CommonDownloadQueued = "common-download-queued";
-        /// <summary>
-        /// Running
-        /// </summary>
-        public const string CommonDownloadRunning = "common-download-running";
-        /// <summary>
-        /// Canceled
-        /// </summary>
-        public const string CommonDownloadCanceled = "common-download-canceled";
-        /// <summary>
-        /// Completed
-        /// </summary>
-        public const string CommonDownloadCompleted = "common-download-completed";
-        /// <summary>
-        /// Remove entry
-        /// </summary>
-        public const string CommonRemoveEntry = "common-remove-entry";
-        /// <summary>
         /// Are you sure you want to remove {$entryName} from list?
         /// </summary>
         public const string CommonRemoveEntryConfirm = "common-remove-entry-confirm";
-        /// <summary>
-        /// Move entry to top
-        /// </summary>
-        public const string CommonMoveEntryTop = "common-move-entry-top";
-        /// <summary>
-        /// Move entry up
-        /// </summary>
-        public const string CommonMoveEntryUp = "common-move-entry-up";
-        /// <summary>
-        /// Move entry down
-        /// </summary>
-        public const string CommonMoveEntryDown = "common-move-entry-down";
-        /// <summary>
-        /// Move entry to bottom
-        /// </summary>
-        public const string CommonMoveEntryBottom = "common-move-entry-bottom";
-        /// <summary>
-        /// Remove completed downloads
-        /// </summary>
-        public const string CommonRemoveCompletedDownloads = "common-remove-completed-downloads";
-        /// <summary>
-        /// Are you sure you want to remove all completed downloads from list?
-        /// </summary>
-        public const string CommonRemoveCompletedDownloadsConfirm = "common-remove-completed-downloads-confirm";
-        /// <summary>
-        /// Are you sure you want to remove selected entries from list?
-        /// </summary>
-        public const string CommonRemoveSelectedEntriesConfirm = "common-remove-selected-entries-confirm";
-        /// <summary>
-        /// Select all entries
-        /// </summary>
-        public const string CommonSelectAllEntries = "common-select-all-entries";
         /// <summary>
         /// Repair
         /// </summary>
@@ -561,18 +425,6 @@ namespace System
         /// Check the log files for more information.
         /// </summary>
         public const string CommonCheckLog = "common-check-log";
-        /// <summary>
-        /// Edit entry properties
-        /// </summary>
-        public const string CommonEditSelectedDownloadProperties = "common-edit-selected-download-properties";
-        /// <summary>
-        /// Open download directory
-        /// </summary>
-        public const string CommonOpenDownloadDirectory = "common-open-download-directory";
-        /// <summary>
-        /// The specified path does not exist.
-        /// </summary>
-        public const string CommonPathNotExistsError = "common-path-not-exists-error";
         /// <summary>
         /// Task
         /// </summary>
