@@ -38,7 +38,23 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
+        private bool _displayDownloadSpeedInBits { get; set; }
+        public bool DisplayDownloadSpeedInBits 
+        {
+            get => _displayDownloadSpeedInBits;
+            set
+            {
+                _displayDownloadSpeedInBits = value;
+                OnPropertyChanged(nameof(DisplayDownloadSpeedInBits));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public TaskManager()
+        {
+            DisplayDownloadSpeedInBits = UnifiedDownloadManager.GetSettings().DisplayDownloadSpeedInBits;
+        }
 
         protected void OnPropertyChanged(string name)
         {
@@ -114,7 +130,6 @@ namespace UnifiedDownloadManagerNS
             task.gracefulCts?.Dispose();
             var unifiedDownloadLogic = GetUnifiedDownloadLogic(task.pluginId);
             await unifiedDownloadLogic.OnCancelDownload(task);
-            await DoNextJobInQueue();
         }
 
         public async Task RemoveDownloadEntry(UnifiedDownload selectedEntry)

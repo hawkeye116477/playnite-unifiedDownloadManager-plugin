@@ -55,6 +55,7 @@ namespace UnifiedDownloadManagerNS
                     await _manager.CancelTask(cancelableDownload);
                 }
                 UnifiedDownloadManager.Instance.SaveManagerData();
+                await _manager.DoNextJobInQueue();
             }
         }
 

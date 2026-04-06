@@ -19,6 +19,7 @@
         <commoncon:LongToDateConverter x:Key="LongToDateConverter"/>
         <localcon:DownloadStatusEnumToStringConverter x:Key="DownloadStatusEnumToStringConverter"/>
         <localcon:DurationStringConverter x:Key="DurationConverter"/>
+        <localcon:SpeedConverter x:Key="SpeedConverter"/>
         <commoncon:NumericalSizeToStringConverter x:Key="NumericalSizeToStringConverter"/>
         <Style TargetType="Separator" BasedOn="{StaticResource HawkeyeSeparatorStyle}" />
         <Style TargetType="Border" BasedOn="{StaticResource HawkeyeBorderStyle}" />
@@ -52,7 +53,8 @@
             <TextBlock x:Name="DescriptionTB" HorizontalAlignment="Left" Margin="0,0,0,5" Grid.Row="2" VerticalAlignment="Bottom" Text="{Binding ActiveTask.activity, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Top">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDownloadSpeed}}"></TextBlock>
-                <TextBlock Name="DownloadSpeedTB" HorizontalAlignment="Left" Margin="5,0,30,0" Text="{Binding DownloadSpeedText,  UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Name="DownloadSpeedTB" HorizontalAlignment="Left" Margin="5,0,30,0" Text="{Binding ActiveTask.downloadSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}">
+                </TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" VerticalAlignment="Top">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmElapsed}}"></TextBlock>
@@ -60,7 +62,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Top">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDiskSpeed}}"></TextBlock>
-                <TextBlock Name="DiskSpeedTB" HorizontalAlignment="Left" Margin="5,0,30,0" Text="{Binding DiskText, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Name="DiskSpeedTB" HorizontalAlignment="Left" Margin="5,0,30,0" Text="{Binding ActiveTask.diskWriteSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}"></TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" VerticalAlignment="Top">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmEta}}"></TextBlock>

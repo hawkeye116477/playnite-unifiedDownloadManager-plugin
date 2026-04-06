@@ -183,5 +183,9 @@ namespace UnifiedDownloadManagerNS
             return clearingTime?.ToUnixTimeSeconds() ?? 0;
         }
 
+        public static UnifiedDownloadManagerSettings GetSettings()
+        {
+            return Instance.settings?.Settings ?? null;
+        }
     }
 }
