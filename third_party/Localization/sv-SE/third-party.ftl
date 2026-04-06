@@ -15,6 +15,7 @@ third-party-playnite-menu-shutdown-system = Stäng ner systemet
 third-party-playnite-menu-suspend-system = Sätt systemet i viloläge
 third-party-playnite-menu-hibernate-system = Viloläge
 third-party-playnite-settings-label = Inställningar
+third-party-playnite-settings-playtime-import-mode-never = Aldrig
 third-party-playnite-game-name-title = Titel
 third-party-playnite-source-label = Källkod
 third-party-playnite-download-error = Hämtings fel

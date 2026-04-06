@@ -15,6 +15,7 @@ third-party-playnite-menu-shutdown-system = Vypnúť systém
 third-party-playnite-menu-suspend-system = Uspať systém
 third-party-playnite-menu-hibernate-system = Hibernovať systém
 third-party-playnite-settings-label = Nastavenia
+third-party-playnite-settings-playtime-import-mode-never = Nikdy
 third-party-playnite-game-name-title = Meno
 third-party-playnite-source-label = Zdroj
 third-party-playnite-download-error = Chyba preberania

@@ -54,6 +54,7 @@
     <Compile Include="Converters\DownloadStatusEnumToStringConverter.cs" />
     <Compile Include="Converters\DurationStringConverter.cs" />
     <Compile Include="Converters\SpeedConverter.cs" />
+    <Compile Include="Enums\DownloadCompleteAction.cs" />
     <Compile Include="Models\UnifiedDownloadManagerData.cs" />
     <Compile Include="UnifiedDownloadManager.cs" />
     <Compile Include="UnifiedDownloadManagerSettings.cs" />
@@ -139,11 +140,8 @@
     <Compile Include="..\..\third_party\playnite-common-plugin\src\LocalizeExtension.cs">
       <Link>Shared\LocalizeExtension.cs</Link>
     </Compile>
-    <Compile Include="..\..\third_party\playnite-common-plugin\src\Enums\DownloadAction.cs">
-      <Link>Shared\Enums\DownloadAction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\third_party\playnite-common-plugin\src\Enums\DownloadCompleteAction.cs">
-      <Link>Shared\Enums\DownloadCompleteAction.cs</Link>
+    <Compile Include="..\..\third_party\playnite-common-plugin\src\Enums\ClearCacheTime.cs">
+      <Link>Shared\Enums\ClearCacheTime.cs</Link>
     </Compile>
     <Compile Include="..\..\third_party\playnite-common-plugin\src\Converters\LongToDateConverter.cs">
       <Link>Shared\Converters\LongToDateConverter.cs</Link>

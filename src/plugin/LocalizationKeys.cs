@@ -122,6 +122,38 @@ namespace System
         /// </summary>
         public const string UdmRemoveEntryConfirm = "udm-remove-entry-confirm";
         /// <summary>
+        /// Display desktop notifications about finished tasks
+        /// </summary>
+        public const string UdmDisplayDownloadTaskFinishedNotifications = "udm-display-download-task-finished-notifications";
+        /// <summary>
+        /// Display download speed in bits per second
+        /// </summary>
+        public const string UdmDisplayDownloadSpeedInBits = "udm-display-download-speed-in-bits";
+        /// <summary>
+        /// Action after download is complete
+        /// </summary>
+        public const string UdmAfterDownloadComplete = "udm-after-download-complete";
+        /// <summary>
+        /// Automatically remove completed downloads from list
+        /// </summary>
+        public const string UdmAutoRemoveCompletedDownloads = "udm-auto-remove-completed-downloads";
+        /// <summary>
+        /// System will be turned off soon...
+        /// </summary>
+        public const string UdmSystemShutdownCountdown = "udm-system-shutdown-countdown";
+        /// <summary>
+        /// System will be restarted soon...
+        /// </summary>
+        public const string UdmSystemRestartCountdown = "udm-system-restart-countdown";
+        /// <summary>
+        /// System will be hibernated soon...
+        /// </summary>
+        public const string UdmSystemHibernateCountdown = "udm-system-hibernate-countdown";
+        /// <summary>
+        /// System will be suspended soon...
+        /// </summary>
+        public const string UdmSystemSuspendCountdown = "udm-system-suspend-countdown";
+        /// <summary>
         /// Sync game saves to the cloud
         /// </summary>
         public const string CommonSyncGameSaves = "common-sync-game-saves";
@@ -270,14 +302,6 @@ namespace System
         /// </summary>
         public const string CommonDownloadSettings = "common-download-settings";
         /// <summary>
-        /// Display desktop notifications about finished tasks
-        /// </summary>
-        public const string CommonDisplayDownloadTaskFinishedNotifications = "common-display-download-task-finished-notifications";
-        /// <summary>
-        /// Display download speed in bits per second
-        /// </summary>
-        public const string CommonDisplayDownloadSpeedInBits = "common-display-download-speed-in-bits";
-        /// <summary>
         /// Enable unattended installation mode
         /// </summary>
         public const string CommonUnattendedInstall = "common-unattended-install";
@@ -297,30 +321,6 @@ namespace System
         /// Connection timeout (sec)
         /// </summary>
         public const string CommonConnectionTimeout = "common-connection-timeout";
-        /// <summary>
-        /// Action after download is complete
-        /// </summary>
-        public const string CommonAfterDownloadComplete = "common-after-download-complete";
-        /// <summary>
-        /// Automatically remove completed downloads from list
-        /// </summary>
-        public const string CommonAutoRemoveCompletedDownloads = "common-auto-remove-completed-downloads";
-        /// <summary>
-        /// System will be turned off soon...
-        /// </summary>
-        public const string CommonSystemShutdownCountdown = "common-system-shutdown-countdown";
-        /// <summary>
-        /// System will be restarted soon...
-        /// </summary>
-        public const string CommonSystemRestartCountdown = "common-system-restart-countdown";
-        /// <summary>
-        /// System will be hibernated soon...
-        /// </summary>
-        public const string CommonSystemHibernateCountdown = "common-system-hibernate-countdown";
-        /// <summary>
-        /// System will be suspended soon...
-        /// </summary>
-        public const string CommonSystemSuspendCountdown = "common-system-suspend-countdown";
         /// <summary>
         /// Space Available:
         /// </summary>
@@ -381,10 +381,6 @@ namespace System
         /// Import finished. Have fun.
         /// </summary>
         public const string CommonImportFinished = "common-import-finished";
-        /// <summary>
-        /// Are you sure you want to remove {$entryName} from list?
-        /// </summary>
-        public const string CommonRemoveEntryConfirm = "common-remove-entry-confirm";
         /// <summary>
         /// Repair
         /// </summary>
@@ -687,6 +683,10 @@ namespace System
         /// </summary>
         public const string ThirdPartyPlayniteSettingsLabel = "third-party-playnite-settings-label";
         /// <summary>
+        /// Never
+        /// </summary>
+        public const string ThirdPartyPlayniteSettingsPlaytimeImportModeNever = "third-party-playnite-settings-playtime-import-mode-never";
+        /// <summary>
         /// Name
         /// </summary>
         public const string ThirdPartyPlayniteGameNameTitle = "third-party-playnite-game-name-title";
@@ -706,5 +706,13 @@ namespace System
         /// Don't Show Again
         /// </summary>
         public const string ThirdPartyPlayniteDontShowAgainTitle = "third-party-playnite-dont-show-again-title";
+        /// <summary>
+        /// Once a day
+        /// </summary>
+        public const string ThirdPartyPlayniteOptionOnceADay = "third-party-playnite-option-once-a-day";
+        /// <summary>
+        /// Once a week
+        /// </summary>
+        public const string ThirdPartyPlayniteOptionOnceAWeek = "third-party-playnite-option-once-a-week";
     }
 }

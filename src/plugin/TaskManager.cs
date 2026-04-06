@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnifiedDownloadManagerApiNS;
 
-namespace UnifiedDownloadManager
+namespace UnifiedDownloadManagerNS
 {
     public class TaskManager : INotifyPropertyChanged, IUnifiedTaskManager
     {

@@ -15,6 +15,7 @@ third-party-playnite-menu-shutdown-system = Închidere Sistem
 third-party-playnite-menu-suspend-system = Suspendare Sistem
 third-party-playnite-menu-hibernate-system = Hibernează Sistemul
 third-party-playnite-settings-label = Setări
+third-party-playnite-settings-playtime-import-mode-never = Niciodată
 third-party-playnite-game-name-title = Nume
 third-party-playnite-source-label = Sursă
 third-party-playnite-download-error = Eroare la descărcare

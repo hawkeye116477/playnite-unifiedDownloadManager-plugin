@@ -15,6 +15,7 @@ third-party-playnite-menu-shutdown-system = Išjungti sistemą
 third-party-playnite-menu-suspend-system = Užmigdyti sistemą
 third-party-playnite-menu-hibernate-system = Sistemą užmigdyti įrašius
 third-party-playnite-settings-label = Nustatymai
+third-party-playnite-settings-playtime-import-mode-never = Niekada
 third-party-playnite-game-name-title = Pavadinimas
 third-party-playnite-source-label = Šaltinis
 third-party-playnite-download-error = Atsiuntimo klaida

@@ -1,11 +1,10 @@
 ﻿using CommonPlugin;
-using CommonPlugin.Enums;
 using System;
 using System.Globalization;
 using System.Windows.Data;
 using UnifiedDownloadManagerApiNS;
 
-namespace UnifiedDownloadManager.Converters
+namespace UnifiedDownloadManagerNS.Converters
 {
     public class DownloadStatusEnumToStringConverter : IValueConverter
     {

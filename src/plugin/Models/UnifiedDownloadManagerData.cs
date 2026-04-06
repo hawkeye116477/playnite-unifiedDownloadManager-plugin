@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using UnifiedDownloadManagerApiNS;
 
-namespace UnifiedDownloadManager.Models
+namespace UnifiedDownloadManagerNS.Models
 {
     public class UnifiedDownloadManagerData
     {

@@ -26,3 +26,5 @@ udm-edit-selected-download-properties = Eintragseigenschaften bearbeiten
 udm-open-download-directory = Download-Verzeichnis öffnen
 udm-path-not-exists-error = Der angegebene Pfad existiert nicht.
 udm-remove-entry-confirm = Sind Sie sicher, dass Sie { $entryName } aus der Liste entfernen möchten?
+udm-display-download-task-finished-notifications = Desktop-Benachrichtigungen über abgeschlossene Aufgaben anzeigen
+udm-display-download-speed-in-bits = Downloadgeschwindigkeit in Bits pro Sekunde anzeigen

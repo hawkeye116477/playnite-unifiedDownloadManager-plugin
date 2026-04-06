@@ -1,4 +1,4 @@
-﻿namespace CommonPlugin.Enums
+﻿namespace UnifiedDownloadManagerNS.Enums
 {
     public enum DownloadCompleteAction
     {

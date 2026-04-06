@@ -14,3 +14,6 @@ LOCAddedLabel
 LOCDontShowAgainTitle
 LOCDownloadError
 LOCSourceLabel
+LOCOptionOnceADay
+LOCOptionOnceAWeek
+LOCSettingsPlaytimeImportModeNever

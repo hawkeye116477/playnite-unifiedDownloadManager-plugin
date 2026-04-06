@@ -4,21 +4,18 @@ using Playnite.Common;
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using Playnite.SDK.Events;
-using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using UnifiedDownloadManagerApiNS;
-using UnifiedDownloadManager.Models;
+using UnifiedDownloadManagerNS.Models;
+using CommonPlugin.Enums;
 
-namespace UnifiedDownloadManager
+namespace UnifiedDownloadManagerNS
 {
     public class UnifiedDownloadManager : GenericPlugin, IUnifiedDownloadManager
     {
@@ -138,31 +135,6 @@ namespace UnifiedDownloadManager
             yield return downloadManagerSidebarItem;
         }
 
-        public override void OnGameInstalled(OnGameInstalledEventArgs args)
-        {
-            // Add code to be executed when game is finished installing.
-        }
-
-        public override void OnGameStarted(OnGameStartedEventArgs args)
-        {
-            // Add code to be executed when game is started running.
-        }
-
-        public override void OnGameStarting(OnGameStartingEventArgs args)
-        {
-            // Add code to be executed when game is preparing to be started.
-        }
-
-        public override void OnGameStopped(OnGameStoppedEventArgs args)
-        {
-            // Add code to be executed when game is preparing to be started.
-        }
-
-        public override void OnGameUninstalled(OnGameUninstalledEventArgs args)
-        {
-            // Add code to be executed when game is uninstalled.
-        }
-
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
             // Add code to be executed when Playnite is initialized.
@@ -173,10 +145,6 @@ namespace UnifiedDownloadManager
             // Add code to be executed when Playnite is shutting down.
         }
 
-        public override void OnLibraryUpdated(OnLibraryUpdatedEventArgs args)
-        {
-            // Add code to be executed when library is updated.
-        }
 
         public override ISettings GetSettings(bool firstRunSettings)
         {
@@ -187,5 +155,33 @@ namespace UnifiedDownloadManager
         {
             return new UnifiedDownloadManagerSettingsView();
         }
+
+        public static long GetNextClearingTime(ClearCacheTime frequency)
+        {
+            DateTimeOffset? clearingTime = null;
+            DateTimeOffset now = DateTime.UtcNow;
+            switch (frequency)
+            {
+                case ClearCacheTime.Day:
+                    clearingTime = now.AddDays(1);
+                    break;
+                case ClearCacheTime.Week:
+                    clearingTime = now.AddDays(7);
+                    break;
+                case ClearCacheTime.Month:
+                    clearingTime = now.AddMonths(1);
+                    break;
+                case ClearCacheTime.ThreeMonths:
+                    clearingTime = now.AddMonths(3);
+                    break;
+                case ClearCacheTime.SixMonths:
+                    clearingTime = now.AddMonths(6);
+                    break;
+                default:
+                    break;
+            }
+            return clearingTime?.ToUnixTimeSeconds() ?? 0;
+        }
+
     }
 }

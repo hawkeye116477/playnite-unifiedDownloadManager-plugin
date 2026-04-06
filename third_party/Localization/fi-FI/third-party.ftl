@@ -15,6 +15,7 @@ third-party-playnite-menu-shutdown-system = Sammuta järjestelmä
 third-party-playnite-menu-suspend-system = Aseta järjestelmä valmiustilaan
 third-party-playnite-menu-hibernate-system = Aseta järjestelmä horrostilaan
 third-party-playnite-settings-label = Asetukset
+third-party-playnite-settings-playtime-import-mode-never = Ei koskaan
 third-party-playnite-game-name-title = Nimi
 third-party-playnite-source-label = Lähde
 third-party-playnite-download-error = Latausvirhe

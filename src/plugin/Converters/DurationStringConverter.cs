@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace UnifiedDownloadManager.Converters
+namespace UnifiedDownloadManagerNS.Converters
 {
     public class DurationStringConverter : IValueConverter
     {

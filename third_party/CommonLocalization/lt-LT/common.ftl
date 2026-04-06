@@ -7,7 +7,6 @@ common-space-available = Yra vietos:
 common-installation-finished = Diegimas baigtas. Smagaus.
 common-importing-game = Importuojama { $gameTitle }...
 common-import-finished = Importas baigtas. Smagaus.
-common-remove-entry-confirm = Ar tikrai norite pašalinti { $entryName } iš sąrašo?
 common-repair = Sutaisyti
 common-advanced-options = Išplėstinės Parinktys
 common-cache = Podėlis

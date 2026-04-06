@@ -1,25 +1,18 @@
-﻿using Playnite.SDK;
+﻿using CommonPlugin.Enums;
+using Playnite.SDK;
 using Playnite.SDK.Data;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnifiedDownloadManagerNS.Enums;
 
-namespace UnifiedDownloadManager
+namespace UnifiedDownloadManagerNS
 {
     public class UnifiedDownloadManagerSettings : ObservableObject
     {
-        private string option1 = string.Empty;
-        private bool option2 = false;
-        private bool optionThatWontBeSaved = false;
-
-        public string Option1 { get => option1; set => SetValue(ref option1, value); }
-        public bool Option2 { get => option2; set => SetValue(ref option2, value); }
-        // Playnite serializes settings object to a JSON object and saves it as text file.
-        // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
-        [DontSerialize]
-        public bool OptionThatWontBeSaved { get => optionThatWontBeSaved; set => SetValue(ref optionThatWontBeSaved, value); }
+        public bool DisplayDownloadTaskFinishedNotifications { get; set; } = true;
+        public bool DisplayDownloadSpeedInBits { get; set; } = false;
+        public DownloadCompleteAction DoActionAfterDownloadComplete { get; set; } = DownloadCompleteAction.Nothing;
+        public ClearCacheTime AutoRemoveCompletedDownloads { get; set; } = ClearCacheTime.Never;
+        public long NextRemovingCompletedDownloadsTime { get; set; } = 0;
     }
 
     public class UnifiedDownloadManagerSettingsViewModel : ObservableObject, ISettings
@@ -72,6 +65,18 @@ namespace UnifiedDownloadManager
 
         public void EndEdit()
         {
+            if (editingClone.AutoRemoveCompletedDownloads != Settings.AutoRemoveCompletedDownloads)
+            {
+                if (Settings.AutoRemoveCompletedDownloads != ClearCacheTime.Never)
+                {
+                    Settings.NextRemovingCompletedDownloadsTime = UnifiedDownloadManager.GetNextClearingTime(Settings.AutoRemoveCompletedDownloads);
+                }
+                else
+                {
+                    Settings.NextRemovingCompletedDownloadsTime = 0;
+                }
+            }
+
             // Code executed when user decides to confirm changes made since BeginEdit was called.
             // This method should save settings made to Option1 and Option2.
             plugin.SavePluginSettings(Settings);
