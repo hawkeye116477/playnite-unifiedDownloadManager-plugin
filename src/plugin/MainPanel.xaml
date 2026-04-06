@@ -111,6 +111,9 @@
                     Margin="5,0,0,0" IsEnabled="False" Click="OpenDownloadDirectoryBtn_Click" />
                 <ToggleButton x:Name="FilterDownloadBtn" Content="&#xef29;" FontFamily="{DynamicResource FontIcoFont}" ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteFilters}}"
                     Margin="5,0,0,0" />
+                <Separator Margin="10,0,5,0" />
+                <Button x:Name="OpenPluginSettingsBtn" Content="&#xefb0;" FontFamily="{DynamicResource FontIcoFont}"
+                    Margin="5,0,0,0" IsEnabled="True" Click="OpenPluginSettingsBtn_Click" ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSettingsLabel}}" />
             </StackPanel>
             <Separator Margin="0,5,0,5"></Separator>
             <Popup Name="FilterPop" HorizontalAlignment="Left" VerticalAlignment="Top" IsOpen="False" Placement="MousePoint" AllowsTransparency="False" AllowDrop="False" Margin="0" HorizontalOffset="20">

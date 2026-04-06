@@ -285,5 +285,10 @@ namespace UnifiedDownloadManagerNS
                 await _manager.EnqueueTasks(downloadsToResume, true);
             }
         }
+
+        private void OpenPluginSettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            playniteAPI.MainView.OpenPluginSettings(UnifiedDownloadManager.Instance.Id);
+        }
     }
 }
