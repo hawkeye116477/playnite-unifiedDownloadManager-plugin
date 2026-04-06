@@ -22,9 +22,15 @@ namespace CommonPlugin
 
         public static string FormatSize(double size, string unit = "B", bool toBits = false)
         {
+            var logger = LogManager.GetLogger();
             if (toBits)
             {
                 size *= 8;
+            }
+            if (size < 0)
+            {
+                logger.Warn($"Invalid size: {size}");
+                size = 0;
             }
             var finalSize = ByteSize.Parse($"{size} {unit}").ToBinaryString();
             if (toBits)
@@ -36,6 +42,12 @@ namespace CommonPlugin
 
         public static double ToBytes(double size, string unit)
         {
+            var logger = LogManager.GetLogger();
+            if (size < 0)
+            {
+                logger.Warn($"Invalid size: {size}");
+                size = 0;
+            }
             return ByteSize.Parse($"{size} {unit}").Bytes;
         }
 
@@ -57,10 +69,11 @@ namespace CommonPlugin
             }
         }
 
-        public static bool IsDirectoryWritable(string folderPath, string permissionErrorString)
+        public static bool IsDirectoryWritable(string folderPath, string permissionErrorString = "")
         {
             try
             {
+                Directory.CreateDirectory(folderPath);
                 using (FileStream fs = File.Create(Path.Combine(folderPath, Path.GetRandomFileName()),
                                                    1,
                                                    FileOptions.DeleteOnClose)
@@ -70,8 +83,11 @@ namespace CommonPlugin
             }
             catch (UnauthorizedAccessException)
             {
-                var playniteAPI = API.Instance;
-                playniteAPI.Dialogs.ShowErrorMessage(LocalizationManager.Instance.GetString(permissionErrorString));
+                if (permissionErrorString != "")
+                {
+                    var playniteAPI = API.Instance;
+                    playniteAPI.Dialogs.ShowErrorMessage(LocalizationManager.Instance.GetString(permissionErrorString));
+                }
                 return false;
             }
             catch (Exception ex)

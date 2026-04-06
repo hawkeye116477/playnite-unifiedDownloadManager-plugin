@@ -7,10 +7,5 @@
 third-party-playnite-filter-active-label = පෙරහන ක්‍රියාත්මකයි
 third-party-playnite-filters = පෙරහන්
 third-party-playnite-ok-label = හරි
-third-party-playnite-save-label = සුරකින්න
 third-party-playnite-cancel-label = අවලංගු කරන්න
-third-party-playnite-yes-label = ඔව්
-third-party-playnite-no-label = නැහැ
-third-party-playnite-downloading-label = බාගත වෙමින්…
-third-party-playnite-loading-label = පූරණය වෙමින්…
 third-party-playnite-settings-label = සැකසුම්

@@ -51,7 +51,7 @@ main_path = pn(script_path + "/..")
 
 third_party_loc_file = pn(
     pj(main_path, "third_party", "Localization", "en-US", "third-party.ftl"))
-loc_keys_file = pj(main_path, "src", "LocalizationKeys.cs")
+loc_keys_file = pj(main_path, "src", "plugin", "LocalizationKeys.cs")
 
 loc_keys_file_content = '''\
 ///
@@ -66,7 +66,7 @@ namespace System
 
 x_ns = "{http://schemas.microsoft.com/winfx/2006/xaml}"
 common_loc_path = pj(main_path, "third_party", "CommonLocalization", "en-US")
-loc_path = pn(pj(main_path, "src", "Localization", "en-US"))
+loc_path = pn(pj(main_path, "src", "plugin", "Localization", "en-US"))
 ftl_files = list(Path(loc_path).rglob('*.ftl')) + list(Path(common_loc_path).rglob('*.ftl'))
 ftl_files.append(third_party_loc_file)
 

@@ -799,22 +799,6 @@ namespace System
         /// </summary>
         public const string ThirdPartyPlayniteFilters = "third-party-playnite-filters";
         /// <summary>
-        /// Cannot install game: {$var0}
-        /// </summary>
-        public const string ThirdPartyPlayniteGameInstallError = "third-party-playnite-game-install-error";
-        /// <summary>
-        /// Cannot un-install game: {$var0}
-        /// </summary>
-        public const string ThirdPartyPlayniteGameUninstallError = "third-party-playnite-game-uninstall-error";
-        /// <summary>
-        /// Disabled
-        /// </summary>
-        public const string ThirdPartyPlayniteDisabledTitle = "third-party-playnite-disabled-title";
-        /// <summary>
-        /// Version
-        /// </summary>
-        public const string ThirdPartyPlayniteVersionLabel = "third-party-playnite-version-label";
-        /// <summary>
         /// Install Size
         /// </summary>
         public const string ThirdPartyPlayniteInstallSizeLabel = "third-party-playnite-install-size-label";
@@ -827,37 +811,9 @@ namespace System
         /// </summary>
         public const string ThirdPartyPlayniteOkLabel = "third-party-playnite-ok-label";
         /// <summary>
-        /// Save
-        /// </summary>
-        public const string ThirdPartyPlayniteSaveLabel = "third-party-playnite-save-label";
-        /// <summary>
         /// Cancel
         /// </summary>
         public const string ThirdPartyPlayniteCancelLabel = "third-party-playnite-cancel-label";
-        /// <summary>
-        /// Yes
-        /// </summary>
-        public const string ThirdPartyPlayniteYesLabel = "third-party-playnite-yes-label";
-        /// <summary>
-        /// No
-        /// </summary>
-        public const string ThirdPartyPlayniteNoLabel = "third-party-playnite-no-label";
-        /// <summary>
-        /// Downloading…
-        /// </summary>
-        public const string ThirdPartyPlayniteDownloadingLabel = "third-party-playnite-downloading-label";
-        /// <summary>
-        /// Loading…
-        /// </summary>
-        public const string ThirdPartyPlayniteLoadingLabel = "third-party-playnite-loading-label";
-        /// <summary>
-        /// Download
-        /// </summary>
-        public const string ThirdPartyPlayniteDownloadLabel = "third-party-playnite-download-label";
-        /// <summary>
-        /// Downloading metadata…
-        /// </summary>
-        public const string ThirdPartyPlayniteProgressMetadata = "third-party-playnite-progress-metadata";
         /// <summary>
         /// Restart System
         /// </summary>
@@ -879,128 +835,24 @@ namespace System
         /// </summary>
         public const string ThirdPartyPlayniteSettingsLabel = "third-party-playnite-settings-label";
         /// <summary>
-        /// General
-        /// </summary>
-        public const string ThirdPartyPlayniteSettingsGeneralLabel = "third-party-playnite-settings-general-label";
-        /// <summary>
-        /// Advanced
-        /// </summary>
-        public const string ThirdPartyPlayniteSettingsAdvancedLabel = "third-party-playnite-settings-advanced-label";
-        /// <summary>
-        /// Clear Cache?
-        /// </summary>
-        public const string ThirdPartyPlayniteSettingsClearCacheTitle = "third-party-playnite-settings-clear-cache-title";
-        /// <summary>
-        /// Never
-        /// </summary>
-        public const string ThirdPartyPlayniteSettingsPlaytimeImportModeNever = "third-party-playnite-settings-playtime-import-mode-never";
-        /// <summary>
-        /// Authentification required
-        /// </summary>
-        public const string ThirdPartyPlayniteLoginRequired = "third-party-playnite-login-required";
-        /// <summary>
-        /// Executable
-        /// </summary>
-        public const string ThirdPartyPlayniteExecutableTitle = "third-party-playnite-executable-title";
-        /// <summary>
         /// Name
         /// </summary>
         public const string ThirdPartyPlayniteGameNameTitle = "third-party-playnite-game-name-title";
-        /// <summary>
-        /// Installation Folder
-        /// </summary>
-        public const string ThirdPartyPlayniteGameInstallDirTitle = "third-party-playnite-game-install-dir-title";
         /// <summary>
         /// Source
         /// </summary>
         public const string ThirdPartyPlayniteSourceLabel = "third-party-playnite-source-label";
         /// <summary>
-        /// Failed to import games from {$var0}.
-        /// </summary>
-        public const string ThirdPartyPlayniteLibraryImportError = "third-party-playnite-library-import-error";
-        /// <summary>
-        /// Failed to download metadata: {$var0}
-        /// </summary>
-        public const string ThirdPartyPlayniteMetadataDownloadError = "third-party-playnite-metadata-download-error";
-        /// <summary>
         /// Download Error
         /// </summary>
         public const string ThirdPartyPlayniteDownloadError = "third-party-playnite-download-error";
-        /// <summary>
-        /// Uninstalling
-        /// </summary>
-        public const string ThirdPartyPlayniteUninstalling = "third-party-playnite-uninstalling";
         /// <summary>
         /// Do nothing
         /// </summary>
         public const string ThirdPartyPlayniteDoNothing = "third-party-playnite-do-nothing";
         /// <summary>
-        /// Close
-        /// </summary>
-        public const string ThirdPartyPlayniteClose = "third-party-playnite-close";
-        /// <summary>
-        /// Update Available
-        /// </summary>
-        public const string ThirdPartyPlayniteUpdaterWindowTitle = "third-party-playnite-updater-window-title";
-        /// <summary>
-        /// Download and Install Update
-        /// </summary>
-        public const string ThirdPartyPlayniteUpdaterInstallUpdate = "third-party-playnite-updater-install-update";
-        /// <summary>
-        /// Check for Updates
-        /// </summary>
-        public const string ThirdPartyPlayniteCheckForUpdates = "third-party-playnite-check-for-updates";
-        /// <summary>
-        /// Failed to check for new version.
-        /// </summary>
-        public const string ThirdPartyPlayniteUpdateCheckFailMessage = "third-party-playnite-update-check-fail-message";
-        /// <summary>
-        /// Install
-        /// </summary>
-        public const string ThirdPartyPlayniteInstallGame = "third-party-playnite-install-game";
-        /// <summary>
-        /// Uninstall
-        /// </summary>
-        public const string ThirdPartyPlayniteUninstallGame = "third-party-playnite-uninstall-game";
-        /// <summary>
         /// Don't Show Again
         /// </summary>
         public const string ThirdPartyPlayniteDontShowAgainTitle = "third-party-playnite-dont-show-again-title";
-        /// <summary>
-        /// Forum
-        /// </summary>
-        public const string ThirdPartyPlayniteCommonLinksForum = "third-party-playnite-common-links-forum";
-        /// <summary>
-        /// Store Page
-        /// </summary>
-        public const string ThirdPartyPlayniteCommonLinksStorePage = "third-party-playnite-common-links-store-page";
-        /// <summary>
-        /// Updates
-        /// </summary>
-        public const string ThirdPartyPlayniteExtensionsUpdates = "third-party-playnite-extensions-updates";
-        /// <summary>
-        /// Select file…
-        /// </summary>
-        public const string ThirdPartyPlayniteSelectFileTooltip = "third-party-playnite-select-file-tooltip";
-        /// <summary>
-        /// Select folder…
-        /// </summary>
-        public const string ThirdPartyPlayniteSelectDirectoryTooltip = "third-party-playnite-select-directory-tooltip";
-        /// <summary>
-        /// Only manually
-        /// </summary>
-        public const string ThirdPartyPlayniteOptionOnlyManually = "third-party-playnite-option-only-manually";
-        /// <summary>
-        /// Once a day
-        /// </summary>
-        public const string ThirdPartyPlayniteOptionOnceADay = "third-party-playnite-option-once-a-day";
-        /// <summary>
-        /// Once a week
-        /// </summary>
-        public const string ThirdPartyPlayniteOptionOnceAWeek = "third-party-playnite-option-once-a-week";
-        /// <summary>
-        /// Open
-        /// </summary>
-        public const string ThirdPartyPlayniteOpen = "third-party-playnite-open";
     }
 }

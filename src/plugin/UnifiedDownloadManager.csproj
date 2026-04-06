@@ -101,6 +101,10 @@
     <None Include="$(LocalAppData)\Playnite\Templates\Themes\Fonts\icofont.ttf">
       <Link>Fonts/icofont.ttf</Link>
     </None>
+    <None Include="..\..\LICENSE">
+      <Link>LICENSE</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Page Include="UnifiedDownloadManagerSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,12 +154,6 @@
     <Compile Include="..\..\third_party\playnite-common-plugin\src\CommonHelpers.cs">
       <Link>Shared\CommonHelpers.cs</Link>
     </Compile>
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\Playnite\Common\Xaml.cs">
-      <Link>Shared\Playnite\Xaml.cs</Link>
-    </Compile>
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\extensions\StringExtensions.cs">
-      <Link>Shared\Playnite\StringExtensions.cs</Link>
-    </Compile>
     <None Include="..\..\third_party\playnite-common-plugin\src\Resources\FullScreenStyles.xaml">
       <Link>Shared\Resources\FullScreenStyles.xaml</Link>
       <SubType>Designer</SubType>
@@ -173,6 +171,18 @@
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\FileSystem.cs">
       <Link>Shared\Playnite\FileSystem.cs</Link>
     </Compile>
+    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\Paths.cs">
+      <Link>Shared\Playnite\Paths.cs</Link>
+    </Compile>
+    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\ProcessStarter.cs">
+      <Link>Shared\Playnite\ProcessStarter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\extensions\StringExtensions.cs">
+      <Link>Shared\Playnite\StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\Playnite\Common\Xaml.cs">
+      <Link>Shared\Playnite\Xaml.cs</Link>
+    </Compile>
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Fileapi.cs">
       <Link>Shared\Playnite\Native\Fileapi.cs</Link>
     </Compile>
@@ -181,12 +191,6 @@
     </Compile>
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Ntdll.cs">
       <Link>Shared\Playnite\Native\Ntdll.cs</Link>
-    </Compile>
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\Paths.cs">
-      <Link>Shared\Playnite\Paths.cs</Link>
-    </Compile>
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\ProcessStarter.cs">
-      <Link>Shared\Playnite\ProcessStarter.cs</Link>
     </Compile>
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Processthreadsapi.cs">
       <Link>Shared\Playnite\Native\Processthreadsapi.cs</Link>
@@ -200,8 +204,8 @@
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Windef.cs">
       <Link>Shared\Playnite\Native\Windef.cs</Link>
     </Compile>
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\winuser.cs">
-      <Link>Shared\Playnite\Native\winuser.cs</Link>
+    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Winuser.cs">
+      <Link>Shared\Playnite\Native\Winuser.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
