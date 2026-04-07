@@ -7,7 +7,7 @@
     <ProjectGuid>{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnifiedDownloadManager</RootNamespace>
+    <RootNamespace>UnifiedDownloadManagerNS</RootNamespace>
     <AssemblyName>UnifiedDownloadManager</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -37,7 +37,9 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,6 +58,9 @@
     <Compile Include="Converters\SpeedConverter.cs" />
     <Compile Include="Enums\DownloadCompleteAction.cs" />
     <Compile Include="Models\UnifiedDownloadManagerData.cs" />
+    <Compile Include="UnifiedDownloadCompleteActionView.xaml.cs">
+      <DependentUpon>UnifiedDownloadCompleteActionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UnifiedDownloadManager.cs" />
     <Compile Include="UnifiedDownloadManagerSettings.cs" />
     <Compile Include="LocalizationKeys.cs" />
@@ -106,13 +111,17 @@
       <Link>LICENSE</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Include="UnifiedDownloadCompleteActionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UnifiedDownloadManagerSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon.png">
+    <None Include="Resources\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -166,6 +175,9 @@
       <TargetPath>Resources\NormalStyles.xaml</TargetPath>
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\WindowsNotifyIconManager.cs">
+      <Link>Shared\Playnite\WindowsNotifyIconManager.cs</Link>
+    </Compile>
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\FileSystem.cs">
       <Link>Shared\Playnite\FileSystem.cs</Link>
     </Compile>
@@ -189,6 +201,9 @@
     </Compile>
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Ntdll.cs">
       <Link>Shared\Playnite\Native\Ntdll.cs</Link>
+    </Compile>
+    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Powrprof.cs">
+      <Link>Shared\Playnite\Native\Powrprof.cs</Link>
     </Compile>
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Processthreadsapi.cs">
       <Link>Shared\Playnite\Native\Processthreadsapi.cs</Link>

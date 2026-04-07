@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace UnifiedDownloadManagerApiNS
 {
@@ -8,5 +7,6 @@ namespace UnifiedDownloadManagerApiNS
         Task StartDownload(UnifiedDownload downloadTask);
         Task OnCancelDownload(UnifiedDownload downloadTask);
         Task OnRemoveDownloadEntry(UnifiedDownload downloadTask);
+        void OpenDownloadPropertiesWindow(UnifiedDownload selectedEntry);
     }
 }

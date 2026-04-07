@@ -7,9 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using UnifiedDownloadManagerApiNS;
 
 namespace UnifiedDownloadManagerNS
@@ -50,12 +52,14 @@ namespace UnifiedDownloadManagerNS
                 var cancelableDownloads = DownloadsDG.SelectedItems.Cast<UnifiedDownload>()
                                                                    .Where(i => i.status != UnifiedDownloadStatus.Completed && i.status != UnifiedDownloadStatus.Canceled)
                                                                    .ToList();
-                foreach (var cancelableDownload in cancelableDownloads)
+                if (cancelableDownloads.Count > 0)
                 {
-                    await _manager.CancelTask(cancelableDownload);
+                    foreach (var cancelableDownload in cancelableDownloads)
+                    {
+                        await _manager.CancelTask(cancelableDownload);
+                    }
+                    await _manager.DoNextJobInQueue();
                 }
-                UnifiedDownloadManager.Instance.SaveManagerData();
-                await _manager.DoNextJobInQueue();
             }
         }
 
@@ -106,11 +110,9 @@ namespace UnifiedDownloadManagerNS
                 {
                     foreach (var selectedRow in runningOrQueuedDownloads)
                     {
-                        if (selectedRow.status == UnifiedDownloadStatus.Running)
-                        {
-                            await _manager.PauseTask(selectedRow);
-                        }
+                        await _manager.PauseTask(selectedRow);
                     }
+                    await _manager.DoNextJobInQueue();
                 }
             }
         }
@@ -183,6 +185,7 @@ namespace UnifiedDownloadManagerNS
                 {
                     DownloadsDG.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 }
+                UnifiedDownloadManager.Instance.SaveManagerData();
             }
         }
 
@@ -289,6 +292,64 @@ namespace UnifiedDownloadManagerNS
         private void OpenPluginSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
             playniteAPI.MainView.OpenPluginSettings(UnifiedDownloadManager.Instance.Id);
+        }
+
+        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                RemoveDownloadBtn_Click(sender, e);
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Home))
+            {
+                MoveEntries(EntryPosition.Top, true);
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Up))
+            {
+                MoveEntries(EntryPosition.Up, true);
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.Down))
+            {
+                MoveEntries(EntryPosition.Down, true);
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.End))
+            {
+                MoveEntries(EntryPosition.Bottom, true);
+            }
+            else if ((Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) && e.Key == Key.P)
+            {
+                DownloadPropertiesBtn_Click(sender, e);
+            }
+            else if ((Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) && e.Key == Key.O)
+            {
+                OpenDownloadDirectoryBtn_Click(sender, e);
+            }
+        }
+
+        private void DownloadPropertiesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (DownloadsDG.SelectedIndex != -1)
+            {
+                var selectedItem = DownloadsDG.SelectedItems[0] as UnifiedDownload;
+                _manager.OpenDownloadPropertiesWindows(selectedItem);
+            }
+        }
+
+        private void BackHl_Click(object sender, RoutedEventArgs e)
+        {
+            if (playniteAPI.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            {
+                Window.GetWindow(this).Close();
+            }
+            else
+            {
+                playniteAPI.MainView.SwitchToLibraryView();
+            }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            CommonHelpers.SetControlBackground(this);
         }
     }
 }

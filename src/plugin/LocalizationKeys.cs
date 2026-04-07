@@ -154,6 +154,14 @@ namespace System
         /// </summary>
         public const string UdmSystemSuspendCountdown = "udm-system-suspend-countdown";
         /// <summary>
+        /// {$appName} download finished. Have fun!
+        /// </summary>
+        public const string UdmDownloadFinished = "udm-download-finished";
+        /// <summary>
+        /// {$appName} download failed. Please check the log files for more information.
+        /// </summary>
+        public const string UdmDownloadFailed = "udm-download-failed";
+        /// <summary>
         /// Sync game saves to the cloud
         /// </summary>
         public const string CommonSyncGameSaves = "common-sync-game-saves";

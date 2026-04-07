@@ -10,7 +10,7 @@
              xmlns:common="clr-namespace:CommonPlugin"
              xmlns:system="clr-namespace:System"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="UserControl_PreviewKeyDown" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <sys:Boolean x:Key="True">True</sys:Boolean>
@@ -72,7 +72,7 @@
         <StackPanel VerticalAlignment="Top" DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10" DockPanel.Dock="Top">
                 <TextBlock VerticalAlignment="Center" WindowChrome.IsHitTestVisibleInChrome="True" Style="{x:Null}">
-                <Hyperlink Command="{Binding NavigateBackCommand}">
+                <Hyperlink Click="BackHl_Click" Name="BackHl">
                     <TextBlock Text="&#xea5c;" FontFamily="{DynamicResource FontIcoFont}" FontSize="26" Style="{x:Null}" />
                 </Hyperlink>
             </TextBlock>
@@ -106,7 +106,7 @@
                     Margin="5,0,0,0" Click="RemoveCompletedDownloadsBtn_Click" />
                 <Separator Margin="10,0,5,0" />
                 <Button x:Name="DownloadPropertiesBtn" Content="&#xefe2;" FontFamily="{DynamicResource FontIcoFont}"
-                    Margin="5,0,0,0" IsEnabled="False" />
+                    Margin="5,0,0,0" IsEnabled="False" Click="DownloadPropertiesBtn_Click" />
                 <Button x:Name="OpenDownloadDirectoryBtn" Content="&#xef35;" FontFamily="{DynamicResource FontIcoFont}"
                     Margin="5,0,0,0" IsEnabled="False" Click="OpenDownloadDirectoryBtn_Click" />
                 <ToggleButton x:Name="FilterDownloadBtn" Content="&#xef29;" FontFamily="{DynamicResource FontIcoFont}" ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteFilters}}"

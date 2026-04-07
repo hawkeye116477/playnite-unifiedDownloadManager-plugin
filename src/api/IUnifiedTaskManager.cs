@@ -10,5 +10,6 @@ namespace UnifiedDownloadManagerApiNS
         ObservableCollection<UnifiedDownload> Downloads { get; set; }
         Task EnqueueTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false);
         UnifiedDownload GetTask(string appId, string pluginId);
+        Task PauseAllTasks(string pluginId);
     }
 }

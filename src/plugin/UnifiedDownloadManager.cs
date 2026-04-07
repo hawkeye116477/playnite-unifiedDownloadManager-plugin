@@ -15,6 +15,7 @@ using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerNS.Models;
 using CommonPlugin.Enums;
 using System.Linq;
+using System.Windows;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -32,6 +33,7 @@ namespace UnifiedDownloadManagerNS
         public IUnifiedTaskManager Manager { get; set; }
         public UnifiedDownloadManagerData UnifiedDownloadManagerData { get; set; }
         public string pluginName = "Unified Download Manager";
+        public CommonHelpers commonHelpers { get; set; }
 
         public UnifiedDownloadManager(IPlayniteAPI api) : base(api)
         {
@@ -42,6 +44,7 @@ namespace UnifiedDownloadManagerNS
                 HasSettings = true
             };
             Load3pLocalization();
+            commonHelpers.LoadNeededResources(icons: false);
             Manager = new TaskManager();
   
             DownloadManagerPanel = new MainPanel((TaskManager)Manager);
@@ -49,6 +52,8 @@ namespace UnifiedDownloadManagerNS
             UnifiedDownloadManagerData = savedTasks;
             Manager.Downloads = UnifiedDownloadManagerData.downloads;
         }
+
+        public static string Icon => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Resources\icon.png");
 
         public UnifiedDownloadManagerData LoadSavedManagerData()
         {
@@ -101,10 +106,7 @@ namespace UnifiedDownloadManagerNS
             LocalizationManager.Instance.SetLanguage(currentLanguage);
             var commonFluentArgs = new Dictionary<string, IFluentType>
             {
-                { "launcherName", (FluentString)"Legendary" },
-                { "pluginShortName", (FluentString)"Legendary" },
-                { "originalPluginShortName", (FluentString)"Epic" },
-                { "updatesSourceName", (FluentString)"Epic Games" }
+                { "pluginShortName", (FluentString)"UDM" },
             };
             LocalizationManager.Instance.SetCommonArgs(commonFluentArgs);
         }
@@ -116,7 +118,7 @@ namespace UnifiedDownloadManagerNS
                 Instance.downloadManagerSidebarItem = new SidebarItem
                 {
                     Title = Instance.pluginName,
-                    Icon = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"icon.png"),
+                    Icon = GetSidebarIcon(),
                     Type = SiderbarItemType.View,
                     Opened = () => GetDownloadManagerPanel(),
                     ProgressValue = 0,
@@ -134,6 +136,19 @@ namespace UnifiedDownloadManagerNS
         public override IEnumerable<SidebarItem> GetSidebarItems()
         {
             yield return downloadManagerSidebarItem;
+        }
+
+        public static TextBlock GetSidebarIcon()
+        {
+            var textBlock = new TextBlock
+            {
+                Text = char.ConvertFromUtf32(0xef08),
+                FontSize = 18
+            };
+
+            var font = ResourceProvider.GetResource("FontIcoFont") as System.Windows.Media.FontFamily;
+            textBlock.FontFamily = font ?? new System.Windows.Media.FontFamily("Segoe UI Symbol");
+            return textBlock;
         }
 
         public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
@@ -194,6 +209,31 @@ namespace UnifiedDownloadManagerNS
         public override UserControl GetSettingsView(bool firstRunSettings)
         {
             return new UnifiedDownloadManagerSettingsView();
+        }
+
+        public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+        {
+            if (PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            {
+                yield return new MainMenuItem
+                {
+                    Description = LocalizationManager.Instance.GetString(LOC.UdmDownloadManager),
+                    MenuSection = $"@{Instance.pluginName}",
+                    Icon = UnifiedDownloadManager.Icon,
+                    Action = (args) =>
+                    {
+                        Window window = PlayniteApi.Dialogs.CreateWindow(new WindowCreationOptions
+                        {
+                            ShowMaximizeButton = true,
+                        });
+                        window.Title = $"{LocalizationManager.Instance.GetString(LOC.CommonPanel)}";
+                        window.Content = GetDownloadManagerPanel();
+                        window.Owner = PlayniteApi.Dialogs.GetCurrentAppWindow();
+                        window.SizeToContent = SizeToContent.WidthAndHeight;
+                        window.ShowDialog();
+                    }
+                };
+            }
         }
 
         public static long GetNextClearingTime(ClearCacheTime frequency)
