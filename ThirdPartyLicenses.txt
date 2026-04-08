@@ -1,0 +1,30 @@
+----------------------------------------------------------------------------------------
+Playnite / Playnite.SDK - https://github.com/JosefNemec/Playnite
+MIT License
+Copyright (c) 2020 Josef Nemec
+
+
+----------------------------------------------------------------------------------------
+corefx - https://github.com/dotnet/corefx
+The MIT License (MIT)
+Copyright (c) .NET Foundation and Contributors
+All rights reserved.
+
+
+----------------------------------------------------------------------------------------
+ByteSize - https://github.com/omar/ByteSize
+The MIT License (MIT)
+Copyright (c) 2013-2022 Omar Khudeira (http://omar.io)
+
+
+----------------------------------------------------------------------------------------
+Linguini - https://github.com/Ygg01/Linguini/
+License: MIT (dual-licensed MIT / Apache 2.0)
+Copyright 2021 Daniel Fath
+
+
+----------------------------------------------------------------------------------------
+IndexRange - https://github.com/bgrainger/IndexRange
+MIT License
+Copyright (c) 2019–2022 Bradley Grainger
+
