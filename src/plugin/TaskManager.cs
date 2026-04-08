@@ -102,11 +102,11 @@ namespace UnifiedDownloadManagerNS
                     var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
                     if (ActiveTask.status == UnifiedDownloadStatus.Completed)
                     {
-                        Playnite.WindowsNotifyIconManager.Notify(new System.Drawing.Icon(UnifiedDownloadManager.Icon), UnifiedDownloadManager.Instance.pluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg), null);
+                        Playnite.WindowsNotifyIconManager.Notify(new System.Drawing.Icon(UnifiedDownloadManager.Icon), UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg), null);
                     }
                     else if (ActiveTask.status == UnifiedDownloadStatus.Error)
                     {
-                        Playnite.WindowsNotifyIconManager.Notify(new System.Drawing.Icon(UnifiedDownloadManager.Icon), UnifiedDownloadManager.Instance.pluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg), null);
+                        Playnite.WindowsNotifyIconManager.Notify(new System.Drawing.Icon(UnifiedDownloadManager.Icon), UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg), null);
                     }
                 }
                 ActiveTask = null;
@@ -121,7 +121,7 @@ namespace UnifiedDownloadManagerNS
                     {
                         ShowMaximizeButton = false,
                     });
-                    window.Title = UnifiedDownloadManager.Instance.pluginName;
+                    window.Title = UnifiedDownloadManager.Instance.PluginName;
                     window.Content = new UnifiedDownloadCompleteActionView();
                     window.Owner = playniteAPI.Dialogs.GetCurrentAppWindow();
                     window.SizeToContent = SizeToContent.WidthAndHeight;
@@ -152,7 +152,7 @@ namespace UnifiedDownloadManagerNS
             {
                 if (libraryPluginSettings.dontShowDownloadManagerWhatsUpMsg == false)
                 {
-                    var result = MessageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.CommonDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
+                    var result = MessageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
                     if (result.CheckboxChecked)
                     {
                         libraryPluginSettings.dontShowDownloadManagerWhatsUpMsg = true;

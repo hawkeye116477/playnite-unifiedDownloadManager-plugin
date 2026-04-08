@@ -29,11 +29,11 @@ namespace UnifiedDownloadManagerNS
         public static UnifiedDownloadManager Instance { get; set; }
 
         private MainPanel DownloadManagerPanel;
-        private SidebarItem downloadManagerSidebarItem;
+        private SidebarItem DownloadManagerSidebarItem;
         public IUnifiedTaskManager Manager { get; set; }
         public UnifiedDownloadManagerData UnifiedDownloadManagerData { get; set; }
-        public string pluginName = "Unified Download Manager";
-        public CommonHelpers commonHelpers { get; set; }
+        public string PluginName = "Unified Download Manager";
+        public CommonHelpers CommonHelpersInstance { get; set; }
 
         public UnifiedDownloadManager(IPlayniteAPI api) : base(api)
         {
@@ -44,8 +44,8 @@ namespace UnifiedDownloadManagerNS
                 HasSettings = true
             };
             Load3pLocalization();
-            commonHelpers = new CommonHelpers(Instance);
-            commonHelpers.LoadNeededResources(icons: false);
+            CommonHelpersInstance = new CommonHelpers(Instance);
+            CommonHelpersInstance.LoadNeededResources(icons: false);
             Manager = new TaskManager();
   
             DownloadManagerPanel = new MainPanel((TaskManager)Manager);
@@ -107,18 +107,18 @@ namespace UnifiedDownloadManagerNS
             LocalizationManager.Instance.SetLanguage(currentLanguage);
             var commonFluentArgs = new Dictionary<string, IFluentType>
             {
-                { "pluginShortName", (FluentString)"Unified Download Manager" },
+                { "pluginShortName", (FluentString)"UDM" },
             };
             LocalizationManager.Instance.SetCommonArgs(commonFluentArgs);
         }
 
         public static SidebarItem GetPanel()
         {
-            if (Instance.downloadManagerSidebarItem == null)
+            if (Instance.DownloadManagerSidebarItem == null)
             {
-                Instance.downloadManagerSidebarItem = new SidebarItem
+                Instance.DownloadManagerSidebarItem = new SidebarItem
                 {
-                    Title = Instance.pluginName,
+                    Title = Instance.PluginName,
                     Icon = GetSidebarIcon(),
                     Type = SiderbarItemType.View,
                     Opened = () => GetDownloadManagerPanel(),
@@ -126,7 +126,7 @@ namespace UnifiedDownloadManagerNS
                     ProgressMaximum = 100,
                 };
             }
-            return Instance.downloadManagerSidebarItem;
+            return Instance.DownloadManagerSidebarItem;
         }
 
         public static MainPanel GetDownloadManagerPanel()
@@ -136,7 +136,7 @@ namespace UnifiedDownloadManagerNS
 
         public override IEnumerable<SidebarItem> GetSidebarItems()
         {
-            yield return downloadManagerSidebarItem;
+            yield return DownloadManagerSidebarItem;
         }
 
         public static TextBlock GetSidebarIcon()
@@ -223,7 +223,7 @@ namespace UnifiedDownloadManagerNS
                 yield return new MainMenuItem
                 {
                     Description = LocalizationManager.Instance.GetString(LOC.UdmDownloadManager),
-                    MenuSection = $"@{Instance.pluginName}",
+                    MenuSection = $"@{Instance.PluginName}",
                     Icon = UnifiedDownloadManager.Icon,
                     Action = (args) =>
                     {
@@ -231,7 +231,7 @@ namespace UnifiedDownloadManagerNS
                         {
                             ShowMaximizeButton = true,
                         });
-                        window.Title = $"{LocalizationManager.Instance.GetString(LOC.CommonPanel)}";
+                        window.Title = UnifiedDownloadManager.Instance.PluginName;
                         window.Content = GetDownloadManagerPanel();
                         window.Owner = PlayniteApi.Dialogs.GetCurrentAppWindow();
                         window.SizeToContent = SizeToContent.WidthAndHeight;
