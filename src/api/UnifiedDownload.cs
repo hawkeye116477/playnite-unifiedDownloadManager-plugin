@@ -1,4 +1,5 @@
 ﻿using Playnite.SDK.Data;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,19 +68,17 @@ namespace UnifiedDownloadManagerApiNS
             set => SetValue(ref _activity, value);
         }
 
-        private string _elapsed;
+        private TimeSpan _elapsed;
         [DontSerialize]
-        /* DD:HH:MM:SS */
-        public string elapsed
+        public TimeSpan elapsed
         {
             get => _elapsed;
             set => SetValue(ref _elapsed, value);
         }
 
-        private string _eta;
+        private TimeSpan _eta;
         [DontSerialize]
-        /* DD:HH:MM:SS */
-        public string eta
+        public TimeSpan eta
         {
             get => _eta;
             set => SetValue(ref _eta, value);

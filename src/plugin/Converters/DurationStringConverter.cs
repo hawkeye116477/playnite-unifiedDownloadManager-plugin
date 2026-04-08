@@ -9,19 +9,18 @@ namespace UnifiedDownloadManagerNS.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is string duration))
+            if (!(value is TimeSpan duration))
             {
-                return value;
+                return 0;
             }
             var parts = new List<string>();
-            var parsedTimeSpan = TimeSpan.Parse((string)value);
-            if (parsedTimeSpan.Days > 0)
+            if (duration.Days > 0)
             {
-                parts.Add(parsedTimeSpan.Days.ToString("D2"));
+                parts.Add(duration.Days.ToString("D2"));
             }
-            parts.Add(parsedTimeSpan.Hours.ToString("D2"));
-            parts.Add(parsedTimeSpan.Minutes.ToString("D2"));
-            parts.Add(parsedTimeSpan.Seconds.ToString("D2"));
+            parts.Add(duration.Hours.ToString("D2"));
+            parts.Add(duration.Minutes.ToString("D2"));
+            parts.Add(duration.Seconds.ToString("D2"));
             return string.Join(":", parts);
         }
 
