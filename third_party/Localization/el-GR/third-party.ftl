@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Ποτέ
 third-party-playnite-game-name-title = Ονομα
 third-party-playnite-source-label = Πηγή
 third-party-playnite-download-error = Σφάλμα λήψης
+third-party-playnite-clear-filters = Καθαρισμός φίλτρων
 third-party-playnite-do-nothing = καμία ενέργεια
 third-party-playnite-dont-show-again-title = Να μην εμφανιστεί ξανά
 third-party-playnite-option-once-a-day = Μία φορά την ημέρα

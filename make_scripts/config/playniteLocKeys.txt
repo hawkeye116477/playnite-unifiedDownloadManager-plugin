@@ -17,3 +17,4 @@ LOCSourceLabel
 LOCOptionOnceADay
 LOCOptionOnceAWeek
 LOCSettingsPlaytimeImportModeNever
+LOCClearFilters

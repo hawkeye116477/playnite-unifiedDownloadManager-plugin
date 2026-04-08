@@ -19,5 +19,6 @@ third-party-playnite-settings-playtime-import-mode-never = Aldrig
 third-party-playnite-game-name-title = Titel
 third-party-playnite-source-label = Källkod
 third-party-playnite-download-error = Hämtings fel
+third-party-playnite-clear-filters = Rensa Filter
 third-party-playnite-do-nothing = Gör inget
 third-party-playnite-dont-show-again-title = Visa Inte Igen

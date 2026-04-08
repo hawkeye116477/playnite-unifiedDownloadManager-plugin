@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Không bao giờ
 third-party-playnite-game-name-title = Tên
 third-party-playnite-source-label = Mã nguồn
 third-party-playnite-download-error = Lỗi Tải Xuống
+third-party-playnite-clear-filters = Xoá bộ lọc
 third-party-playnite-do-nothing = Không làm gì cả
 third-party-playnite-dont-show-again-title = Không hiện thị lại
 third-party-playnite-option-once-a-day = Mỗi ngày một lần

@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Aldri
 third-party-playnite-game-name-title = Navn
 third-party-playnite-source-label = Kilde
 third-party-playnite-download-error = Feil ved nedlasting
+third-party-playnite-clear-filters = Fjern filtre
 third-party-playnite-do-nothing = Gjør ingenting
 third-party-playnite-dont-show-again-title = Ikke vis igjen
 third-party-playnite-option-once-a-day = En gang om dagen

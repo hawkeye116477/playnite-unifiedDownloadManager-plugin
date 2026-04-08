@@ -19,5 +19,6 @@ third-party-playnite-settings-playtime-import-mode-never = Niciodată
 third-party-playnite-game-name-title = Nume
 third-party-playnite-source-label = Sursă
 third-party-playnite-download-error = Eroare la descărcare
+third-party-playnite-clear-filters = Curăță Filtrele
 third-party-playnite-do-nothing = Repaus
 third-party-playnite-dont-show-again-title = Nu mai afișa

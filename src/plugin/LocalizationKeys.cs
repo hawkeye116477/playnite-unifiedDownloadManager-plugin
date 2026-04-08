@@ -707,6 +707,10 @@ namespace System
         /// </summary>
         public const string ThirdPartyPlayniteDownloadError = "third-party-playnite-download-error";
         /// <summary>
+        /// Clear Filters
+        /// </summary>
+        public const string ThirdPartyPlayniteClearFilters = "third-party-playnite-clear-filters";
+        /// <summary>
         /// Do nothing
         /// </summary>
         public const string ThirdPartyPlayniteDoNothing = "third-party-playnite-do-nothing";

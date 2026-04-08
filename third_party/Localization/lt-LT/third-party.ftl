@@ -19,5 +19,6 @@ third-party-playnite-settings-playtime-import-mode-never = Niekada
 third-party-playnite-game-name-title = Pavadinimas
 third-party-playnite-source-label = Šaltinis
 third-party-playnite-download-error = Atsiuntimo klaida
+third-party-playnite-clear-filters = Išvalyti filtrus
 third-party-playnite-do-nothing = Nieko nedaryti
 third-party-playnite-dont-show-again-title = Daugiau neberodyti

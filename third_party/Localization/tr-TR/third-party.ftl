@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Asla
 third-party-playnite-game-name-title = İsim
 third-party-playnite-source-label = Kaynak
 third-party-playnite-download-error = İndirme Hatası
+third-party-playnite-clear-filters = Filtreleri Temizle
 third-party-playnite-do-nothing = Hiçbir şey yapma
 third-party-playnite-dont-show-again-title = Bir Daha Gösterme
 third-party-playnite-option-once-a-day = Günde bir

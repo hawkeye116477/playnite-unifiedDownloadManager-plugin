@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Nooit
 third-party-playnite-game-name-title = Naam
 third-party-playnite-source-label = Bron
 third-party-playnite-download-error = Download Fout
+third-party-playnite-clear-filters = Wis Filters
 third-party-playnite-do-nothing = Doe niets
 third-party-playnite-dont-show-again-title = Niet Opnieuw Weergeven
 third-party-playnite-option-once-a-day = Eens per dag

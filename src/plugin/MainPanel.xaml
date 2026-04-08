@@ -213,6 +213,7 @@
                     <Separator />
                 </StackPanel>
                 <StackPanel Name="FilterSP" Grid.Column="2" Margin="10,0,0,0" DockPanel.Dock="Right">
+                    <Button Content="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteClearFilters}}" Margin="0,0,0,10" Click="ClearFiltersBtn_Click" IsEnabled="False" Name="ClearFiltersBtn"></Button>
                     <TextBlock Margin="0,0,0,5" Text="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
                     <Grid Margin="0,0,0,7">
                         <ComboBox x:Name="StatusCBo" HorizontalContentAlignment="Stretch" IsEditable="False" SelectionChanged="StatusCBo_SelectionChanged">

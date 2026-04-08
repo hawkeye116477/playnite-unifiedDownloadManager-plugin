@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Mitte kunagi
 third-party-playnite-game-name-title = Nimi
 third-party-playnite-source-label = Allikas
 third-party-playnite-download-error = Allalaadimise viga
+third-party-playnite-clear-filters = Tühjenda filtrid
 third-party-playnite-do-nothing = Ära tee midagi
 third-party-playnite-dont-show-again-title = Ära enam näita
 third-party-playnite-option-once-a-day = Kord päevas

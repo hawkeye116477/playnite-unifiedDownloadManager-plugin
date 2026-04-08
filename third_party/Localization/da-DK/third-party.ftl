@@ -17,4 +17,5 @@ third-party-playnite-menu-hibernate-system = Dvaletilstand
 third-party-playnite-settings-label = Indstillinger
 third-party-playnite-game-name-title = Navn
 third-party-playnite-source-label = Kilde
+third-party-playnite-clear-filters = Ryd filtre
 third-party-playnite-do-nothing = Gør ingenting

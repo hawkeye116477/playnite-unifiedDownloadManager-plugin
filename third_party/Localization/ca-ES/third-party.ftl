@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Mai
 third-party-playnite-game-name-title = Nom
 third-party-playnite-source-label = Font
 third-party-playnite-download-error = Error de descàrrega
+third-party-playnite-clear-filters = Esborrar els filtres
 third-party-playnite-do-nothing = No fer res
 third-party-playnite-dont-show-again-title = No mostrar de nou
 third-party-playnite-option-once-a-day = Un cop al dia

@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Sosem
 third-party-playnite-game-name-title = Név
 third-party-playnite-source-label = Forrás
 third-party-playnite-download-error = Hiba a letöltésben
+third-party-playnite-clear-filters = Szűrök törlése
 third-party-playnite-do-nothing = Ne tegyen semmit
 third-party-playnite-dont-show-again-title = Ne mutasd többször
 third-party-playnite-option-once-a-day = Naponta egyszer

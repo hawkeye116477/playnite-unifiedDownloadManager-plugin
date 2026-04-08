@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = Nunca
 third-party-playnite-game-name-title = Nome
 third-party-playnite-source-label = Orixe
 third-party-playnite-download-error = Erro ao descargar
+third-party-playnite-clear-filters = Limpar filtros
 third-party-playnite-do-nothing = Non facer nada
 third-party-playnite-dont-show-again-title = Non mostrar de novo
 third-party-playnite-option-once-a-day = Diariamente

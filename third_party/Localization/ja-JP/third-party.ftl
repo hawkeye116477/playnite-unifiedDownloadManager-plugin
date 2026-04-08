@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = 常に無効
 third-party-playnite-game-name-title = タイトル
 third-party-playnite-source-label = ソース
 third-party-playnite-download-error = ダウンロードエラー
+third-party-playnite-clear-filters = フィルターを解除
 third-party-playnite-do-nothing = 何もしない
 third-party-playnite-dont-show-again-title = 次回から表示しない
 third-party-playnite-option-once-a-day = 1日に1回

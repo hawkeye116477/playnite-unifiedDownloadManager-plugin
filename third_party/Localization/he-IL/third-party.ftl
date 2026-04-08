@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = אף פעם
 third-party-playnite-game-name-title = שם
 third-party-playnite-source-label = מקור
 third-party-playnite-download-error = שגיאת הורדה
+third-party-playnite-clear-filters = נקה מסננים
 third-party-playnite-do-nothing = אל תעשה דבר
 third-party-playnite-dont-show-again-title = אל תציג שוב
 third-party-playnite-option-once-a-day = פעם ביום

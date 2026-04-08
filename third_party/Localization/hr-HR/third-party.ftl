@@ -19,5 +19,6 @@ third-party-playnite-settings-playtime-import-mode-never = Nikad
 third-party-playnite-game-name-title = Naziv
 third-party-playnite-source-label = Izvor
 third-party-playnite-download-error = Greška pri preuzimanju
+third-party-playnite-clear-filters = Očistite filtere
 third-party-playnite-do-nothing = Ne čini ništa
 third-party-playnite-dont-show-again-title = Ne prikazuj ponovo

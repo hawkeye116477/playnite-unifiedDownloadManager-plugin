@@ -19,5 +19,6 @@ third-party-playnite-settings-playtime-import-mode-never = Ei koskaan
 third-party-playnite-game-name-title = Nimi
 third-party-playnite-source-label = Lähde
 third-party-playnite-download-error = Latausvirhe
+third-party-playnite-clear-filters = Tyhjennä suodattimet
 third-party-playnite-do-nothing = Älä tee mitään
 third-party-playnite-dont-show-again-title = Älä näytä uudelleen

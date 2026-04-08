@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = 從未
 third-party-playnite-game-name-title = 名稱
 third-party-playnite-source-label = 來源
 third-party-playnite-download-error = 下載錯誤
+third-party-playnite-clear-filters = 清除過濾條件
 third-party-playnite-do-nothing = 不做任何事
 third-party-playnite-dont-show-again-title = 不再顯示
 third-party-playnite-option-once-a-day = 每天一次

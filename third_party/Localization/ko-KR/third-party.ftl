@@ -19,6 +19,7 @@ third-party-playnite-settings-playtime-import-mode-never = 가져오지 않음
 third-party-playnite-game-name-title = 이름
 third-party-playnite-source-label = 소스
 third-party-playnite-download-error = 다운로드 오류
+third-party-playnite-clear-filters = 필터 초기화
 third-party-playnite-do-nothing = 아무것도 하지않음
 third-party-playnite-dont-show-again-title = 다시 표시 안함
 third-party-playnite-option-once-a-day = 하루에 한 번

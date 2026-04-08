@@ -405,10 +405,12 @@ namespace UnifiedDownloadManagerNS
             if (SelectedSources.Count > 0 || SelectedStatuses.Count > 0)
             {
                 FilterDownloadBtn.Content = "\uef29 " + LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteFilterActiveLabel);
+                ClearFiltersBtn.IsEnabled = true;
             }
             else
             {
                 FilterDownloadBtn.Content = "\uef29";
+                ClearFiltersBtn.IsEnabled = false;
             }
             return sourceContains && statusContains;
         }
@@ -470,6 +472,18 @@ namespace UnifiedDownloadManagerNS
         private void SourceCBo_DropDownOpened(object sender, EventArgs e)
         {
             UpdateSources();
+        }
+
+        private void ClearFiltersBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedSources.Clear();
+            SelectedStatuses.Clear();
+            StatusTb.Text = "";
+            SourceTb.Text = "";
+            ICollectionView downloadsView = CollectionViewSource.GetDefaultView(DownloadsDG.ItemsSource);
+            downloadsView.Filter = DownloadsFilter;
+            SourceCBo.Items.Refresh();
+            StatusCBo.Items.Refresh();
         }
     }
 }
