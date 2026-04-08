@@ -53,6 +53,9 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
+        public ObservableCollection<string> AllSources { get; } = new ObservableCollection<string>();
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public TaskManager()
@@ -166,6 +169,15 @@ namespace UnifiedDownloadManagerNS
             UnifiedDownloadManager.Instance.SaveManagerData();
         }
 
+        public async Task PauseAllTasks()
+        {
+            var runningOrQueuedDownloads = Downloads.Where(i => i.status == UnifiedDownloadStatus.Running || i.status == UnifiedDownloadStatus.Queued).ToList();
+            foreach (var selectedRow in runningOrQueuedDownloads)
+            {
+                await PauseTask(selectedRow);
+            }
+            UnifiedDownloadManager.Instance.SaveManagerData();
+        }
 
         public async Task CancelTask(UnifiedDownload task)
         {
@@ -198,5 +210,6 @@ namespace UnifiedDownloadManagerNS
             var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
             unifiedDownloadLogic.OpenDownloadPropertiesWindow(selectedEntry);
         }
+
     }
 }

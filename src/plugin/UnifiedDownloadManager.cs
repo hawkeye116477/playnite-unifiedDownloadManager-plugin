@@ -44,6 +44,7 @@ namespace UnifiedDownloadManagerNS
                 HasSettings = true
             };
             Load3pLocalization();
+            commonHelpers = new CommonHelpers(Instance);
             commonHelpers.LoadNeededResources(icons: false);
             Manager = new TaskManager();
   
@@ -156,8 +157,12 @@ namespace UnifiedDownloadManagerNS
             // Add code to be executed when Playnite is initialized.
         }
 
-        public override void OnApplicationStopped(OnApplicationStoppedEventArgs args)
+        public override async void OnApplicationStopped(OnApplicationStoppedEventArgs args)
         {
+            if (Manager is TaskManager fullTaskManager)
+            {
+                await fullTaskManager.PauseAllTasks();
+            }
             bool downloadsChanged = false;
             bool settingsChanged = false;
             var settings = GetSettings();

@@ -5,14 +5,16 @@ using Playnite.SDK;
 using Playnite.SDK.Plugins;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using UnifiedDownloadManagerApiNS;
+using UnifiedDownloadManagerNS.Converters;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -24,6 +26,8 @@ namespace UnifiedDownloadManagerNS
         public SidebarItem downloadPanel = UnifiedDownloadManager.GetPanel();
         private readonly TaskManager _manager;
         private IPlayniteAPI playniteAPI = API.Instance;
+        public ObservableCollection<UnifiedDownloadStatus> SelectedStatuses { get; set; } = new ObservableCollection<UnifiedDownloadStatus>();
+        public ObservableCollection<string> SelectedSources = new ObservableCollection<string>();
 
         public MainPanel(TaskManager manager)
         {
@@ -350,6 +354,122 @@ namespace UnifiedDownloadManagerNS
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             CommonHelpers.SetControlBackground(this);
+            FilterSP.Visibility = Visibility.Collapsed;
+            FiltersSepSP.Visibility = FilterSP.Visibility;
+            RightCol.Width = new GridLength(0, GridUnitType.Auto);
+            StatusCBo.ItemsSource = Enum.GetValues(typeof(UnifiedDownloadStatus)).Cast<UnifiedDownloadStatus>();
+        }
+
+        private void StatusChk_Changed(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox && checkBox.DataContext is UnifiedDownloadStatus status)
+            {
+                if (checkBox.IsChecked == true)
+                {
+                    if (!SelectedStatuses.Contains(status))
+                    {
+                        SelectedStatuses.Add(status);
+                    }
+                }
+                else
+                {
+                    SelectedStatuses.Remove(status);
+                }
+
+                var converter = new DownloadStatusEnumToStringConverter();
+
+                var text = SelectedStatuses.Select(s => converter.Convert(s, null, null, null).ToString());
+                StatusTb.Text = string.Join(", ", text);
+            }
+
+            ICollectionView downloadsView = CollectionViewSource.GetDefaultView(DownloadsDG.ItemsSource);
+            downloadsView.Filter = DownloadsFilter;
+        }
+
+        private bool DownloadsFilter(object obj)
+        {
+            if (!(obj is UnifiedDownload download))
+            {
+                return false;
+            }
+            bool sourceContains = true;
+            if (SelectedSources.Count > 0)
+            {
+                sourceContains = SelectedSources.Contains(download.sourceName);
+            }
+            bool statusContains = true;
+            if (SelectedStatuses.Count > 0)
+            {
+                statusContains = SelectedStatuses.Contains(download.status);
+            }
+            if (SelectedSources.Count > 0 || SelectedStatuses.Count > 0)
+            {
+                FilterDownloadBtn.Content = "\uef29 " + LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteFilterActiveLabel);
+            }
+            else
+            {
+                FilterDownloadBtn.Content = "\uef29";
+            }
+            return sourceContains && statusContains;
+        }
+
+        private void StatusCBo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            comboBox.SelectedItem = null;
+        }
+
+        private void FilterDownloadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (FilterSP.Visibility == Visibility.Visible)
+            {
+                FilterSP.Visibility = Visibility.Collapsed;
+                RightCol.Width = new GridLength(0, GridUnitType.Auto);
+            }
+            else
+            {
+                FilterSP.Visibility = Visibility.Visible;
+                RightCol.Width = new GridLength(1, GridUnitType.Star);
+            }
+            FiltersSepSP.Visibility = FilterSP.Visibility;
+        }
+
+        private void SourceChk_Changed(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox && checkBox.DataContext is string source)
+            {
+                if (checkBox.IsChecked == true)
+                {
+                    if (!SelectedSources.Contains(source))
+                    {
+                        SelectedSources.Add(source);
+                    }
+                }
+                else
+                {
+                    SelectedSources.Remove(source);
+                }
+                SourceTb.Text = string.Join(", ", SelectedSources);
+            }
+            ICollectionView downloadsView = CollectionViewSource.GetDefaultView(DownloadsDG.ItemsSource);
+            downloadsView.Filter = DownloadsFilter;
+        }
+
+        private void UpdateSources()
+        {
+            var sources = DownloadsDG.Items.Cast<UnifiedDownload>().Select(d => d.sourceName).Distinct().OrderBy(s => s);
+            foreach (var src in sources)
+            {
+                if (!_manager.AllSources.Contains(src) && !src.IsNullOrEmpty())
+                {
+                    _manager.AllSources.Add(src);
+                }
+            }
+        }
+
+        private void SourceCBo_DropDownOpened(object sender, EventArgs e)
+        {
+            UpdateSources();
         }
     }
 }
