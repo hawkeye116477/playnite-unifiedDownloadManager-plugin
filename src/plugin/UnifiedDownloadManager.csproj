@@ -175,6 +175,15 @@
       <TargetPath>Resources\NormalStyles.xaml</TargetPath>
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Include="..\..\third_party\playnite-common-plugin\src\MessageCheckBoxDialog.xaml">
+      <Link>Shared\MessageCheckBoxDialog.xaml</Link>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="..\..\third_party\playnite-common-plugin\src\MessageCheckBoxDialog.xaml.cs">
+      <Link>Shared\MessageCheckBoxDialog.xaml.cs</Link>
+      <DependentUpon>MessageCheckBoxDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\WindowsNotifyIconManager.cs">
       <Link>Shared\Playnite\WindowsNotifyIconManager.cs</Link>
     </Compile>

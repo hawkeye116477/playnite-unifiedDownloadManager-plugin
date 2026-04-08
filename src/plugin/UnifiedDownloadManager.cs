@@ -107,7 +107,7 @@ namespace UnifiedDownloadManagerNS
             LocalizationManager.Instance.SetLanguage(currentLanguage);
             var commonFluentArgs = new Dictionary<string, IFluentType>
             {
-                { "pluginShortName", (FluentString)"UDM" },
+                { "pluginShortName", (FluentString)"Unified Download Manager" },
             };
             LocalizationManager.Instance.SetCommonArgs(commonFluentArgs);
         }

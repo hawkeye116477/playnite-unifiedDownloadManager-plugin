@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerNS.Enums;
+using UnifiedDownloadManagerNS.Models;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -137,6 +138,29 @@ namespace UnifiedDownloadManagerNS
             {
                 Downloads.Add(uniqueTask);
             }
+            var libraryPluginSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.pluginSettings.FirstOrDefault(p => p.pluginId == downloadManagerDataList[0].pluginId);
+            if (libraryPluginSettings == null)
+            {
+                var newPluginSettings = new PluginDownloadSetting
+                {
+                   pluginId = downloadManagerDataList[0].pluginId
+                };
+                UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.pluginSettings.Add(newPluginSettings);
+                libraryPluginSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.pluginSettings.FirstOrDefault(p => p.pluginId == downloadManagerDataList[0].pluginId);
+            }
+            if (libraryPluginSettings != null)
+            {
+                if (libraryPluginSettings.dontShowDownloadManagerWhatsUpMsg == false)
+                {
+                    var result = MessageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.CommonDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (result.CheckboxChecked)
+                    {
+                        libraryPluginSettings.dontShowDownloadManagerWhatsUpMsg = true;
+                        UnifiedDownloadManager.Instance.SaveManagerData();
+                    }
+                }
+            }
+
             await EnqueueTasks(uniqueTasks, silently);
         }
 
