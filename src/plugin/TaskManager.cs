@@ -130,6 +130,17 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
+        public async Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
+        {
+            var uniqueTasks = downloadManagerDataList.Where(downloadJob => !Downloads.Any(d => d.gameID == downloadJob.gameID)).ToList();
+            foreach (var uniqueTask in uniqueTasks)
+            {
+                Downloads.Add(uniqueTask);
+            }
+            await EnqueueTasks(uniqueTasks, silently);
+        }
+
+
         public async Task EnqueueTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
         {
             DateTimeOffset now = DateTime.UtcNow;

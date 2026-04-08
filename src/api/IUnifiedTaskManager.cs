@@ -8,7 +8,7 @@ namespace UnifiedDownloadManagerApiNS
     public interface IUnifiedTaskManager : INotifyPropertyChanged
     {
         ObservableCollection<UnifiedDownload> Downloads { get; set; }
-        Task EnqueueTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false);
+        Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false);
         UnifiedDownload GetTask(string appId, string pluginId);
         Task PauseAllTasks(string pluginId);
     }
