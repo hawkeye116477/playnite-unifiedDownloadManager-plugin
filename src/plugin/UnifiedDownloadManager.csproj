@@ -226,7 +226,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)/..'))=Dev:/playnite-unified-download-manager-plugin</PathMap>
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)/..'))=Dev:/playnite-unified-download-manager-plugin/src/plugin</PathMap>
     <LocalAppData>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</LocalAppData>
   </PropertyGroup>
 </Project>
