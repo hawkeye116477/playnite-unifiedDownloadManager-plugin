@@ -1,0 +1,15 @@
+udm-eta = Numatomas baigties laikas:
+udm-download-speed = Siuntimosi greitis:
+udm-elapsed = Praėjo:
+udm-pause-download = Pristabdyti
+udm-resume-download = Pratęsti
+udm-download-paused = Pristabdyta
+udm-download-manager = Atsisiuntimų Tvarkyklė
+udm-download-status = Būsena
+udm-download-completed-column = Baigta
+udm-download-queued = Laukia eilėje
+udm-download-running = Vykdoma
+udm-download-canceled = Atšaukta
+udm-download-completed = Baigta
+udm-remove-entry = Pašalinti įrašą
+udm-remove-entry-confirm = Ar tikrai norite pašalinti { $entryName } iš sąrašo?
