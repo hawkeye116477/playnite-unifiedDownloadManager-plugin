@@ -160,18 +160,21 @@ namespace UnifiedDownloadManagerNS
                     bool canAdd = true;
                     if (uniqueTask.sourceName.IsNullOrEmpty())
                     {
-                        logger.Error("Empty source for download item isn't allowed");
-                        canAdd = false;
+                        logger.Warn("Empty source for download item.");
                     }
                     if (uniqueTask.gameID.IsNullOrEmpty())
                     {
-                        logger.Error("Empty game id for download item isn't allowed");
+                        logger.Error("Empty game id for download item isn't allowed.");
+                        canAdd = false;
+                    }
+                    if (uniqueTask.pluginId.IsNullOrEmpty())
+                    {
+                        logger.Error("Empty plugin id for download item isn't allowed.");
                         canAdd = false;
                     }
                     if (uniqueTask.name.IsNullOrEmpty())
                     {
-                        logger.Error("Empty name for download item isn't allowed");
-                        canAdd = false;
+                        logger.Warn("Empty name for download item.");
                     }
                     if (canAdd)
                     {
