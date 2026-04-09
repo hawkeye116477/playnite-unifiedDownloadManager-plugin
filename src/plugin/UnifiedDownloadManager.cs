@@ -21,8 +21,6 @@ namespace UnifiedDownloadManagerNS
 {
     public class UnifiedDownloadManager : GenericPlugin, IUnifiedDownloadManager
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
-
         private UnifiedDownloadManagerSettingsViewModel settings { get; set; }
 
         public override Guid Id { get; } = UnifiedDownloadManagerSharedProperties.Id;
@@ -152,9 +150,12 @@ namespace UnifiedDownloadManagerNS
             return textBlock;
         }
 
-        public override void OnApplicationStarted(OnApplicationStartedEventArgs args)
+        public override async void OnApplicationStarted(OnApplicationStartedEventArgs args)
         {
-            // Add code to be executed when Playnite is initialized.
+            if (Manager is TaskManager fullTaskManager)
+            {
+                await fullTaskManager.PauseAllTasks();
+            }
         }
 
         public override async void OnApplicationStopped(OnApplicationStoppedEventArgs args)
