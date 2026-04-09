@@ -18,6 +18,7 @@ namespace UnifiedDownloadManagerNS
 {
     public class TaskManager : INotifyPropertyChanged, IUnifiedTaskManager
     {
+        public ILogger logger = LogManager.GetLogger();
         public ObservableCollection<UnifiedDownload> Downloads { get; set; }
         private IPlayniteAPI playniteAPI = API.Instance;
         private UnifiedDownload _activeTask { get; set; }
@@ -156,7 +157,26 @@ namespace UnifiedDownloadManagerNS
                 foreach (var uniqueTask in uniqueTasks)
                 {
                     uniqueTask.addedTime = now.ToUnixTimeSeconds();
-                    Downloads.Add(uniqueTask);
+                    bool canAdd = true;
+                    if (uniqueTask.sourceName.IsNullOrEmpty())
+                    {
+                        logger.Error("Empty source for download item isn't allowed");
+                        canAdd = false;
+                    }
+                    if (uniqueTask.gameID.IsNullOrEmpty())
+                    {
+                        logger.Error("Empty game id for download item isn't allowed");
+                        canAdd = false;
+                    }
+                    if (uniqueTask.name.IsNullOrEmpty())
+                    {
+                        logger.Error("Empty name for download item isn't allowed");
+                        canAdd = false;
+                    }
+                    if (canAdd)
+                    {
+                        Downloads.Add(uniqueTask);
+                    }
                 }
                 if (!silently)
                 {
