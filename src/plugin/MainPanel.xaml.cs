@@ -392,6 +392,10 @@ namespace UnifiedDownloadManagerNS
             {
                 return false;
             }
+            if (SelectedSources == null && SelectedStatuses == null)
+            {
+                return false;
+            }
             bool sourceContains = true;
             if (SelectedSources.Count > 0)
             {

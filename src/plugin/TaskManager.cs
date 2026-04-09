@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,28 +18,36 @@ namespace UnifiedDownloadManagerNS
 {
     public class TaskManager : INotifyPropertyChanged, IUnifiedTaskManager
     {
-        public ObservableCollection<UnifiedDownload> Downloads { get; set; } = new ObservableCollection<UnifiedDownload>();
+        public ObservableCollection<UnifiedDownload> Downloads { get; set; }
         private IPlayniteAPI playniteAPI = API.Instance;
-        public string GameTitleTBText { get; set; }
-        private string _etaText;
-        public string EtaText
-        {
-            get => _etaText;
-            set
-            {
-                _etaText = value;
-                OnPropertyChanged(nameof(EtaText));
-            }
-        }
-
         private UnifiedDownload _activeTask { get; set; }
         public UnifiedDownload ActiveTask
         {
             get => _activeTask;
             set
             {
+                if (_activeTask != null)
+                {
+                    _activeTask.PropertyChanged -= ActiveTask_PropertyChanged;
+                }
+
                 _activeTask = value;
+
+                if (_activeTask != null)
+                {
+                    _activeTask.PropertyChanged += ActiveTask_PropertyChanged;
+                }
+
+                UnifiedDownloadManager.GetPanel().ProgressValue = ActiveTask?.progress ?? 0;
                 OnPropertyChanged(nameof(ActiveTask));
+            }
+        }
+
+        private void ActiveTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ActiveTask.progress))
+            {
+                UnifiedDownloadManager.GetPanel().ProgressValue = ActiveTask?.progress ?? 0;
             }
         }
 
@@ -94,22 +103,30 @@ namespace UnifiedDownloadManagerNS
                 queuedList[0].forcefulCts = new CancellationTokenSource();
                 queuedList[0].gracefulCts = new CancellationTokenSource();
                 ActiveTask = queuedList[0];
-                var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
-                await unifiedDownloadLogic.StartDownload(queuedList[0]);
-                if (settings.DisplayDownloadTaskFinishedNotifications)
+                if (ActiveTask != null)
                 {
-                    var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
-                    if (ActiveTask.status == UnifiedDownloadStatus.Completed)
+                    var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
+                    await unifiedDownloadLogic.StartDownload(queuedList[0]);
+                    if (settings.DisplayDownloadTaskFinishedNotifications)
                     {
-                        Playnite.WindowsNotifyIconManager.Notify(new System.Drawing.Icon(UnifiedDownloadManager.Icon), UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg), null);
+                        var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
+                        var bitmap = new Bitmap(UnifiedDownloadManager.Icon);
+                        var iconHandle = bitmap.GetHicon();
+                        var icon = Icon.FromHandle(iconHandle);
+                        if (ActiveTask.status == UnifiedDownloadStatus.Completed)
+                        {
+                            Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg), null);
+                        }
+                        else if (ActiveTask.status == UnifiedDownloadStatus.Error)
+                        {
+                            Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg), null);
+                        }
+                        bitmap.Dispose();
+                        icon.Dispose();
                     }
-                    else if (ActiveTask.status == UnifiedDownloadStatus.Error)
-                    {
-                        Playnite.WindowsNotifyIconManager.Notify(new System.Drawing.Icon(UnifiedDownloadManager.Icon), UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg), null);
-                    }
+                    ActiveTask = null;
+                    await DoNextJobInQueue();
                 }
-                ActiveTask = null;
-                await DoNextJobInQueue();
             }
             else if (!running)
             {
@@ -164,7 +181,10 @@ namespace UnifiedDownloadManagerNS
             foreach (var downloadJob in downloadManagerDataList)
             {
                 var wantedItem = Downloads.FirstOrDefault(item => item.gameID == downloadJob.gameID);
-                wantedItem.status = UnifiedDownloadStatus.Queued;
+                if (wantedItem != null)
+                {
+                    wantedItem.status = UnifiedDownloadStatus.Queued;
+                }
             }
             await DoNextJobInQueue();
         }
@@ -215,13 +235,10 @@ namespace UnifiedDownloadManagerNS
             var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
             if (selectedEntry.status == UnifiedDownloadStatus.Running)
             {
-                selectedEntry.gracefulCts.Cancel();
-                selectedEntry.gracefulCts.Dispose();
-                ActiveTask = null;
-                await unifiedDownloadLogic.OnCancelDownload(selectedEntry);
+                await CancelTask(selectedEntry);
             }
-            Downloads.Remove(selectedEntry);
             await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
+            Downloads.Remove(selectedEntry);
         }
 
         public void OpenDownloadPropertiesWindows(UnifiedDownload selectedEntry)
