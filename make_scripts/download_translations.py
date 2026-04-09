@@ -3,6 +3,7 @@ import shutil
 import tempfile
 from zipfile import ZipFile
 import requests
+from pathlib import Path
 from crowdin_api import CrowdinClient
 
 pj = os.path.join
@@ -50,19 +51,29 @@ with tempfile.TemporaryDirectory() as tmpdirname:
     NSMAP = {None: xmlns,
             "sys": xmlns_sys,
             "x":  xmlns_x}
+    
     # Copy localizations
-    shared_loc_path = pj(tmpdirname, "src", "Localization")
+    shared_loc_path = pj(tmpdirname, "src")
+    udm_tmp_path = pj(tmpdirname, "src", "plugin", "Localization")
+    shared_tmp_path = pj(tmpdirname, "src", "Localization")
     for root, dirs, files in os.walk(shared_loc_path):
         for filename in files:
+            print(filename)
             full_file_path = pj(root, filename)
+            print(full_file_path)
             if os.path.getsize(full_file_path) > 0:
-                relative_path = os.path.relpath(root, shared_loc_path)
+                if "plugin" in full_file_path:
+                    relative_path = os.path.relpath(root, udm_tmp_path)
+                else:
+                    relative_path = os.path.relpath(root, shared_tmp_path)
+                print(relative_path)
                 destination_path = ""
                 if "udm" in filename:
                     destination_path = pj(src_path, "Localization", relative_path)
-                elif "common-frequency.ftl" in filename:
+                elif "common-frequency" in filename:
                     destination_path = pj(main_path, "third_party", "CommonLocalization", relative_path)
                 if destination_path != "":
+                    print(destination_path)
                     if not os.path.exists(destination_path):
                         os.makedirs(destination_path)
                     shutil.copy(full_file_path, destination_path)
