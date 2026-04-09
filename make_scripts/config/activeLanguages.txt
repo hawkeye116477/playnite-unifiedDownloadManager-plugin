@@ -1,0 +1,9 @@
+de-DE
+en-US
+es-ES
+it-IT
+pl-PL
+pt-BR
+ru-RU
+tr-TR
+zh-CN

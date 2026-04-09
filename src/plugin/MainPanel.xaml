@@ -1,7 +1,6 @@
 ﻿<UserControl x:Class="UnifiedDownloadManagerNS.MainPanel" 
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:common="clr-namespace:CommonPlugin" 
-             xmlns:commoncon="clr-namespace:CommonPlugin.Converters" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UnifiedDownloadManagerNS" 
              xmlns:localcon="clr-namespace:UnifiedDownloadManagerNS.Converters"
@@ -13,11 +12,11 @@
         <sys:Boolean x:Key="True">True</sys:Boolean>
         <sys:Boolean x:Key="False">False</sys:Boolean>
         <FontFamily x:Key="FontIcoFont">/Fonts/icofont.ttf#icofont</FontFamily>
-        <commoncon:LongToDateConverter x:Key="LongToDateConverter" />
+        <localcon:LongToDateConverter x:Key="LongToDateConverter" />
         <localcon:DownloadStatusEnumToStringConverter x:Key="DownloadStatusEnumToStringConverter" />
         <localcon:DurationStringConverter x:Key="DurationConverter" />
         <localcon:SpeedConverter x:Key="SpeedConverter" />
-        <commoncon:NumericalSizeToStringConverter x:Key="NumericalSizeToStringConverter" />
+        <localcon:NumericalSizeToStringConverter x:Key="NumericalSizeToStringConverter" />
         <Style BasedOn="{StaticResource HawkeyeSeparatorStyle}" TargetType="Separator" />
         <Style BasedOn="{StaticResource HawkeyeBorderStyle}" TargetType="Border" />
         <Style BasedOn="{StaticResource HawkeyeListBoxStyle}" TargetType="ListBox" />

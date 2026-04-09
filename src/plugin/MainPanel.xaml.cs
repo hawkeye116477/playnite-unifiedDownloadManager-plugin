@@ -289,7 +289,7 @@ namespace UnifiedDownloadManagerNS
                                                                              && i.status != UnifiedDownloadStatus.Running
                                                                              && i.status != UnifiedDownloadStatus.Queued)
                                                                  .ToList();
-                await _manager.EnqueueTasks(downloadsToResume, true);
+                await _manager.EnqueueTasks(downloadsToResume);
             }
         }
 

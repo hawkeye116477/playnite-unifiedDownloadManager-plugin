@@ -17,7 +17,6 @@ namespace UnifiedDownloadManagerNS
 {
     public class TaskManager : INotifyPropertyChanged, IUnifiedTaskManager
     {
-        private static readonly ILogger logger = LogManager.GetLogger();
         public ObservableCollection<UnifiedDownload> Downloads { get; set; } = new ObservableCollection<UnifiedDownload>();
         private IPlayniteAPI playniteAPI = API.Instance;
         public string GameTitleTBText { get; set; }
@@ -134,53 +133,38 @@ namespace UnifiedDownloadManagerNS
         public async Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
         {
             var uniqueTasks = downloadManagerDataList.Where(downloadJob => !Downloads.Any(d => d.gameID == downloadJob.gameID)).ToList();
-            foreach (var uniqueTask in uniqueTasks)
+            if (uniqueTasks.Count > 0)
             {
-                Downloads.Add(uniqueTask);
-            }
-            var libraryPluginSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.pluginSettings.FirstOrDefault(p => p.pluginId == downloadManagerDataList[0].pluginId);
-            if (libraryPluginSettings == null)
-            {
-                var newPluginSettings = new PluginDownloadSetting
+                DateTimeOffset now = DateTime.UtcNow;
+                foreach (var uniqueTask in uniqueTasks)
                 {
-                   pluginId = downloadManagerDataList[0].pluginId
-                };
-                UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.pluginSettings.Add(newPluginSettings);
-                libraryPluginSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.pluginSettings.FirstOrDefault(p => p.pluginId == downloadManagerDataList[0].pluginId);
-            }
-            if (libraryPluginSettings != null)
-            {
-                if (libraryPluginSettings.dontShowDownloadManagerWhatsUpMsg == false)
+                    uniqueTask.addedTime = now.ToUnixTimeSeconds();
+                    Downloads.Add(uniqueTask);
+                }
+                if (!silently)
                 {
-                    var result = MessageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
-                    if (result.CheckboxChecked)
+                    var messagesSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.messagesSettings;
+                    if (messagesSettings.dontShowDownloadManagerWhatsUpMsg == false)
                     {
-                        libraryPluginSettings.dontShowDownloadManagerWhatsUpMsg = true;
-                        UnifiedDownloadManager.Instance.SaveManagerData();
+                        var result = MessageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
+                        if (result.CheckboxChecked)
+                        {
+                            messagesSettings.dontShowDownloadManagerWhatsUpMsg = true;
+                            UnifiedDownloadManager.Instance.SaveManagerData();
+                        }
                     }
                 }
+                await EnqueueTasks(uniqueTasks);
             }
-
-            await EnqueueTasks(uniqueTasks, silently);
         }
 
 
-        public async Task EnqueueTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
+        public async Task EnqueueTasks(List<UnifiedDownload> downloadManagerDataList)
         {
-            DateTimeOffset now = DateTime.UtcNow;
             foreach (var downloadJob in downloadManagerDataList)
             {
                 var wantedItem = Downloads.FirstOrDefault(item => item.gameID == downloadJob.gameID);
-                if (wantedItem == null)
-                {
-                    downloadJob.status = UnifiedDownloadStatus.Queued;
-                    downloadJob.addedTime = now.ToUnixTimeSeconds();
-                    Downloads.Add(downloadJob);
-                }
-                else
-                {
-                    wantedItem.status = UnifiedDownloadStatus.Queued;
-                }
+                wantedItem.status = UnifiedDownloadStatus.Queued;
             }
             await DoNextJobInQueue();
         }

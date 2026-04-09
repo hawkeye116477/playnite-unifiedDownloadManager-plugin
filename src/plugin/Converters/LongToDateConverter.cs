@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace CommonPlugin.Converters
+namespace UnifiedDownloadManagerNS.Converters
 {
     public class LongToDateConverter : IValueConverter
     {

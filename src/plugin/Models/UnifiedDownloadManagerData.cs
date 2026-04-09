@@ -6,12 +6,11 @@ namespace UnifiedDownloadManagerNS.Models
     public class UnifiedDownloadManagerData
     {
         public ObservableCollection<UnifiedDownload> downloads { get; set; }
-        public ObservableCollection<PluginDownloadSetting> pluginSettings { get; } = new ObservableCollection<PluginDownloadSetting>();
+        public UnifiedMessagesSettings messagesSettings { get; } = new UnifiedMessagesSettings();
     }
 
-    public class PluginDownloadSetting
+    public class UnifiedMessagesSettings
     {
-        public string pluginId { get; set; }
         public bool dontShowDownloadManagerWhatsUpMsg { get; set; } = false;
     }
 }

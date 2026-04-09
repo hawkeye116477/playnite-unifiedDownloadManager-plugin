@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.37027.11
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnifiedDownloadManagerApi", "api\UnifiedDownloadManagerApi.csproj", "{81979029-1C1C-4E3C-9E65-F8EFBBEDFC25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnifiedDownloadManager", "plugin\UnifiedDownloadManager.csproj", "{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnifiedDownloadManagerPlugin", "plugin\UnifiedDownloadManagerPlugin.csproj", "{4FDF1E89-5BC3-4C72-8FDA-0D580E7A5D5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
