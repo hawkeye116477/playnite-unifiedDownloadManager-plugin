@@ -1,2 +1,8 @@
 AddonId: UnifiedDownloadManager
 Packages:
+  - Version: 1.0.0
+    RequiredApiVersion: 6.4.0
+    ReleaseDate: 2026-04-09
+    PackageUrl: https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/releases/download/1.0.0/UnifiedDownloadManager_1_0_0.pext
+    Changelog:
+      - First release
