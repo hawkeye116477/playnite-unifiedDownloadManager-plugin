@@ -1,8 +1,5 @@
 ﻿using Playnite.SDK;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace UnifiedDownloadManagerApiNS
@@ -11,7 +8,6 @@ namespace UnifiedDownloadManagerApiNS
     {
         private IPlayniteAPI playniteAPI = API.Instance;
         public Playnite.SDK.Plugins.Plugin udmPlugin => playniteAPI.Addons.Plugins.Find(plugin => plugin.Id.Equals(UnifiedDownloadManagerSharedProperties.Id));
-        private static readonly ILogger logger = LogManager.GetLogger();
         private readonly IUnifiedTaskManager manager;
 
         public UnifiedDownloadManagerApi()
