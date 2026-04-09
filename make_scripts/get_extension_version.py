@@ -19,5 +19,5 @@ def run():
             version = ""
             if line.startswith("[") and "AssemblyVersion" in line:
                 version = line.split('AssemblyVersion("')[
-                    1].replace('")]', '').replace(".*", "")
+                    1].replace('")]', '')
     return version
