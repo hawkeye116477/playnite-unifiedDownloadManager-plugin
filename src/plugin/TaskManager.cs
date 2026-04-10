@@ -164,7 +164,10 @@ namespace UnifiedDownloadManagerNS
                 DateTimeOffset now = DateTime.UtcNow;
                 foreach (var uniqueTask in uniqueTasks)
                 {
-                    uniqueTask.addedTime = now.ToUnixTimeSeconds();
+                    if (uniqueTask.addedTime == 0)
+                    {
+                        uniqueTask.addedTime = now.ToUnixTimeSeconds();
+                    }
                     bool canAdd = true;
                     if (uniqueTask.sourceName.IsNullOrEmpty())
                     {
@@ -202,12 +205,11 @@ namespace UnifiedDownloadManagerNS
                         }
                     }
                 }
-                await EnqueueTasks(uniqueTasks);
+                await DoNextJobInQueue();
             }
         }
 
-
-        public async Task EnqueueTasks(List<UnifiedDownload> downloadManagerDataList)
+        public async Task ResumeTasks(List<UnifiedDownload> downloadManagerDataList)
         {
             foreach (var downloadJob in downloadManagerDataList)
             {
