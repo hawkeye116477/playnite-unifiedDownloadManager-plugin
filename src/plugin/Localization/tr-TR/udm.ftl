@@ -25,7 +25,6 @@ udm-remove-selected-entries-confirm = Seçilen girişleri listeden kaldırmak is
 udm-select-all-entries = Tüm girişleri seç
 udm-edit-selected-download-properties = Girdi özelliklerini düzenle
 udm-open-download-directory = İndirilenler dizinini aç
-udm-path-not-exists-error = Belirtilen yol mevcut değil.
 udm-remove-entry-confirm = { $entryName } öğesini listeden çıkarmak istediğinizden emin misiniz?
 udm-display-download-task-finished-notifications = Tamamlanan görevlerle ilgili masaüstü bildirimlerini görüntüle
 udm-display-download-speed-in-bits = İndirme hızını saniyedeki bit cinsinden göster

@@ -25,7 +25,6 @@ udm-remove-selected-entries-confirm = Are you sure you want to remove selected e
 udm-select-all-entries = Select all entries
 udm-edit-selected-download-properties = Edit entry properties
 udm-open-download-directory = Open download directory
-udm-path-not-exists-error = The specified path does not exist.
 udm-remove-entry-confirm = Are you sure you want to remove { $entryName } from list?
 udm-display-download-task-finished-notifications = Display desktop notifications about finished tasks
 udm-display-download-speed-in-bits = Display download speed in bits per second

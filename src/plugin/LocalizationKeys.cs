@@ -114,10 +114,6 @@ namespace System
         /// </summary>
         public const string UdmOpenDownloadDirectory = "udm-open-download-directory";
         /// <summary>
-        /// The specified path does not exist.
-        /// </summary>
-        public const string UdmPathNotExistsError = "udm-path-not-exists-error";
-        /// <summary>
         /// Are you sure you want to remove {$entryName} from list?
         /// </summary>
         public const string UdmRemoveEntryConfirm = "udm-remove-entry-confirm";
@@ -177,6 +173,10 @@ namespace System
         /// Once every 6 months
         /// </summary>
         public const string CommonOnceEvery6Months = "common-once-every6-months";
+        /// <summary>
+        /// The specified path does not exist.
+        /// </summary>
+        public const string CommonPathNotExistsError = "common-path-not-exists-error";
         /// <summary>
         /// Filter Active
         /// </summary>

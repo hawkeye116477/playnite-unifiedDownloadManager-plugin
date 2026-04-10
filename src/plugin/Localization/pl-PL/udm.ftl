@@ -25,7 +25,6 @@ udm-remove-selected-entries-confirm = Czy na pewno chcesz usunąć wybrane wpisy
 udm-select-all-entries = Zaznacz wszystkie wpisy
 udm-edit-selected-download-properties = Edytuj właściwości wpisu
 udm-open-download-directory = Otwórz katalog pobierania
-udm-path-not-exists-error = Podana ścieżka nie istnieje.
 udm-remove-entry-confirm = Czy na pewno chcesz usunąć { $entryName } z listy?
 udm-display-download-task-finished-notifications = Wyświetlaj powiadomienia na pulpicie o zakończonych zadaniach
 udm-display-download-speed-in-bits = Wyświetlaj prędkość pobierania w bitach na sekundę

@@ -25,7 +25,6 @@ udm-remove-selected-entries-confirm = 您确定要从列表中移除选定条目
 udm-select-all-entries = 选择所有条目
 udm-edit-selected-download-properties = 编辑条目属性
 udm-open-download-directory = 打开下载目录
-udm-path-not-exists-error = 指定的路径不存在。
 udm-remove-entry-confirm = 您确定要从列表中移除 { $entryName } 吗？
 udm-display-download-task-finished-notifications = 显示已完成任务的通知
 udm-display-download-speed-in-bits = 以 比特(bps) 显示下载速度
