@@ -41,6 +41,11 @@ namespace UnifiedDownloadManagerApiNS
             return manager.Downloads;
         }
 
+        public async Task PauseAllTasks(string pluginId)
+        {
+            await manager.PauseAllTasks(pluginId);
+        }
+
         public void RemoveTask(UnifiedDownload downloadItem)
         {
             manager.RemoveTask(downloadItem);
