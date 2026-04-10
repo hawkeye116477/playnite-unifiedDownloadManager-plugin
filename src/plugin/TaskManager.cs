@@ -150,7 +150,13 @@ namespace UnifiedDownloadManagerNS
 
         public async Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
         {
-            var uniqueTasks = downloadManagerDataList.Where(downloadJob => !Downloads.Any(d => d.gameID == downloadJob.gameID)).ToList();
+            var existingKeys = new HashSet<(string gameID, string pluginId)>(Downloads?
+                .Where(d => d != null)
+                .Select(d => (d.gameID, d.pluginId))
+                ?? Enumerable.Empty<(string, string)>());
+            var uniqueTasks = downloadManagerDataList
+                .Where(downloadJob => !existingKeys.Contains((downloadJob.gameID, downloadJob.pluginId)))
+                .ToList();
             if (uniqueTasks.Count > 0)
             {
                 DateTimeOffset now = DateTime.UtcNow;
