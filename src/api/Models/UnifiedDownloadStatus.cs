@@ -1,4 +1,4 @@
-﻿namespace UnifiedDownloadManagerApiNS
+﻿namespace UnifiedDownloadManagerApiNS.Models
 {
     public enum UnifiedDownloadStatus
     {

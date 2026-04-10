@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using UnifiedDownloadManagerApiNS;
+using UnifiedDownloadManagerApiNS.Models;
 
 namespace UnifiedDownloadManagerNS.Models
 {

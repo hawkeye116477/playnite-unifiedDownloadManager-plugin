@@ -2,8 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using UnifiedDownloadManagerApiNS.Models;
 
-namespace UnifiedDownloadManagerApiNS
+namespace UnifiedDownloadManagerApiNS.Interfaces
 {
     public interface IUnifiedTaskManager : INotifyPropertyChanged
     {

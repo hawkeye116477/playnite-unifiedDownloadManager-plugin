@@ -1,4 +1,4 @@
-﻿namespace UnifiedDownloadManagerApiNS
+﻿namespace UnifiedDownloadManagerApiNS.Interfaces
 {
     public interface IUnifiedDownloadManager
     {

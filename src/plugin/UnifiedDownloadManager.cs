@@ -16,6 +16,8 @@ using UnifiedDownloadManagerNS.Models;
 using CommonPlugin.Enums;
 using System.Linq;
 using System.Windows;
+using UnifiedDownloadManagerApiNS.Models;
+using UnifiedDownloadManagerApiNS.Interfaces;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -60,7 +62,7 @@ namespace UnifiedDownloadManagerNS
             {
                 downloads = new ObservableCollection<UnifiedDownload>()
             };
-            var dataDir = UnifiedDownloadManager.Instance.GetPluginUserDataPath();
+            var dataDir = Instance.GetPluginUserDataPath();
             var dataFile = Path.Combine(dataDir, "unifiedDownloads.json");
             bool correctJson = false;
             if (File.Exists(dataFile))

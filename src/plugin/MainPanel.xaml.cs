@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using UnifiedDownloadManagerApiNS;
+using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
 
 namespace UnifiedDownloadManagerNS

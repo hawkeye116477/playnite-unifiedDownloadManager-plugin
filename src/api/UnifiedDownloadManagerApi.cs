@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using UnifiedDownloadManagerApiNS.Interfaces;
+using UnifiedDownloadManagerApiNS.Models;
 
 namespace UnifiedDownloadManagerApiNS
 {

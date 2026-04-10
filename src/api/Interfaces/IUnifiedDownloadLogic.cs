@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using UnifiedDownloadManagerApiNS.Models;
 
-namespace UnifiedDownloadManagerApiNS
+namespace UnifiedDownloadManagerApiNS.Interfaces
 {
     public interface IUnifiedDownloadLogic
     {

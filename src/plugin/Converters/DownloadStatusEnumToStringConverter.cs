@@ -2,7 +2,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
-using UnifiedDownloadManagerApiNS;
+using UnifiedDownloadManagerApiNS.Models;
 
 namespace UnifiedDownloadManagerNS.Converters
 {

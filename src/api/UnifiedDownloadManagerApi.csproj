@@ -41,15 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IUnifiedDownloadLogic.cs" />
-    <Compile Include="IUnifiedDownloadManager.cs" />
-    <Compile Include="IUnifiedDownloadProvider.cs" />
-    <Compile Include="IUnifiedTaskManager.cs" />
-    <Compile Include="UnifiedDownload.cs" />
+    <Compile Include="Interfaces\IUnifiedDownloadLogic.cs" />
+    <Compile Include="Interfaces\IUnifiedDownloadManager.cs" />
+    <Compile Include="Interfaces\IUnifiedDownloadProvider.cs" />
+    <Compile Include="Interfaces\IUnifiedTaskManager.cs" />
+    <Compile Include="Models\UnifiedDownload.cs" />
     <Compile Include="UnifiedDownloadManagerApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnifiedDownloadManagerSharedProperties.cs" />
-    <Compile Include="UnifiedDownloadStatus.cs" />
+    <Compile Include="Models\UnifiedDownloadStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PlayniteSDK">
