@@ -1,5 +1,6 @@
 ﻿using Playnite.SDK;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace UnifiedDownloadManagerApiNS
@@ -7,7 +8,7 @@ namespace UnifiedDownloadManagerApiNS
     public class UnifiedDownloadManagerApi
     {
         private IPlayniteAPI playniteAPI = API.Instance;
-        public Playnite.SDK.Plugins.Plugin udmPlugin => playniteAPI.Addons.Plugins.Find(plugin => plugin.Id.Equals(UnifiedDownloadManagerSharedProperties.Id));
+        private Playnite.SDK.Plugins.Plugin udmPlugin => playniteAPI.Addons.Plugins.Find(plugin => plugin.Id.Equals(UnifiedDownloadManagerSharedProperties.Id));
         private readonly IUnifiedTaskManager manager;
 
         public UnifiedDownloadManagerApi()
@@ -33,6 +34,16 @@ namespace UnifiedDownloadManagerApiNS
         public UnifiedDownload GetTask(string appId, string pluginId)
         {
             return manager.GetTask(appId, pluginId);
+        }
+        
+        public ObservableCollection<UnifiedDownload> GetAllDownloads()
+        {
+            return manager.Downloads;
+        }
+
+        public void RemoveTask(UnifiedDownload downloadItem)
+        {
+            manager.RemoveTask(downloadItem);
         }
 
     }

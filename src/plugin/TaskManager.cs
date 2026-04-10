@@ -270,5 +270,10 @@ namespace UnifiedDownloadManagerNS
             unifiedDownloadLogic.OpenDownloadPropertiesWindow(selectedEntry);
         }
 
+        public void RemoveTask(UnifiedDownload downloadItem)
+        {
+            Downloads.Remove(downloadItem);
+        }
+
     }
 }
