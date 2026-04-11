@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace UnifiedDownloadManagerApiNS.Models
 {
@@ -104,5 +103,7 @@ namespace UnifiedDownloadManagerApiNS.Models
         public CancellationTokenSource gracefulCts { get; set; }
         [DontSerialize]
         public CancellationTokenSource forcefulCts { get; set; }
+
+        public bool allowParallel { get; set; } = false;
     }
 }
