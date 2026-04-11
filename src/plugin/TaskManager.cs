@@ -126,6 +126,8 @@ namespace UnifiedDownloadManagerNS
                         }
                         queuedList[0].gracefulCts?.Dispose();
                         queuedList[0].forcefulCts?.Dispose();
+                        queuedList[0].gracefulCts = null;
+                        queuedList[0].forcefulCts = null;
                         if (settings.DisplayDownloadTaskFinishedNotifications)
                         {
                             var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
