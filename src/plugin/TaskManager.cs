@@ -118,6 +118,11 @@ namespace UnifiedDownloadManagerNS
                         logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
                         queuedList[0].status = UnifiedDownloadStatus.Error;
                     }
+                    finally
+                    {
+                        queuedList[0].gracefulCts?.Dispose();
+                        queuedList[0].forcefulCts?.Dispose();
+                    }
                     if (settings.DisplayDownloadTaskFinishedNotifications)
                     {
                         var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
@@ -233,8 +238,6 @@ namespace UnifiedDownloadManagerNS
         public Task PauseTask(UnifiedDownload task)
         {
             task.gracefulCts?.Cancel();
-            task.gracefulCts?.Dispose();
-            task.forcefulCts?.Dispose();
             task.status = UnifiedDownloadStatus.Paused;
             return Task.CompletedTask;
         }
@@ -262,8 +265,6 @@ namespace UnifiedDownloadManagerNS
         public async Task CancelTask(UnifiedDownload task)
         {
             task.gracefulCts?.Cancel();
-            task.gracefulCts?.Dispose();
-            task.forcefulCts?.Dispose();
             var unifiedDownloadLogic = GetUnifiedDownloadLogic(task.pluginId);
             await unifiedDownloadLogic.OnCancelDownload(task);
             task.status = UnifiedDownloadStatus.Canceled;
