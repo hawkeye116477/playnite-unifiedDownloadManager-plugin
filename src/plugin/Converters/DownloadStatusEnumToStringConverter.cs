@@ -28,7 +28,7 @@ namespace UnifiedDownloadManagerNS.Converters
                     value = LocalizationManager.Instance.GetString(LOC.UdmDownloadCompleted);
                     break;
                 case UnifiedDownloadStatus.Error:
-                    value = LocalizationManager.Instance.GetString(LOC.UdmDownloadPaused);
+                    value = LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDownloadError);
                     break;
             }
             return value;
