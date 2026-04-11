@@ -108,8 +108,16 @@ namespace UnifiedDownloadManagerNS
                 ActiveTask = queuedList[0];
                 if (ActiveTask != null)
                 {
-                    var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
-                    await unifiedDownloadLogic.StartDownload(queuedList[0]);
+                    try
+                    {
+                        var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
+                        await unifiedDownloadLogic.StartDownload(queuedList[0]);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
+                        queuedList[0].status = UnifiedDownloadStatus.Error;
+                    }
                     if (settings.DisplayDownloadTaskFinishedNotifications)
                     {
                         var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
