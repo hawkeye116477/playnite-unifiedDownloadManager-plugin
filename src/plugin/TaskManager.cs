@@ -115,6 +115,14 @@ namespace UnifiedDownloadManagerNS
                     }
                     catch (Exception ex)
                     {
+                        if (ex is OperationCanceledException && (queuedList[0].status == UnifiedDownloadStatus.Canceled || queuedList[0].status == UnifiedDownloadStatus.Paused))
+                        {
+                            if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
+                            {
+                                await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
+                            }
+                            return;
+                        }
                         logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
                         queuedList[0].status = UnifiedDownloadStatus.Error;
                     }
