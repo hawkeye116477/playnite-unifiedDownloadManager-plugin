@@ -61,7 +61,7 @@ namespace UnifiedDownloadManagerNS
                 {
                     foreach (var cancelableDownload in cancelableDownloads)
                     {
-                        await _manager.CancelTask(cancelableDownload);
+                        _manager.CancelTask(cancelableDownload);
                     }
                     await _manager.DoNextJobInQueue();
                 }
