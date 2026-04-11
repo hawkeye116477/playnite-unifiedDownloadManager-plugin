@@ -91,7 +91,6 @@ namespace UnifiedDownloadManagerNS
         {
             var targetPlugin = playniteAPI.Addons.Plugins.Find(plugin => plugin.Id == Guid.Parse(pluginId)) as IUnifiedDownloadProvider;
             return targetPlugin.UnifiedDownloadLogic;
-
         }
 
 
@@ -121,10 +120,12 @@ namespace UnifiedDownloadManagerNS
                             {
                                 await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
                             }
-                            return;
                         }
-                        logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
-                        queuedList[0].status = UnifiedDownloadStatus.Error;
+                        else
+                        {
+                            logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
+                            queuedList[0].status = UnifiedDownloadStatus.Error;
+                        }
                     }
                     finally
                     {
