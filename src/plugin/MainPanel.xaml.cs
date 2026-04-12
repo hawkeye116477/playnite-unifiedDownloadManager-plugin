@@ -462,21 +462,9 @@ namespace UnifiedDownloadManagerNS
             downloadsView.Filter = DownloadsFilter;
         }
 
-        private void UpdateSources()
-        {
-            var sources = DownloadsDG.Items.Cast<UnifiedDownload>().Select(d => d.sourceName).Distinct().OrderBy(s => s);
-            foreach (var src in sources)
-            {
-                if (!_manager.AllSources.Contains(src) && !src.IsNullOrEmpty())
-                {
-                    _manager.AllSources.Add(src);
-                }
-            }
-        }
-
         private void SourceCBo_DropDownOpened(object sender, EventArgs e)
         {
-            UpdateSources();
+            _manager.UpdateSources();
         }
 
         private void ClearFiltersBtn_Click(object sender, RoutedEventArgs e)

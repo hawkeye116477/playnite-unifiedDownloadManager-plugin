@@ -307,5 +307,17 @@ namespace UnifiedDownloadManagerNS
             Downloads.Remove(downloadItem);
         }
 
+        public void UpdateSources()
+        {
+            var sources = Downloads.Select(d => d.sourceName).Distinct().OrderBy(s => s);
+            foreach (var src in sources)
+            {
+                if (!AllSources.Contains(src) && !src.IsNullOrEmpty())
+                {
+                    AllSources.Add(src);
+                }
+            }
+        }
+
     }
 }
