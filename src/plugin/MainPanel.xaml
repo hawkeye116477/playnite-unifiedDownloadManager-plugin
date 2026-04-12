@@ -25,65 +25,13 @@
         <Style BasedOn="{StaticResource HawkeyeExpanderStyle}" TargetType="Expander" />
         <Style BasedOn="{StaticResource HawkeyeTabControlStyle}" TargetType="TabControl" />
     </UserControl.Resources>
-    <DockPanel Margin="10,10,10,5">
-        <Grid DockPanel.Dock="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Separator Grid.Row="0" Grid.ColumnSpan="2" Margin="0,15,0,10" />
-            <TextBlock
-                Name="GameTitleTB" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
-                HorizontalAlignment="Left"
-                Text="{Binding ActiveTask.name, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock
-                x:Name="DescriptionTB" Grid.Row="2" Margin="0,0,0,5" HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                Text="{Binding ActiveTask.activity, UpdateSourceTrigger=PropertyChanged}" />
-            <StackPanel
-                Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" HorizontalAlignment="Left"
-                VerticalAlignment="Top" Orientation="Horizontal">
-                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDownloadSpeed}}" />
-                <TextBlock Name="DownloadSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.downloadSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
-            </StackPanel>
-            <StackPanel
-                Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" HorizontalAlignment="Left"
-                VerticalAlignment="Top" Orientation="Horizontal">
-                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmElapsed}}" />
-                <TextBlock Name="ElapsedTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.elapsed, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            <StackPanel
-                Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" HorizontalAlignment="Left"
-                VerticalAlignment="Top" Orientation="Horizontal">
-                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDiskSpeed}}" />
-                <TextBlock Name="DiskSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.diskWriteSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
-            </StackPanel>
-            <StackPanel
-                Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" HorizontalAlignment="Left"
-                VerticalAlignment="Top" Orientation="Horizontal">
-                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmEta}}" />
-                <TextBlock Name="EtaTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.eta, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-        </Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Grid Margin="10,10,10,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
             <StackPanel Grid.Row="0" VerticalAlignment="Top" Orientation="Vertical">
                 <StackPanel Margin="0,0,0,10" DockPanel.Dock="Top" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Style="{x:Null}" WindowChrome.IsHitTestVisibleInChrome="True">
@@ -160,98 +108,149 @@
                 </StackPanel>
                 <Separator Margin="0,5,0,5" />
             </StackPanel>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="LeftCol" Width="4*" />
-                    <ColumnDefinition x:Name="MiddleCol" Width="Auto" />
-                    <ColumnDefinition x:Name="RightCol" Width="1*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <DataGrid
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftCol" Width="4*" />
+                <ColumnDefinition x:Name="MiddleCol" Width="Auto" />
+                <ColumnDefinition x:Name="RightCol" Width="1*" />
+            </Grid.ColumnDefinitions>
+            <DataGrid
                     x:Name="DownloadsDG" Margin="0,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Top"
                     AutoGenerateColumns="False" CanUserResizeColumns="True" CanUserSortColumns="True" ColumnWidth="*"
-                    DockPanel.Dock="Left" EnableColumnVirtualization="True" EnableRowVirtualization="True" HeadersVisibility="Column"
+                    EnableColumnVirtualization="True" EnableRowVirtualization="True" HeadersVisibility="Column"
                     IsReadOnly="True"
                     ItemsSource="{Binding Downloads}"
                     ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DownloadsDG_SelectionChanged"
-                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" />
-                        <DataGridTextColumn Binding="{Binding sourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
-                        <DataGridTemplateColumn Header="{common:Localize Key={x:Static system:LOC.UdmProgress}}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <ProgressBar Name="DownloadPB" Value="{Binding progress}" />
-                                        <TextBlock
+                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" />
+                    <DataGridTextColumn Binding="{Binding sourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
+                    <DataGridTemplateColumn Header="{common:Localize Key={x:Static system:LOC.UdmProgress}}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <ProgressBar Name="DownloadPB" Value="{Binding progress}" />
+                                    <TextBlock
                                             Margin="0,2" HorizontalAlignment="Center" VerticalAlignment="Center"
                                             Style="{DynamicResource HawkeyeTextBlockStyle}"
                                             Text="{Binding progress, StringFormat={}{0:0}%}" />
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="{common:Localize Key={x:Static system:LOC.UdmDownloaded}}">
-                            <DataGridTextColumn.Binding>
-                                <MultiBinding StringFormat="{}{0} / {1}">
-                                    <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="downloadedBytes" />
-                                    <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="downloadSizeBytes" />
-                                </MultiBinding>
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding installSizeBytes, Converter={StaticResource NumericalSizeToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteInstallSizeLabel}}" />
-                        <DataGridTextColumn Binding="{Binding status, Converter={StaticResource DownloadStatusEnumToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
-                        <DataGridTextColumn Binding="{Binding addedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteAddedLabel}}" />
-                        <DataGridTextColumn Binding="{Binding completedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadCompletedColumn}}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-                <StackPanel Name="FiltersSepSP" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal">
-                    <Separator />
-                </StackPanel>
-                <StackPanel Name="FilterSP" Grid.Column="2" Margin="10,0,0,0" DockPanel.Dock="Right">
-                    <Button Content="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteClearFilters}}" Margin="0,0,0,10" Click="ClearFiltersBtn_Click" IsEnabled="False" Name="ClearFiltersBtn"></Button>
-                    <TextBlock Margin="0,0,0,5" Text="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
-                    <Grid Margin="0,0,0,7">
-                        <ComboBox x:Name="StatusCBo" HorizontalContentAlignment="Stretch" IsEditable="False" SelectionChanged="StatusCBo_SelectionChanged">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox Checked="StatusChk_Changed" Content="{Binding Converter={StaticResource DownloadStatusEnumToStringConverter}}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Unchecked="StatusChk_Changed" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <TextBlock
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{common:Localize Key={x:Static system:LOC.UdmDownloaded}}">
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding StringFormat="{}{0} / {1}">
+                                <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="downloadedBytes" />
+                                <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="downloadSizeBytes" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding installSizeBytes, Converter={StaticResource NumericalSizeToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteInstallSizeLabel}}" />
+                    <DataGridTextColumn Binding="{Binding status, Converter={StaticResource DownloadStatusEnumToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
+                    <DataGridTextColumn Binding="{Binding addedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteAddedLabel}}" />
+                    <DataGridTextColumn Binding="{Binding completedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadCompletedColumn}}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Name="FiltersSepSP" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal">
+                <Separator />
+            </StackPanel>
+            <StackPanel Name="FilterSP" Grid.Column="2" Margin="10,0,0,0" DockPanel.Dock="Right">
+                <Button Content="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteClearFilters}}" Margin="0,0,0,10" Click="ClearFiltersBtn_Click" IsEnabled="False" Name="ClearFiltersBtn"></Button>
+                <TextBlock Margin="0,0,0,5" Text="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
+                <Grid Margin="0,0,0,7">
+                    <ComboBox x:Name="StatusCBo" HorizontalContentAlignment="Stretch" IsEditable="False" SelectionChanged="StatusCBo_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Checked="StatusChk_Changed" Content="{Binding Converter={StaticResource DownloadStatusEnumToStringConverter}}" IsChecked="{Binding IsSelected, Mode=TwoWay}" Unchecked="StatusChk_Changed" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock
                             Name="StatusTb" Margin="5,0,20,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                             Panel.ZIndex="1" ClipToBounds="True" IsHitTestVisible="False" TextTrimming="CharacterEllipsis"
                             TextWrapping="NoWrap" />
-                    </Grid>
-                    <TextBlock Margin="0,0,0,5" Text="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
-                    <Grid Margin="0,0,0,7">
-                        <ComboBox
+                </Grid>
+                <TextBlock Margin="0,0,0,5" Text="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
+                <Grid Margin="0,0,0,7">
+                    <ComboBox
                             x:Name="SourceCBo" HorizontalContentAlignment="Stretch" DropDownOpened="SourceCBo_DropDownOpened" IsEditable="False"
                             ItemsSource="{Binding AllSources}"
                             SelectionChanged="StatusCBo_SelectionChanged">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox
                                         x:Name="SourceChk" Checked="SourceChk_Changed"
                                         Content="{Binding Converter={StaticResource DownloadStatusEnumToStringConverter}}"
                                         IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                         Unchecked="SourceChk_Changed" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <TextBlock
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock
                             Name="SourceTb" Margin="5,0,20,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                             Panel.ZIndex="1" ClipToBounds="True" IsHitTestVisible="False" TextTrimming="CharacterEllipsis"
                             TextWrapping="NoWrap" />
-                    </Grid>
-                </StackPanel>
-            </Grid>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Separator Grid.Row="0" Grid.ColumnSpan="2" Margin="0,5,0,10" />
+            <TextBlock
+                Name="GameTitleTB" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
+                HorizontalAlignment="Left"
+                Text="{Binding ActiveTask.name, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock
+                x:Name="DescriptionTB" Grid.Row="2" Margin="0,0,0,5" HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Text="{Binding ActiveTask.activity, UpdateSourceTrigger=PropertyChanged}" />
+            <StackPanel
+                Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" HorizontalAlignment="Left"
+                VerticalAlignment="Top" Orientation="Horizontal">
+                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDownloadSpeed}}" />
+                <TextBlock Name="DownloadSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.downloadSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" HorizontalAlignment="Left"
+                VerticalAlignment="Top" Orientation="Horizontal">
+                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmElapsed}}" />
+                <TextBlock Name="ElapsedTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.elapsed, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" HorizontalAlignment="Left"
+                VerticalAlignment="Top" Orientation="Horizontal">
+                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDiskSpeed}}" />
+                <TextBlock Name="DiskSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.diskWriteSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" HorizontalAlignment="Left"
+                VerticalAlignment="Top" Orientation="Horizontal">
+                <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmEta}}" />
+                <TextBlock Name="EtaTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.eta, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
         </Grid>
 
-    </DockPanel>
+    </Grid>
 
 </UserControl>
