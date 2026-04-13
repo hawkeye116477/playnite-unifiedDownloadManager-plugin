@@ -1,5 +1,11 @@
 AddonId: UnifiedDownloadManager
 Packages:
+  - Version: 1.0.5
+    RequiredApiVersion: 6.4.0
+    ReleaseDate: 2026-04-13
+    PackageUrl: https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/releases/download/1.0.5/UnifiedDownloadManager_1_0_5.pext
+    Changelog:
+      - Removed uncessary pausing at startup and keeped only at shutdown
   - Version: 1.0.4
     RequiredApiVersion: 6.4.0
     ReleaseDate: 2026-04-12
