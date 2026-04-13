@@ -152,14 +152,6 @@ namespace UnifiedDownloadManagerNS
             return textBlock;
         }
 
-        public override async void OnApplicationStarted(OnApplicationStartedEventArgs args)
-        {
-            if (Manager is TaskManager fullTaskManager)
-            {
-                await fullTaskManager.PauseAllTasks();
-            }
-        }
-
         public override async void OnApplicationStopped(OnApplicationStoppedEventArgs args)
         {
             if (Manager is TaskManager fullTaskManager)
