@@ -2,4 +2,4 @@
 Manage downloads from compatible Playnite plugins.
 
 ## How to integrate this into my library plugin?
-For now that'll be sweet secret 🙂.
+Just follow [entry at wiki](https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/wiki/API-guide).
