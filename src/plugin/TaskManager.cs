@@ -10,11 +10,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Interfaces;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Enums;
-using UnifiedDownloadManagerNS.Models;
 
 namespace UnifiedDownloadManagerNS
 {
