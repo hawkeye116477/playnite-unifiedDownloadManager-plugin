@@ -21,11 +21,19 @@ udm-move-entry-down = Przenieś wpis w dół
 udm-move-entry-bottom = Przenieś wpis na dół
 udm-remove-completed-downloads = Usuń ukończone pobrania
 udm-remove-completed-downloads-confirm = Czy na pewno chcesz usunąć wszystkie ukończone pobrania z listy?
-udm-remove-selected-entries-confirm = Czy na pewno chcesz usunąć wybrane wpisy z listy?
 udm-select-all-entries = Zaznacz wszystkie wpisy
 udm-edit-selected-download-properties = Edytuj właściwości wpisu
 udm-open-download-directory = Otwórz katalog pobierania
-udm-remove-entry-confirm = Czy na pewno chcesz usunąć { $entryName } z listy?
+udm-remove-entry-confirm =
+    { $count ->
+        [one] Czy na pewno chcesz usunąć { $entryName } z listy?
+       *[other] Czy na pewno chcesz usunąć wybrane wpisy z listy?
+    }
+udm-cancel-download-confirm =
+    { $count ->
+        [one] Czy na pewno chcesz anulować pobieranie { $appName }?
+       *[other] Czy na pewno chcesz anulować pobieranie wybranych wpisów?
+    }
 udm-display-download-task-finished-notifications = Wyświetlaj powiadomienia na pulpicie o zakończonych zadaniach
 udm-display-download-speed-in-bits = Wyświetlaj prędkość pobierania w bitach na sekundę
 udm-after-download-complete = Akcja po zakończeniu pobierania
