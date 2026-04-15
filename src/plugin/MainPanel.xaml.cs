@@ -61,6 +61,11 @@ namespace UnifiedDownloadManagerNS
                 {
                     foreach (var cancelableDownload in cancelableDownloads)
                     {
+                        var unifiedDownloadLogic = _manager.GetUnifiedDownloadLogic(cancelableDownload.pluginId);
+                        if (cancelableDownload.status != UnifiedDownloadStatus.Running)
+                        {
+                            await unifiedDownloadLogic.OnCancelDownload(cancelableDownload);
+                        }
                         _manager.CancelTask(cancelableDownload);
                     }
                     await _manager.DoNextJobInQueue();

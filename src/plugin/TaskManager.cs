@@ -85,7 +85,7 @@ namespace UnifiedDownloadManagerNS
             return task;
         }
 
-        private IUnifiedDownloadLogic GetUnifiedDownloadLogic(string pluginId)
+        public IUnifiedDownloadLogic GetUnifiedDownloadLogic(string pluginId)
         {
             var targetPlugin = playniteAPI.Addons.Plugins.Find(plugin => plugin.Id == Guid.Parse(pluginId)) as IUnifiedDownloadProvider;
             return targetPlugin.UnifiedDownloadLogic;
