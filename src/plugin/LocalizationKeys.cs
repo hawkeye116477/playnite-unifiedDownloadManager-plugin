@@ -98,10 +98,6 @@ namespace System
         /// </summary>
         public const string UdmRemoveCompletedDownloadsConfirm = "udm-remove-completed-downloads-confirm";
         /// <summary>
-        /// Are you sure you want to remove selected entries from list?
-        /// </summary>
-        public const string UdmRemoveSelectedEntriesConfirm = "udm-remove-selected-entries-confirm";
-        /// <summary>
         /// Select all entries
         /// </summary>
         public const string UdmSelectAllEntries = "udm-select-all-entries";
@@ -114,9 +110,17 @@ namespace System
         /// </summary>
         public const string UdmOpenDownloadDirectory = "udm-open-download-directory";
         /// <summary>
-        /// Are you sure you want to remove {$entryName} from list?
+        /// {$count ->}<br/>
+		/// one: Are you sure you want to remove {$entryName} from list?<br/>
+		/// other: Are you sure you want to remove selected entries from list?
         /// </summary>
         public const string UdmRemoveEntryConfirm = "udm-remove-entry-confirm";
+        /// <summary>
+        /// {$count ->}<br/>
+		/// one: Are you sure you want to cancel downloading {$appName}?<br/>
+		/// other: Are you sure you want to cancel downloading selected entries?
+        /// </summary>
+        public const string UdmCancelDownloadConfirm = "udm-cancel-download-confirm";
         /// <summary>
         /// Display desktop notifications about finished tasks
         /// </summary>

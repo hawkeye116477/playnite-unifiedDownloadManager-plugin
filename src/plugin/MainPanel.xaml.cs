@@ -59,16 +59,21 @@ namespace UnifiedDownloadManagerNS
                                                                    .ToList();
                 if (cancelableDownloads.Count > 0)
                 {
-                    foreach (var cancelableDownload in cancelableDownloads)
+                    string messageText = LocalizationManager.Instance.GetString(LOC.UdmCancelDownloadConfirm, new Dictionary<string, IFluentType> { ["appName"] = (FluentString)cancelableDownloads[0].name, ["count"] = (FluentNumber)cancelableDownloads.Count });
+                    var result = playniteAPI.Dialogs.ShowMessage(messageText, LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteCancelLabel), MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
                     {
-                        var unifiedDownloadLogic = _manager.GetUnifiedDownloadLogic(cancelableDownload.pluginId);
-                        if (cancelableDownload.status != UnifiedDownloadStatus.Running)
+                        foreach (var cancelableDownload in cancelableDownloads)
                         {
-                            await unifiedDownloadLogic.OnCancelDownload(cancelableDownload);
+                            var unifiedDownloadLogic = _manager.GetUnifiedDownloadLogic(cancelableDownload.pluginId);
+                            if (cancelableDownload.status != UnifiedDownloadStatus.Running)
+                            {
+                                await unifiedDownloadLogic.OnCancelDownload(cancelableDownload);
+                            }
+                            _manager.CancelTask(cancelableDownload);
                         }
-                        _manager.CancelTask(cancelableDownload);
+                        await _manager.DoNextJobInQueue();
                     }
-                    await _manager.DoNextJobInQueue();
                 }
             }
         }
@@ -231,25 +236,22 @@ namespace UnifiedDownloadManagerNS
         {
             if (DownloadsDG.SelectedIndex != -1)
             {
-                string messageText;
-                if (DownloadsDG.SelectedItems.Count == 1)
+                var removableDownloads = DownloadsDG.SelectedItems.Cast<UnifiedDownload>()
+                                                                  .Where(i => i.status != UnifiedDownloadStatus.Running)
+                                                                  .ToList();
+                if (removableDownloads.Count > 0)
                 {
-                    var selectedRow = (UnifiedDownload)DownloadsDG.SelectedItem;
-                    messageText = LocalizationManager.Instance.GetString(LOC.UdmRemoveEntryConfirm, new Dictionary<string, IFluentType> { ["entryName"] = (FluentString)selectedRow.name });
-                }
-                else
-                {
-                    messageText = LocalizationManager.Instance.GetString(LOC.UdmRemoveSelectedEntriesConfirm);
-                }
-                var result = playniteAPI.Dialogs.ShowMessage(messageText, LocalizationManager.Instance.GetString(LOC.UdmRemoveEntry), MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    foreach (var selectedRow in DownloadsDG.SelectedItems.Cast<UnifiedDownload>().ToList())
+                    string messageText = LocalizationManager.Instance.GetString(LOC.UdmRemoveEntryConfirm, new Dictionary<string, IFluentType> { ["entryName"] = (FluentString)removableDownloads[0].name, ["count"] = (FluentNumber)removableDownloads.Count });
+                    var result = playniteAPI.Dialogs.ShowMessage(messageText, LocalizationManager.Instance.GetString(LOC.UdmRemoveEntry), MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
                     {
-                        await _manager.RemoveDownloadEntry(selectedRow);
+                        foreach (var selectedRow in removableDownloads)
+                        {
+                            await _manager.RemoveDownloadEntry(selectedRow);
+                        }
                     }
+                    UnifiedDownloadManager.Instance.SaveManagerData();
                 }
-                UnifiedDownloadManager.Instance.SaveManagerData();
             }
         }
 

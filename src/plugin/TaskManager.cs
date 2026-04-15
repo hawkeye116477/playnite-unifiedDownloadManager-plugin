@@ -106,6 +106,7 @@ namespace UnifiedDownloadManagerNS
                 if (ActiveTask != null)
                 {
                     var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
+                    bool cancelMethodExectuted = false;
                     try
                     {
                         await unifiedDownloadLogic.StartDownload(queuedList[0]);
@@ -117,6 +118,7 @@ namespace UnifiedDownloadManagerNS
                             if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
                             {
                                 await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
+                                cancelMethodExectuted = true;
                             }
                         }
                         else
@@ -127,7 +129,7 @@ namespace UnifiedDownloadManagerNS
                     }
                     finally
                     {
-                        if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
+                        if (!cancelMethodExectuted && queuedList[0].status == UnifiedDownloadStatus.Canceled)
                         {
                             await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
                         }
@@ -286,10 +288,6 @@ namespace UnifiedDownloadManagerNS
         public async Task RemoveDownloadEntry(UnifiedDownload selectedEntry)
         {
             var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
-            if (selectedEntry.status == UnifiedDownloadStatus.Running)
-            {
-                CancelTask(selectedEntry);
-            }
             await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
             Downloads.Remove(selectedEntry);
         }
