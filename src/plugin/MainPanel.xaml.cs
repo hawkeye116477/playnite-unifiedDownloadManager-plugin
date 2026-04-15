@@ -280,7 +280,7 @@ namespace UnifiedDownloadManagerNS
             var fullInstallPath = selectedItem.fullInstallPath;
             if (fullInstallPath != "" && Directory.Exists(fullInstallPath))
             {
-                ProcessStarter.StartProcess("explorer.exe", selectedItem.fullInstallPath);
+                ProcessStarter.StartProcess(selectedItem.fullInstallPath);
             }
             else
             {
