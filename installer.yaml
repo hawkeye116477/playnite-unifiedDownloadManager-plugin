@@ -1,5 +1,12 @@
 AddonId: UnifiedDownloadManager
 Packages:
+  - Version: 1.0.7
+    RequiredApiVersion: 6.4.0
+    ReleaseDate: 2026-04-16
+    PackageUrl: https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/releases/download/1.0.7/UnifiedDownloadManager_1_0_7.pext
+    Changelog:
+      - Improved removing, pausing and cancelling tasks
+      - Improved full screen mode styling
   - Version: 1.0.6
     RequiredApiVersion: 6.4.0
     ReleaseDate: 2026-04-15
