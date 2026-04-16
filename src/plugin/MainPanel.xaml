@@ -45,17 +45,17 @@
                     <Button
                         x:Name="ResumeDownloadBtn" Click="ResumeDownloadBtn_Click" Content="&#xec74;"
                         FontFamily="{DynamicResource FontIcoFont}"
-                        IsEnabled="False"
+                        IsEnabled="{Binding CanResume}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.UdmResumeDownload}}" />
                     <Button
                         x:Name="PauseBtn" Margin="5,0,0,0" Click="PauseBtn_Click" Content="&#xec72;"
                         FontFamily="{DynamicResource FontIcoFont}"
-                        IsEnabled="False"
+                        IsEnabled="{Binding CanPause}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.UdmPauseDownload}}" />
                     <Button
                         x:Name="CancelDownloadBtn" Margin="5,0,0,0" Click="CancelDownloadBtn_Click" Content="&#xec73;"
                         FontFamily="{DynamicResource FontIcoFont}"
-                        IsCancel="True" IsEnabled="False"
+                        IsEnabled="{Binding CanCancel}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteCancelLabel}}" />
                     <Separator Margin="10,0,5,0" />
                     <Button

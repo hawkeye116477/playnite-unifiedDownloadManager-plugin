@@ -79,11 +79,11 @@ namespace UnifiedDownloadManagerNS
 
         private void DownloadsDG_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var allSelected = DownloadsDG.SelectedItems.Cast<UnifiedDownload>().ToList();
+            _manager.UpdateSelectedItems(allSelected);
+
             if (DownloadsDG.SelectedIndex != -1)
             {
-                ResumeDownloadBtn.IsEnabled = true;
-                PauseBtn.IsEnabled = true;
-                CancelDownloadBtn.IsEnabled = true;
                 RemoveDownloadBtn.IsEnabled = true;
                 MoveBottomBtn.IsEnabled = true;
                 MoveDownBtn.IsEnabled = true;

@@ -45,7 +45,41 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
+        private bool _canResume { get; set; }
+        public bool CanResume
+        {
+            get => _canResume;
+            set
+            {
+                _canResume = value;
+                OnPropertyChanged(nameof(CanResume));
+            }
+        }
+
+        private bool _canPause { get; set; }
+        public bool CanPause
+        {
+            get => _canPause;
+            set
+            {
+                _canPause = value;
+                OnPropertyChanged(nameof(CanPause));
+            }
+        }
+
+        private bool _canCancel { get; set; }
+        public bool CanCancel
+        {
+            get => _canCancel;
+            set
+            {
+                _canCancel = value;
+                OnPropertyChanged(nameof(CanCancel));
+            }
+        }
+
         private ConcurrentDictionary<string, bool> tasksToRemove = new ConcurrentDictionary<string, bool>();
+        private List<UnifiedDownload> selectedItems = new List<UnifiedDownload>();
 
         private void ActiveTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -79,6 +113,37 @@ namespace UnifiedDownloadManagerNS
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public void UpdateSelectedItems(List<UnifiedDownload> selectedItemsList)
+        {
+            selectedItems = selectedItemsList;
+            RefreshButtonStates();
+        }
+
+        public void RefreshButtonStates()
+        {
+            CanResume = false;
+            CanPause = false;
+            CanCancel = false;
+            foreach (var selectedItem in selectedItems)
+            {
+                if (selectedItem.status != UnifiedDownloadStatus.Completed)
+                {
+                    if (!CanResume && selectedItem.status != UnifiedDownloadStatus.Running)
+                    {
+                        CanResume = true;
+                    }
+                    if (!CanPause && selectedItem.status == UnifiedDownloadStatus.Running)
+                    {
+                        CanPause = true;
+                    }
+                    if (!CanCancel && selectedItem.status != UnifiedDownloadStatus.Canceled)
+                    {
+                        CanCancel = true;
+                    }
+                }
+            }
         }
 
 
@@ -138,6 +203,7 @@ namespace UnifiedDownloadManagerNS
                         if (tasksToRemove.TryRemove($"{queuedList[0].pluginId}_{queuedList[0].gameID}", out bool shouldRemove) && shouldRemove)
                         {
                             await unifiedDownloadLogic.OnRemoveDownloadEntry(queuedList[0]);
+                            queuedList[0].PropertyChanged -= DownloadTask_PropertyChanged;
                             Downloads.Remove(queuedList[0]);
                         }
                         if (settings.DisplayDownloadTaskFinishedNotifications)
@@ -221,6 +287,7 @@ namespace UnifiedDownloadManagerNS
                     if (canAdd)
                     {
                         Downloads.Add(uniqueTask);
+                        uniqueTask.PropertyChanged += DownloadTask_PropertyChanged;
                     }
                 }
                 if (!silently)
@@ -240,6 +307,14 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
+        private void DownloadTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(UnifiedDownload.status))
+            {
+                RefreshButtonStates();
+            }
+        }
+
         public async Task ResumeTasks(List<UnifiedDownload> downloadManagerDataList)
         {
             foreach (var downloadJob in downloadManagerDataList)
@@ -247,6 +322,7 @@ namespace UnifiedDownloadManagerNS
                 var wantedItem = Downloads.FirstOrDefault(item => item.gameID == downloadJob.gameID);
                 if (wantedItem != null)
                 {
+                    wantedItem.PropertyChanged += DownloadTask_PropertyChanged;
                     wantedItem.status = UnifiedDownloadStatus.Queued;
                 }
             }
@@ -299,6 +375,7 @@ namespace UnifiedDownloadManagerNS
             else
             {
                 await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
+                selectedEntry.PropertyChanged -= DownloadTask_PropertyChanged;
                 Downloads.Remove(selectedEntry);
             }
         }
