@@ -72,7 +72,6 @@ namespace UnifiedDownloadManagerNS
                             }
                             _manager.CancelTask(cancelableDownload);
                         }
-                        await _manager.DoNextJobInQueue();
                     }
                 }
             }
@@ -127,7 +126,6 @@ namespace UnifiedDownloadManagerNS
                     {
                         await _manager.PauseTask(selectedRow);
                     }
-                    await _manager.DoNextJobInQueue();
                 }
             }
         }

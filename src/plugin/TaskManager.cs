@@ -106,7 +106,6 @@ namespace UnifiedDownloadManagerNS
                 if (ActiveTask != null)
                 {
                     var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
-                    bool cancelMethodExectuted = false;
                     try
                     {
                         await unifiedDownloadLogic.StartDownload(queuedList[0]);
@@ -115,11 +114,7 @@ namespace UnifiedDownloadManagerNS
                     {
                         if (ex is OperationCanceledException && (queuedList[0].status == UnifiedDownloadStatus.Canceled || queuedList[0].status == UnifiedDownloadStatus.Paused))
                         {
-                            if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
-                            {
-                                await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
-                                cancelMethodExectuted = true;
-                            }
+
                         }
                         else
                         {
@@ -129,7 +124,7 @@ namespace UnifiedDownloadManagerNS
                     }
                     finally
                     {
-                        if (!cancelMethodExectuted && queuedList[0].status == UnifiedDownloadStatus.Canceled)
+                        if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
                         {
                             await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
                         }
