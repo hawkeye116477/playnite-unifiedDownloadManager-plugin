@@ -235,7 +235,6 @@ namespace UnifiedDownloadManagerNS
             if (DownloadsDG.SelectedIndex != -1)
             {
                 var removableDownloads = DownloadsDG.SelectedItems.Cast<UnifiedDownload>()
-                                                                  .Where(i => i.status != UnifiedDownloadStatus.Running)
                                                                   .ToList();
                 if (removableDownloads.Count > 0)
                 {

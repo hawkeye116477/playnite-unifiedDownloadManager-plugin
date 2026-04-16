@@ -2,6 +2,7 @@
 using Linguini.Shared.Types.Bundle;
 using Playnite.SDK;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -43,6 +44,8 @@ namespace UnifiedDownloadManagerNS
                 OnPropertyChanged(nameof(ActiveTask));
             }
         }
+
+        private ConcurrentDictionary<string, bool> tasksToRemove = new ConcurrentDictionary<string, bool>();
 
         private void ActiveTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -132,6 +135,11 @@ namespace UnifiedDownloadManagerNS
                         queuedList[0].forcefulCts?.Dispose();
                         queuedList[0].gracefulCts = null;
                         queuedList[0].forcefulCts = null;
+                        if (tasksToRemove.TryRemove($"{queuedList[0].pluginId}_{queuedList[0].gameID}", out bool shouldRemove) && shouldRemove)
+                        {
+                            await unifiedDownloadLogic.OnRemoveDownloadEntry(queuedList[0]);
+                            Downloads.Remove(queuedList[0]);
+                        }
                         if (settings.DisplayDownloadTaskFinishedNotifications)
                         {
                             var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
@@ -283,8 +291,16 @@ namespace UnifiedDownloadManagerNS
         public async Task RemoveDownloadEntry(UnifiedDownload selectedEntry)
         {
             var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
-            await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
-            Downloads.Remove(selectedEntry);
+            if (selectedEntry.status == UnifiedDownloadStatus.Running)
+            {
+                tasksToRemove[$"{selectedEntry.pluginId}_{selectedEntry.gameID}"] = true;
+                CancelTask(selectedEntry);
+            }
+            else
+            {
+                await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
+                Downloads.Remove(selectedEntry);
+            }
         }
 
         public void OpenDownloadPropertiesWindows(UnifiedDownload selectedEntry)
