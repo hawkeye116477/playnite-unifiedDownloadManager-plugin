@@ -226,10 +226,11 @@ namespace UnifiedDownloadManagerNS
                         {
                             ShowMaximizeButton = true,
                         });
+                        window.ResizeMode = ResizeMode.CanResize;
+                        window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                         window.Title = UnifiedDownloadManager.Instance.PluginName;
                         window.Content = GetDownloadManagerPanel();
                         window.Owner = PlayniteApi.Dialogs.GetCurrentAppWindow();
-                        window.SizeToContent = SizeToContent.WidthAndHeight;
                         window.ShowDialog();
                     }
                 };

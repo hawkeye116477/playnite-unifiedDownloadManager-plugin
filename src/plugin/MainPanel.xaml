@@ -24,6 +24,10 @@
         <Style BasedOn="{StaticResource HawkeyeButtonStyle}" TargetType="Button" />
         <Style BasedOn="{StaticResource HawkeyeExpanderStyle}" TargetType="Expander" />
         <Style BasedOn="{StaticResource HawkeyeTabControlStyle}" TargetType="TabControl" />
+        <Style BasedOn="{StaticResource HawkeyeDataGridStyle}" TargetType="DataGrid" />
+        <Style BasedOn="{StaticResource HawkeyeDataGridCellStyle}" TargetType="DataGridCell" />
+        <Style BasedOn="{StaticResource HawkeyeDataGridRowStyle}" TargetType="DataGridRow" />
+        <Style BasedOn="{StaticResource HawkeyeDataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader" />
     </UserControl.Resources>
     <Grid Margin="10,10,10,5">
         <Grid.RowDefinitions>
@@ -95,7 +99,7 @@
                         x:Name="OpenDownloadDirectoryBtn" Margin="5,0,0,0" Click="OpenDownloadDirectoryBtn_Click" Content="&#xef35;"
                         FontFamily="{DynamicResource FontIcoFont}"
                         IsEnabled="False" />
-                    <ToggleButton
+                    <Button
                         x:Name="FilterDownloadBtn" Margin="5,0,0,0" Click="FilterDownloadBtn_Click" Content="&#xef29;"
                         FontFamily="{DynamicResource FontIcoFont}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteFilters}}" />
