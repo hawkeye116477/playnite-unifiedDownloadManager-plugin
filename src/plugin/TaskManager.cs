@@ -146,7 +146,6 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-
         public UnifiedDownload GetTask(string appId, string pluginId)
         {
             var task = Downloads.FirstOrDefault(t => t.gameID == appId && t.pluginId == pluginId);

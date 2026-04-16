@@ -81,7 +81,6 @@ namespace UnifiedDownloadManagerNS
         {
             var allSelected = DownloadsDG.SelectedItems.Cast<UnifiedDownload>().ToList();
             _manager.UpdateSelectedItems(allSelected);
-
             if (DownloadsDG.SelectedIndex != -1)
             {
                 RemoveDownloadBtn.IsEnabled = true;
@@ -102,9 +101,9 @@ namespace UnifiedDownloadManagerNS
             }
             else
             {
-                ResumeDownloadBtn.IsEnabled = false;
-                PauseBtn.IsEnabled = false;
-                CancelDownloadBtn.IsEnabled = false;
+                _manager.CanResume = false;
+                _manager.CanPause = false;
+                _manager.CanCancel = false;
                 RemoveDownloadBtn.IsEnabled = false;
                 DownloadPropertiesBtn.IsEnabled = false;
                 OpenDownloadDirectoryBtn.IsEnabled = false;
