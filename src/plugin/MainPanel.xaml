@@ -45,7 +45,7 @@
                     </TextBlock>
                     <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontSize="18" Text="{common:Localize Key={x:Static system:LOC.UdmDownloadManager}}" />
                 </StackPanel>
-                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Name="ButtonsSP">
                     <Button
                         x:Name="ResumeDownloadBtn" Click="ResumeDownloadBtn_Click" Content="&#xec74;"
                         FontFamily="{DynamicResource FontIcoFont}"

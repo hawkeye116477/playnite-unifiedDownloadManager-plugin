@@ -2,6 +2,7 @@
 using Linguini.Shared.Types.Bundle;
 using Playnite.Common;
 using Playnite.SDK;
+using Playnite.SDK.Events;
 using Playnite.SDK.Plugins;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
@@ -362,6 +365,19 @@ namespace UnifiedDownloadManagerNS
             FiltersSepSP.Visibility = FilterSP.Visibility;
             RightCol.Width = new GridLength(0, GridUnitType.Auto);
             StatusCBo.ItemsSource = Enum.GetValues(typeof(UnifiedDownloadStatus)).Cast<UnifiedDownloadStatus>();
+
+            if (playniteAPI.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            {
+                OpenPluginSettingsBtn.Visibility = Visibility.Collapsed;
+                DownloadsDG.Focus();
+
+                if (DownloadsDG.Items.Count > 0 && DownloadsDG.Columns.Count > 0)
+                {
+                    DownloadsDG.SelectedIndex = 0;
+                    var item = DownloadsDG.Items[DownloadsDG.SelectedIndex];
+                    DownloadsDG.CurrentCell = new DataGridCellInfo(item, DownloadsDG.Columns[0]);
+                }
+            }
         }
 
         private void StatusChk_Changed(object sender, RoutedEventArgs e)
@@ -480,6 +496,27 @@ namespace UnifiedDownloadManagerNS
             downloadsView.Filter = DownloadsFilter;
             SourceCBo.Items.Refresh();
             StatusCBo.Items.Refresh();
+        }
+
+        public void FocusFirstEnabledButton()
+        {
+            var firstEnabledBtn = LogicalTreeHelper.GetChildren(ButtonsSP).OfType<Button>().FirstOrDefault(b => b.IsEnabled);
+            if (firstEnabledBtn != null)
+            {
+                firstEnabledBtn.Focus();
+            }
+        }
+
+        public void FocusLastEnabledButton()
+        {
+            var lastEnabledBtn = ButtonsSP.Children.OfType<Button>().LastOrDefault(b => b.IsEnabled);
+            if (lastEnabledBtn != null)
+            {
+                var last = LogicalTreeHelper.GetChildren(ButtonsSP).OfType<Button>()
+                           .LastOrDefault(b => b.IsEnabled && b.IsVisible);
+
+                Keyboard.Focus(last);
+            }
         }
     }
 }

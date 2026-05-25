@@ -18,6 +18,7 @@ using System.Linq;
 using System.Windows;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerApiNS.Interfaces;
+using System.Windows.Input;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -268,5 +269,38 @@ namespace UnifiedDownloadManagerNS
         {
             return Instance.settings?.Settings ?? null;
         }
+
+        public override void OnControllerButtonStateChanged(OnControllerButtonStateChangedArgs args)
+        {
+            if (DownloadManagerPanel == null || !DownloadManagerPanel.IsVisible)
+            {
+                return;
+            }
+            if (args.State == ControllerInputState.Pressed)
+            {
+                switch (args.Button)
+                {
+                    case ControllerInput.LeftShoulder:
+                        DownloadManagerPanel.FocusFirstEnabledButton();
+                        break;
+                    case ControllerInput.RightShoulder:
+                        DownloadManagerPanel.FocusLastEnabledButton();
+                        break;
+                    case ControllerInput.A:
+                        if (Keyboard.FocusedElement is Button btn)
+                        {
+                            btn.RaiseEvent(
+                                new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                        }
+                        break;
+                    case ControllerInput.B:
+                        Window.GetWindow(DownloadManagerPanel).Close();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
     }
 }
