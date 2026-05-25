@@ -2,6 +2,6 @@
 {
     public interface IUnifiedDownloadManager
     {
-        IUnifiedTaskManager Manager { get; set; }
+        IUnifiedTaskManager? Manager { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using CommonPlugin;
 using Linguini.Shared.Types.Bundle;
-using Playnite.SDK;
+using Playnite;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace UnifiedDownloadManagerNS
     {
         public ILogger logger = LogManager.GetLogger();
         public ObservableCollection<UnifiedDownload> Downloads { get; set; }
-        private IPlayniteAPI playniteAPI = API.Instance;
+        private IPlayniteApi PlayniteApi = UnifiedDownloadManager.PlayniteApi;
         private UnifiedDownload _activeTask { get; set; }
         public UnifiedDownload ActiveTask
         {
@@ -40,7 +40,7 @@ namespace UnifiedDownloadManagerNS
                     _activeTask.PropertyChanged += ActiveTask_PropertyChanged;
                 }
 
-                UnifiedDownloadManager.GetPanel().ProgressValue = ActiveTask?.progress ?? 0;
+                //UnifiedDownloadManager.GetPanel().ProgressValue = ActiveTask?.progress ?? 0;
                 OnPropertyChanged(nameof(ActiveTask));
             }
         }
@@ -83,10 +83,10 @@ namespace UnifiedDownloadManagerNS
 
         private void ActiveTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ActiveTask.progress))
-            {
-                UnifiedDownloadManager.GetPanel().ProgressValue = ActiveTask?.progress ?? 0;
-            }
+            // if (e.PropertyName == nameof(ActiveTask.Progress))
+            // {
+            //     UnifiedDownloadManager.GetPanel().ProgressValue = ActiveTask?.Progress ?? 0;
+            // }
         }
 
         private bool _displayDownloadSpeedInBits { get; set; }
@@ -100,17 +100,17 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        public ObservableCollection<string> AllSources { get; } = new ObservableCollection<string>();
+        public ObservableCollection<string> AllSources { get; } = [];
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public TaskManager()
         {
             DisplayDownloadSpeedInBits = UnifiedDownloadManager.GetSettings().DisplayDownloadSpeedInBits;
         }
 
-        protected void OnPropertyChanged(string name)
+        private void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -128,17 +128,17 @@ namespace UnifiedDownloadManagerNS
             CanCancel = false;
             foreach (var selectedItem in selectedItems)
             {
-                if (selectedItem.status != UnifiedDownloadStatus.Completed)
+                if (selectedItem.Status != UnifiedDownloadStatus.Completed)
                 {
-                    if (!CanResume && selectedItem.status != UnifiedDownloadStatus.Running)
+                    if (!CanResume && selectedItem.Status != UnifiedDownloadStatus.Running)
                     {
                         CanResume = true;
                     }
-                    if (!CanPause && selectedItem.status == UnifiedDownloadStatus.Running)
+                    if (!CanPause && selectedItem.Status == UnifiedDownloadStatus.Running)
                     {
                         CanPause = true;
                     }
-                    if (!CanCancel && selectedItem.status != UnifiedDownloadStatus.Canceled)
+                    if (!CanCancel && selectedItem.Status != UnifiedDownloadStatus.Canceled)
                     {
                         CanCancel = true;
                     }
@@ -146,78 +146,86 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        public UnifiedDownload GetTask(string appId, string pluginId)
+        public UnifiedDownload? GetTask(string appId, string pluginId)
         {
-            var task = Downloads.FirstOrDefault(t => t.gameID == appId && t.pluginId == pluginId);
-            return task;
+            return Downloads.FirstOrDefault(t => t.GameId == appId && t.PluginId == pluginId);
         }
 
-        public IUnifiedDownloadLogic GetUnifiedDownloadLogic(string pluginId)
+        public IUnifiedDownloadLogic? GetUnifiedDownloadLogic(string pluginId)
         {
-            var targetPlugin = playniteAPI.Addons.Plugins.Find(plugin => plugin.Id == Guid.Parse(pluginId)) as IUnifiedDownloadProvider;
-            return targetPlugin.UnifiedDownloadLogic;
+            var targetPlugin = (IUnifiedDownloadProvider)PlayniteApi.Addons.GetPlugin(pluginId);
+            return targetPlugin?.UnifiedDownloadLogic;
         }
-
-
+        
         public async Task DoNextJobInQueue()
         {
             var settings = UnifiedDownloadManager.GetSettings();
             UnifiedDownloadManager.Instance.SaveManagerData();
-            var running = Downloads.Any(item => item.status == UnifiedDownloadStatus.Running);
-            var queuedList = Downloads.Where(i => i.status == UnifiedDownloadStatus.Queued).ToList();
+            var running = Downloads.Any(item => item.Status == UnifiedDownloadStatus.Running);
+            var queuedList = Downloads.Where(i => i.Status == UnifiedDownloadStatus.Queued).ToList();
             if (!running && queuedList.Count > 0)
             {
-                queuedList[0].forcefulCts = new CancellationTokenSource();
-                queuedList[0].gracefulCts = new CancellationTokenSource();
+                queuedList[0].ForcefulCts = new CancellationTokenSource();
+                queuedList[0].GracefulCts = new CancellationTokenSource();
                 ActiveTask = queuedList[0];
                 if (ActiveTask != null)
                 {
-                    var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
+                    var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].PluginId);
                     try
                     {
-                        await unifiedDownloadLogic.StartDownload(queuedList[0]);
+                        if (unifiedDownloadLogic != null)
+                        {
+                            await unifiedDownloadLogic.StartDownload(queuedList[0]);
+                        }
                     }
                     catch (Exception ex)
                     {
                         bool isExpectedCancel = ex is OperationCanceledException &&
-                           (queuedList[0].status == UnifiedDownloadStatus.Canceled
-                            || queuedList[0].status == UnifiedDownloadStatus.Paused);
+                           (queuedList[0].Status == UnifiedDownloadStatus.Canceled
+                            || queuedList[0].Status == UnifiedDownloadStatus.Paused);
 
                         if (!isExpectedCancel)
                         {
-                            logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
-                            queuedList[0].status = UnifiedDownloadStatus.Error;
+                            logger.Error($"An error occurred while downloading {queuedList[0].Name}: {ex}.");
+                            queuedList[0].Status = UnifiedDownloadStatus.Error;
                         }
                     }
                     finally
                     {
-                        if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
+                        if (queuedList[0].Status == UnifiedDownloadStatus.Canceled)
                         {
-                            await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
+                            if (unifiedDownloadLogic != null)
+                            {
+                                await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
+                            }
                         }
-                        queuedList[0].gracefulCts?.Dispose();
-                        queuedList[0].forcefulCts?.Dispose();
-                        queuedList[0].gracefulCts = null;
-                        queuedList[0].forcefulCts = null;
-                        if (tasksToRemove.TryRemove($"{queuedList[0].pluginId}_{queuedList[0].gameID}", out bool shouldRemove) && shouldRemove)
+                        queuedList[0].GracefulCts?.Dispose();
+                        queuedList[0].ForcefulCts?.Dispose();
+                        queuedList[0].GracefulCts = null;
+                        queuedList[0].ForcefulCts = null;
+                        if (tasksToRemove.TryRemove($"{queuedList[0].PluginId}_{queuedList[0].GameId}", out bool shouldRemove) && shouldRemove)
                         {
-                            await unifiedDownloadLogic.OnRemoveDownloadEntry(queuedList[0]);
+                            if (unifiedDownloadLogic != null)
+                            {
+                                await unifiedDownloadLogic.OnRemoveDownloadEntry(queuedList[0]);
+                            }
+
                             queuedList[0].PropertyChanged -= DownloadTask_PropertyChanged;
                             Downloads.Remove(queuedList[0]);
                         }
                         if (settings.DisplayDownloadTaskFinishedNotifications)
                         {
-                            var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
+                            var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.Name };
                             var bitmap = new Bitmap(UnifiedDownloadManager.Icon);
                             var iconHandle = bitmap.GetHicon();
                             var icon = Icon.FromHandle(iconHandle);
-                            if (ActiveTask.status == UnifiedDownloadStatus.Completed)
+                            if (ActiveTask.Status == UnifiedDownloadStatus.Completed)
                             {
-                                Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg), null);
+                                WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg));
                             }
-                            else if (ActiveTask.status == UnifiedDownloadStatus.Error)
+                            else if (ActiveTask.Status == UnifiedDownloadStatus.Error)
                             {
-                                Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg), null);
+                                WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg));
                             }
                             bitmap.Dispose();
                             icon.Dispose();
@@ -232,13 +240,13 @@ namespace UnifiedDownloadManagerNS
                 var downloadCompleteSettings = UnifiedDownloadManager.GetSettings().DoActionAfterDownloadComplete;
                 if (downloadCompleteSettings != DownloadCompleteAction.Nothing)
                 {
-                    Window window = playniteAPI.Dialogs.CreateWindow(new WindowCreationOptions
+                    Window window = PlayniteApi.CreateWindow(new WindowCreationOptions
                     {
                         ShowMaximizeButton = false,
                     });
                     window.Title = UnifiedDownloadManager.Instance.PluginName;
                     window.Content = new UnifiedDownloadCompleteActionView();
-                    window.Owner = playniteAPI.Dialogs.GetCurrentAppWindow();
+                    window.Owner = PlayniteApi.GetLastActiveWindow();
                     window.SizeToContent = SizeToContent.WidthAndHeight;
                     window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                     window.ShowDialog();
@@ -248,44 +256,45 @@ namespace UnifiedDownloadManagerNS
 
         public async Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
         {
+            var messageCheckBoxDialog = new MessageCheckBoxDialog(PlayniteApi);
             var existingKeys = new HashSet<(string gameID, string pluginId)>(Downloads?
                 .Where(d => d != null)
-                .Select(d => (d.gameID, d.pluginId))
+                .Select(d => (d.GameId, d.PluginId))
                 ?? Enumerable.Empty<(string, string)>());
             var uniqueTasks = downloadManagerDataList
-                .Where(downloadJob => !existingKeys.Contains((downloadJob.gameID, downloadJob.pluginId)))
+                .Where(downloadJob => !existingKeys.Contains((downloadJob.GameId, downloadJob.PluginId)))
                 .ToList();
             if (uniqueTasks.Count > 0)
             {
                 DateTimeOffset now = DateTime.UtcNow;
                 foreach (var uniqueTask in uniqueTasks)
                 {
-                    if (uniqueTask.addedTime == 0)
+                    if (uniqueTask.AddedTime == 0)
                     {
-                        uniqueTask.addedTime = now.ToUnixTimeSeconds();
+                        uniqueTask.AddedTime = now.ToUnixTimeSeconds();
                     }
                     bool canAdd = true;
-                    if (uniqueTask.sourceName.IsNullOrEmpty())
+                    if (uniqueTask.SourceName.IsNullOrEmpty())
                     {
                         logger.Warn("Empty source for download item.");
                     }
-                    if (uniqueTask.gameID.IsNullOrEmpty())
+                    if (uniqueTask.GameId.IsNullOrEmpty())
                     {
                         logger.Error("Empty game id for download item isn't allowed.");
                         canAdd = false;
                     }
-                    if (uniqueTask.pluginId.IsNullOrEmpty())
+                    if (uniqueTask.PluginId.IsNullOrEmpty())
                     {
                         logger.Error("Empty plugin id for download item isn't allowed.");
                         canAdd = false;
                     }
-                    if (uniqueTask.name.IsNullOrEmpty())
+                    if (uniqueTask.Name.IsNullOrEmpty())
                     {
                         logger.Warn("Empty name for download item.");
                     }
                     if (canAdd)
                     {
-                        Downloads.Add(uniqueTask);
+                        Downloads?.Add(uniqueTask);
                         uniqueTask.PropertyChanged += DownloadTask_PropertyChanged;
                     }
                 }
@@ -294,7 +303,7 @@ namespace UnifiedDownloadManagerNS
                     var messagesSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.messagesSettings;
                     if (messagesSettings.dontShowDownloadManagerWhatsUpMsg == false)
                     {
-                        var result = MessageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
+                        var result = messageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
                         if (result.CheckboxChecked)
                         {
                             messagesSettings.dontShowDownloadManagerWhatsUpMsg = true;
@@ -306,9 +315,9 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        private void DownloadTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void DownloadTask_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(UnifiedDownload.status))
+            if (e.PropertyName == nameof(UnifiedDownload.Status))
             {
                 RefreshButtonStates();
             }
@@ -318,11 +327,11 @@ namespace UnifiedDownloadManagerNS
         {
             foreach (var downloadJob in downloadManagerDataList)
             {
-                var wantedItem = Downloads.FirstOrDefault(item => item.gameID == downloadJob.gameID);
+                var wantedItem = Downloads.FirstOrDefault(item => item.GameId == downloadJob.GameId);
                 if (wantedItem != null)
                 {
                     wantedItem.PropertyChanged += DownloadTask_PropertyChanged;
-                    wantedItem.status = UnifiedDownloadStatus.Queued;
+                    wantedItem.Status = UnifiedDownloadStatus.Queued;
                 }
             }
             await DoNextJobInQueue();
@@ -330,14 +339,14 @@ namespace UnifiedDownloadManagerNS
 
         public Task PauseTask(UnifiedDownload task)
         {
-            task.gracefulCts?.Cancel();
-            task.status = UnifiedDownloadStatus.Paused;
+            task.GracefulCts?.Cancel();
+            task.Status = UnifiedDownloadStatus.Paused;
             return Task.CompletedTask;
         }
 
         public async Task PauseAllTasks(string pluginId)
         {
-            var runningOrQueuedDownloads = Downloads.Where(i => (i.status == UnifiedDownloadStatus.Running || i.status == UnifiedDownloadStatus.Queued) && i.pluginId == pluginId).ToList();
+            var runningOrQueuedDownloads = Downloads.Where(i => i.Status is UnifiedDownloadStatus.Running or UnifiedDownloadStatus.Queued && i.PluginId == pluginId).ToList();
             foreach (var selectedRow in runningOrQueuedDownloads)
             {
                 await PauseTask(selectedRow);
@@ -347,7 +356,7 @@ namespace UnifiedDownloadManagerNS
 
         public async Task PauseAllTasks()
         {
-            var runningOrQueuedDownloads = Downloads.Where(i => i.status == UnifiedDownloadStatus.Running || i.status == UnifiedDownloadStatus.Queued).ToList();
+            var runningOrQueuedDownloads = Downloads.Where(i => i.Status is UnifiedDownloadStatus.Running or UnifiedDownloadStatus.Queued).ToList();
             foreach (var selectedRow in runningOrQueuedDownloads)
             {
                 await PauseTask(selectedRow);
@@ -357,23 +366,26 @@ namespace UnifiedDownloadManagerNS
 
         public void CancelTask(UnifiedDownload task)
         {
-            task.gracefulCts?.Cancel();
-            task.status = UnifiedDownloadStatus.Canceled;
-            task.progress = 0;
-            task.downloadedBytes = 0;
+            task.GracefulCts?.Cancel();
+            task.Status = UnifiedDownloadStatus.Canceled;
+            task.Progress = 0;
+            task.DownloadedBytes = 0;
         }
 
         public async Task RemoveDownloadEntry(UnifiedDownload selectedEntry)
         {
-            var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
-            if (selectedEntry.status == UnifiedDownloadStatus.Running)
+            var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.PluginId);
+            if (selectedEntry.Status == UnifiedDownloadStatus.Running)
             {
-                tasksToRemove[$"{selectedEntry.pluginId}_{selectedEntry.gameID}"] = true;
+                tasksToRemove[$"{selectedEntry.PluginId}_{selectedEntry.GameId}"] = true;
                 CancelTask(selectedEntry);
             }
             else
             {
-                await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
+                if (unifiedDownloadLogic != null)
+                {
+                    await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
+                }
                 selectedEntry.PropertyChanged -= DownloadTask_PropertyChanged;
                 Downloads.Remove(selectedEntry);
             }
@@ -381,7 +393,7 @@ namespace UnifiedDownloadManagerNS
 
         public void OpenDownloadPropertiesWindows(UnifiedDownload selectedEntry)
         {
-            var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
+            var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.PluginId);
             unifiedDownloadLogic.OpenDownloadPropertiesWindow(selectedEntry);
         }
 
@@ -392,7 +404,7 @@ namespace UnifiedDownloadManagerNS
 
         public void UpdateSources()
         {
-            var sources = Downloads.Select(d => d.sourceName).Distinct().OrderBy(s => s);
+            var sources = Downloads.Select(d => d.SourceName).Distinct().OrderBy(s => s);
             foreach (var src in sources)
             {
                 if (!AllSources.Contains(src) && !src.IsNullOrEmpty())

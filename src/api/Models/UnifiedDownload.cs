@@ -1,109 +1,66 @@
-﻿using Playnite.SDK.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace UnifiedDownloadManagerApiNS.Models
 {
-    public class UnifiedDownload : ObservableObject
+    public partial class UnifiedDownload : ObservableObject
     {
-        public string gameID { get; set; }
-        public string name { get; set; }
-        public string fullInstallPath { get; set; }
+        public required string GameId { get; set; }
+        public required string Name { get; set; }
+        public string FullInstallPath { get; set; } = "";
 
+        [ObservableProperty]
         private double _downloadSizeBytes;
-        public double downloadSizeBytes
-        {
-            get => _downloadSizeBytes;
-            set => SetValue(ref _downloadSizeBytes, value);
-        }
-
+        
+        [ObservableProperty]
         private double _installSizeBytes;
-        public double installSizeBytes
-        {
-            get => _installSizeBytes;
-            set => SetValue(ref _installSizeBytes, value);
-        }
 
-        public long addedTime { get; set; }
+        public long AddedTime { get; set; }
 
+        [ObservableProperty]
         private long _completedTime;
-        public long completedTime
-        {
-            get => _completedTime;
-            set => SetValue(ref _completedTime, value);
-        }
 
+        [ObservableProperty] 
         private UnifiedDownloadStatus _status;
-        public UnifiedDownloadStatus status
-        {
-            get => _status;
-            set => SetValue(ref _status, value);
-        }
 
-
+        [ObservableProperty]
         private double _progress;
-        public double progress
-        {
-            get => _progress;
-            set => SetValue(ref _progress, value);
-        }
 
+        [ObservableProperty]
         private double _downloadedBytes;
-        public double downloadedBytes
-        {
-            get => _downloadedBytes;
-            set => SetValue(ref _downloadedBytes, value);
-        }
-        public string pluginId { get; set; }
-        public string sourceName { get; set; }
 
-        private string _activity;
-        [DontSerialize]
+        public required string PluginId { get; set; }
+        public required string SourceName { get; set; }
+        
+        [JsonIgnore] 
+        [ObservableProperty]
         /* This is extended description of status (ex. Verifying example file)*/
-        public string activity
-        {
-            get => _activity;
-            set => SetValue(ref _activity, value);
-        }
+        private string _activity = "";
 
+        [JsonIgnore]
+        [ObservableProperty]
         private TimeSpan _elapsed;
-        [DontSerialize]
-        public TimeSpan elapsed
-        {
-            get => _elapsed;
-            set => SetValue(ref _elapsed, value);
-        }
-
+        
+        [JsonIgnore]
+        [ObservableProperty]
         private TimeSpan _eta;
-        [DontSerialize]
-        public TimeSpan eta
-        {
-            get => _eta;
-            set => SetValue(ref _eta, value);
-        }
 
+        [JsonIgnore]
+        [ObservableProperty]
         private double _downloadSpeedBytes;
-        [DontSerialize]
-        public double downloadSpeedBytes
-        {
-            get => _downloadSpeedBytes;
-            set => SetValue(ref _downloadSpeedBytes, value);
-        }
-
+        
+        [JsonIgnore]
+        [ObservableProperty]
         private double _diskWriteSpeedBytes;
-        [DontSerialize]
-        public double diskWriteSpeedBytes
-        {
-            get => _diskWriteSpeedBytes;
-            set => SetValue(ref _diskWriteSpeedBytes, value);
-        }
+        
+        [JsonIgnore]
+        public CancellationTokenSource? GracefulCts { get; set; }
+        [JsonIgnore]
+        public CancellationTokenSource? ForcefulCts { get; set; }
 
-        [DontSerialize]
-        public CancellationTokenSource gracefulCts { get; set; }
-        [DontSerialize]
-        public CancellationTokenSource forcefulCts { get; set; }
-
-        public bool allowParallel { get; set; } = false;
+        public bool AllowParallel { get; set; } = false;
     }
 }

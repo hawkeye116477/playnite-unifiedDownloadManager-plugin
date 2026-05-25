@@ -1,68 +1,68 @@
 ﻿using CommonPlugin;
+using CommonPlugin.Enums;
 using Linguini.Shared.Types.Bundle;
+using Playnite;
 using Playnite.Common;
-using Playnite.SDK;
-using Playnite.SDK.Data;
-using Playnite.SDK.Events;
-using Playnite.SDK.Plugins;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Reflection;
-using System.Windows.Controls;
-using UnifiedDownloadManagerApiNS;
-using UnifiedDownloadManagerNS.Models;
-using CommonPlugin.Enums;
 using System.Linq;
-using System.Windows;
-using UnifiedDownloadManagerApiNS.Models;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Interfaces;
+using UnifiedDownloadManagerApiNS.Models;
+using UnifiedDownloadManagerNS.Models;
 
 namespace UnifiedDownloadManagerNS
 {
-    public class UnifiedDownloadManager : GenericPlugin, IUnifiedDownloadManager
+    public class UnifiedDownloadManager : Plugin, IUnifiedDownloadManager
     {
-        private UnifiedDownloadManagerSettingsViewModel settings { get; set; }
+        public UnifiedDownloadManagerSettings Settings { get; set; } = new();
+        public static readonly string Id = UnifiedDownloadManagerSharedProperties.Id;
+        public static UnifiedDownloadManager Instance { get; set; } = null!;
 
-        public override Guid Id { get; } = UnifiedDownloadManagerSharedProperties.Id;
-        public static UnifiedDownloadManager Instance { get; set; }
-
-        private MainPanel DownloadManagerPanel;
-        private SidebarItem DownloadManagerSidebarItem;
-        public IUnifiedTaskManager Manager { get; set; }
-        public UnifiedDownloadManagerData UnifiedDownloadManagerData { get; set; }
+        private MainPanel? downloadManagerPanel;
+        public IUnifiedTaskManager? Manager { get; set; }
+        public UnifiedDownloadManagerData? UnifiedDownloadManagerData { get; set; }
         public string PluginName = "Unified Download Manager";
-        public CommonHelpers CommonHelpersInstance { get; set; }
+        public CommonHelpers? CommonHelpersInstance { get; set; }
+        public static IPlayniteApi PlayniteApi { get; private set; } = null!;
+        private static readonly ILogger Logger = LogManager.GetLogger();
 
-        public UnifiedDownloadManager(IPlayniteAPI api) : base(api)
+        public UnifiedDownloadManager()
         {
             Instance = this;
-            settings = new UnifiedDownloadManagerSettingsViewModel(this);
-            Properties = new GenericPluginProperties
-            {
-                HasSettings = true
-            };
-            Load3pLocalization();
-            CommonHelpersInstance = new CommonHelpers(Instance);
-            CommonHelpersInstance.LoadNeededResources(icons: false);
-            Manager = new TaskManager();
-  
-            DownloadManagerPanel = new MainPanel((TaskManager)Manager);
-            var savedTasks = LoadSavedManagerData();
-            UnifiedDownloadManagerData = savedTasks;
-            Manager.Downloads = UnifiedDownloadManagerData.downloads;
         }
 
-        public static string Icon => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Resources\icon.png");
-
-        public UnifiedDownloadManagerData LoadSavedManagerData()
+        public override async Task InitializeAsync(InitializeArgs args)
         {
-            UnifiedDownloadManagerData downloadManagerData = new UnifiedDownloadManagerData
+            PlayniteApi = args.Api;
+            Settings = UnifiedDownloadManagerSettingsViewModel.LoadPluginSettings(PlayniteApi.UserDataDir);
+            CommonHelpersInstance = new CommonHelpers(PlayniteApi);
+            CommonHelpersInstance.LoadNeededResources(icons: false);
+            Load3PLocalization();
+            Manager = new TaskManager();
+            downloadManagerPanel = new MainPanel((TaskManager)Manager);
+            UnifiedDownloadManagerData = LoadSavedManagerData();
+            if (UnifiedDownloadManagerData?.downloads != null)
             {
-                downloads = new ObservableCollection<UnifiedDownload>()
+                Manager.Downloads = UnifiedDownloadManagerData.downloads;
+            }
+            await Task.CompletedTask;
+        }
+
+        public static string Icon => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
+                                                  @"Resources\icon.png");
+
+        private static UnifiedDownloadManagerData? LoadSavedManagerData()
+        {
+            UnifiedDownloadManagerData? downloadManagerData = new UnifiedDownloadManagerData
+            {
+                downloads = []
             };
-            var dataDir = Instance.GetPluginUserDataPath();
+            var dataDir = PlayniteApi.UserDataDir;
             var dataFile = Path.Combine(dataDir, "unifiedDownloads.json");
             bool correctJson = false;
             if (File.Exists(dataFile))
@@ -70,19 +70,21 @@ namespace UnifiedDownloadManagerNS
                 var content = FileSystem.ReadFileAsStringSafe(dataFile);
                 if (!content.IsNullOrWhiteSpace() && Serialization.TryFromJson(content, out downloadManagerData))
                 {
-                    if (downloadManagerData != null && downloadManagerData != null)
+                    if (downloadManagerData != null)
                     {
                         correctJson = true;
                     }
                 }
             }
+
             if (!correctJson)
             {
                 downloadManagerData = new UnifiedDownloadManagerData
                 {
-                    downloads = new ObservableCollection<UnifiedDownload>()
+                    downloads = []
                 };
             }
+
             return downloadManagerData;
         }
 
@@ -91,19 +93,20 @@ namespace UnifiedDownloadManagerNS
             var strConf = Serialization.ToJson(UnifiedDownloadManagerData, true);
             if (!strConf.IsNullOrEmpty())
             {
-                var path = Path.Combine(GetPluginUserDataPath());
+                var path = PlayniteApi.UserDataDir;
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
+
                 var dataFile = Path.Combine(path, $"unifiedDownloads.json");
                 File.WriteAllText(dataFile, strConf);
             }
         }
 
-        public void Load3pLocalization()
+        public void Load3PLocalization()
         {
-            var currentLanguage = PlayniteApi.ApplicationSettings.Language;
+            var currentLanguage = PlayniteApi.Settings.Language;
             LocalizationManager.Instance.SetLanguage(currentLanguage);
             var commonFluentArgs = new Dictionary<string, IFluentType>
             {
@@ -112,52 +115,51 @@ namespace UnifiedDownloadManagerNS
             LocalizationManager.Instance.SetCommonArgs(commonFluentArgs);
         }
 
-        public static SidebarItem GetPanel()
+        // public static AppViewItem? GetPanel()
+        // {
+        //     Instance._downloadManagerSidebarItem = new BasicSidebarItem(UIIcon.FromFontIcon("ef08",
+        //                                                                     Playnite.Fonts.IcoFont),
+        //                                                                 (async ) => GetDownloadManagerPanel(),
+        //                                                                 tooltip: Instance.pluginName);
+        //     return Instance._downloadManagerSidebarItem;
+        // }
+
+        public static MainPanel? GetDownloadManagerPanel()
         {
-            if (Instance.DownloadManagerSidebarItem == null)
+            return Instance.downloadManagerPanel;
+        }
+
+        public override AppViewItem? GetAppViewItem(GetAppViewItemsArgs args)
+        {
+            if (args.ViewId == "UDM.panel")
             {
-                Instance.DownloadManagerSidebarItem = new SidebarItem
-                {
-                    Title = Instance.PluginName,
-                    Icon = GetSidebarIcon(),
-                    Type = SiderbarItemType.View,
-                    Opened = () => GetDownloadManagerPanel(),
-                    ProgressValue = 0,
-                    ProgressMaximum = 100,
-                };
+                return new UnifiedDownloadManagerAppView();
             }
-            return Instance.DownloadManagerSidebarItem;
+
+            return null;
         }
 
-        public static MainPanel GetDownloadManagerPanel()
+
+        public override ICollection<AppViewItemDescriptor> GetAppViewItemDescriptors(
+            GetAppViewItemDescriptorsArgs args)
         {
-            return Instance.DownloadManagerPanel;
+            return
+            [
+                new AppViewItemDescriptor("UDM.panel",
+                                          "Unified Download Manager",
+                                          (iconArgs) => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont),
+                                          (iconArgs) =>
+                                              UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont, new SolidColorBrush(Colors.DeepSkyBlue)))
+            ];
         }
 
-        public override IEnumerable<SidebarItem> GetSidebarItems()
-        {
-            yield return DownloadManagerSidebarItem;
-        }
-
-        public static TextBlock GetSidebarIcon()
-        {
-            var textBlock = new TextBlock
-            {
-                Text = char.ConvertFromUtf32(0xef08),
-                FontSize = 18
-            };
-
-            var font = ResourceProvider.GetResource("FontIcoFont") as System.Windows.Media.FontFamily;
-            textBlock.FontFamily = font ?? new System.Windows.Media.FontFamily("Segoe UI Symbol");
-            return textBlock;
-        }
-
-        public override async void OnApplicationStopped(OnApplicationStoppedEventArgs args)
+        public override async Task OnApplicationShutdownAsync(OnApplicationShutdownArgs args)
         {
             if (Manager is TaskManager fullTaskManager)
             {
                 await fullTaskManager.PauseAllTasks();
             }
+
             bool downloadsChanged = false;
             bool settingsChanged = false;
             var settings = GetSettings();
@@ -171,71 +173,82 @@ namespace UnifiedDownloadManagerNS
                         DateTimeOffset now = DateTime.UtcNow;
                         if (now.ToUnixTimeSeconds() >= nextRemovingCompletedDownloadsTime)
                         {
-                            foreach (var downloadItem in Manager.Downloads.ToList())
+                            if (Manager != null)
                             {
-                                if (downloadItem.status == UnifiedDownloadStatus.Completed)
+                                foreach (var downloadItem in Manager.Downloads.ToList())
                                 {
-                                    Manager.Downloads.Remove(downloadItem);
-                                    downloadsChanged = true;
+                                    if (downloadItem.Status == UnifiedDownloadStatus.Completed)
+                                    {
+                                        Manager.Downloads.Remove(downloadItem);
+                                        downloadsChanged = true;
+                                    }
                                 }
                             }
-                            settings.NextRemovingCompletedDownloadsTime = GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
+
+                            settings.NextRemovingCompletedDownloadsTime =
+                                GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
                             settingsChanged = true;
                         }
                     }
                     else
                     {
-                        settings.NextRemovingCompletedDownloadsTime = GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
+                        settings.NextRemovingCompletedDownloadsTime =
+                            GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
                         settingsChanged = true;
                     }
                 }
             }
+
             if (settingsChanged)
             {
-                SavePluginSettings(settings);
+                if (settings != null)
+                {
+                    SavePluginSettings(UnifiedDownloadManager.PlayniteApi.UserDataDir, settings);
+                }
             }
+
             if (downloadsChanged)
             {
                 SaveManagerData();
             }
         }
 
-
-        public override ISettings GetSettings(bool firstRunSettings)
+        public override async Task<PluginSettingsHandler?> GetSettingsHandlerAsync(GetSettingsHandlerArgs args)
         {
-            return settings;
+            return new UnifiedDownloadManagerSettingsViewModel(this);
         }
 
-        public override UserControl GetSettingsView(bool firstRunSettings)
+        public void SavePluginSettings(string dataDir, UnifiedDownloadManagerSettings settings)
         {
-            return new UnifiedDownloadManagerSettingsView();
+            var settingsFile = Path.Combine(dataDir, "settings.json");
+            FileSystem.WriteStringToFile(settingsFile, Serialization.ToJson(settings, true));
         }
 
-        public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
-        {
-            if (PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
-            {
-                yield return new MainMenuItem
-                {
-                    Description = LocalizationManager.Instance.GetString(LOC.UdmDownloadManager),
-                    MenuSection = $"@{Instance.PluginName}",
-                    Icon = UnifiedDownloadManager.Icon,
-                    Action = (args) =>
-                    {
-                        Window window = PlayniteApi.Dialogs.CreateWindow(new WindowCreationOptions
-                        {
-                            ShowMaximizeButton = true,
-                        });
-                        window.ResizeMode = ResizeMode.CanResize;
-                        window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                        window.Title = UnifiedDownloadManager.Instance.PluginName;
-                        window.Content = GetDownloadManagerPanel();
-                        window.Owner = PlayniteApi.Dialogs.GetCurrentAppWindow();
-                        window.ShowDialog();
-                    }
-                };
-            }
-        }
+        // public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+        // {
+        //     if (PlayniteApi.AppInfo.Mode == AppMode.Fullscreen)
+        //     {
+        //         yield return new MainMenuItem
+        //         {
+        //             Description = LocalizationManager.Instance.GetString(LOC.UdmDownloadManager),
+        //             MenuSection = $"@{Instance.pluginName}",
+        //             Icon = UnifiedDownloadManager.Icon,
+        //             Action = (args) =>
+        //                      {
+        //                          Window window = PlayniteApi.Dialogs.CreateWindow(new WindowCreationOptions
+        //                          {
+        //                              ShowMaximizeButton = true,
+        //                          });
+        //                          window.ResizeMode = ResizeMode.CanResize;
+        //                          window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        //                          window.Title = UnifiedDownloadManager.Instance.pluginName;
+        //                          window.Content = GetDownloadManagerPanel();
+        //                          window.Owner = PlayniteApi.Dialogs.GetCurrentAppWindow();
+        //                          window.ShowDialog();
+        //                      }
+        //         };
+        //     }
+        // }
 
         public static long GetNextClearingTime(ClearCacheTime frequency)
         {
@@ -258,15 +271,14 @@ namespace UnifiedDownloadManagerNS
                 case ClearCacheTime.SixMonths:
                     clearingTime = now.AddMonths(6);
                     break;
-                default:
-                    break;
             }
+
             return clearingTime?.ToUnixTimeSeconds() ?? 0;
         }
 
-        public static UnifiedDownloadManagerSettings GetSettings()
+        public static UnifiedDownloadManagerSettings? GetSettings()
         {
-            return Instance.settings?.Settings ?? null;
+            return Instance.Settings;
         }
     }
 }

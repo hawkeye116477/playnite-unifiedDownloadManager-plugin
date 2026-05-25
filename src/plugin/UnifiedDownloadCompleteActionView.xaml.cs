@@ -24,7 +24,7 @@ namespace UnifiedDownloadManagerNS
 
         private void UnifiedDownloadCompleteActionUC_Loaded(object sender, RoutedEventArgs e)
         {
-            CommonHelpers.SetControlBackground(this);
+            UnifiedDownloadManager.Instance.CommonHelpersInstance.SetControlBackground(this);
             switch (downloadCompleteAction)
             {
                 case DownloadCompleteAction.ShutDown:

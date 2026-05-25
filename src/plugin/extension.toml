@@ -1,0 +1,5 @@
+id = "hawkeye116477.UnifiedDownloadManager"
+name = "Unified Download Manager"
+author = "hawkeye116477"
+version =  "_version_"
+module = "UnifiedDownloadManager.dll"

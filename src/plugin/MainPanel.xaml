@@ -11,7 +11,6 @@
     <UserControl.Resources>
         <sys:Boolean x:Key="True">True</sys:Boolean>
         <sys:Boolean x:Key="False">False</sys:Boolean>
-        <FontFamily x:Key="FontIcoFont">/Fonts/icofont.ttf#icofont</FontFamily>
         <localcon:LongToDateConverter x:Key="LongToDateConverter" />
         <localcon:DownloadStatusEnumToStringConverter x:Key="DownloadStatusEnumToStringConverter" />
         <localcon:DurationStringConverter x:Key="DurationConverter" />
@@ -40,7 +39,7 @@
                 <StackPanel Margin="0,0,0,10" DockPanel.Dock="Top" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Style="{x:Null}" WindowChrome.IsHitTestVisibleInChrome="True">
                         <Hyperlink Name="BackHl" Click="BackHl_Click">
-                            <TextBlock FontFamily="{DynamicResource FontIcoFont}" FontSize="26" Style="{x:Null}" Text="&#xea5c;" />
+                            <TextBlock FontFamily="{DynamicResource IcoFont}" FontSize="26" Style="{x:Null}" Text="&#xea5c;" />
                         </Hyperlink>
                     </TextBlock>
                     <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontSize="18" Text="{common:Localize Key={x:Static system:LOC.UdmDownloadManager}}" />
@@ -48,65 +47,65 @@
                 <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
                     <Button
                         x:Name="ResumeDownloadBtn" Click="ResumeDownloadBtn_Click" Content="&#xec74;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="{Binding CanResume}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.UdmResumeDownload}}" />
                     <Button
                         x:Name="PauseBtn" Margin="5,0,0,0" Click="PauseBtn_Click" Content="&#xec72;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="{Binding CanPause}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.UdmPauseDownload}}" />
                     <Button
                         x:Name="CancelDownloadBtn" Margin="5,0,0,0" Click="CancelDownloadBtn_Click" Content="&#xec73;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="{Binding CanCancel}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteCancelLabel}}" />
                     <Separator Margin="10,0,5,0" />
                     <Button
                         Name="MoveTopBtn" Margin="5,0,0,0" Click="MoveTopBtn_Click" Content="&#xea95;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="False" />
                     <Button
                         Name="MoveUpBtn" Margin="5,0,0,0" Click="MoveUpBtn_Click" Content="&#xea5e;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="False" />
                     <Button
                         Name="MoveDownBtn" Margin="5,0,0,0" Click="MoveDownBtn_Click" Content="&#xea5b;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="False" />
                     <Button
                         Name="MoveBottomBtn" Margin="5,0,0,0" Click="MoveBottomBtn_Click" Content="&#xea92;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="False" />
                     <Separator Margin="10,0,5,0" />
                     <Button
                         x:Name="SelectAllBtn" Margin="5,0,0,0" Click="SelectAllBtn_Click" Content="&#xeed9;"
-                        FontFamily="{DynamicResource FontIcoFont}" />
+                        FontFamily="{DynamicResource IcoFont}" />
                     <Button
                         x:Name="RemoveDownloadBtn" Margin="5,0,0,0" Click="RemoveDownloadBtn_Click" Content="&#xec53;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="False" />
                     <Button
                         x:Name="RemoveCompletedDownloadsBtn" Margin="5,0,0,0" Click="RemoveCompletedDownloadsBtn_Click" Content="&#xef9f;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.UdmRemoveCompletedDownloads}}" />
                     <Separator Margin="10,0,5,0" />
                     <Button
                         x:Name="DownloadPropertiesBtn" Margin="5,0,0,0" Click="DownloadPropertiesBtn_Click" Content="&#xefe2;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="False" />
                     <Button
                         x:Name="OpenDownloadDirectoryBtn" Margin="5,0,0,0" Click="OpenDownloadDirectoryBtn_Click" Content="&#xef35;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="False" />
                     <Button
                         x:Name="FilterDownloadBtn" Margin="5,0,0,0" Click="FilterDownloadBtn_Click" Content="&#xef29;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteFilters}}" />
                     <Separator Margin="10,0,5,0" />
                     <Button
                         x:Name="OpenPluginSettingsBtn" Margin="5,0,0,0" Click="OpenPluginSettingsBtn_Click" Content="&#xefb0;"
-                        FontFamily="{DynamicResource FontIcoFont}"
+                        FontFamily="{DynamicResource IcoFont}"
                         IsEnabled="True"
                         ToolTip="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSettingsLabel}}" />
                 </StackPanel>
@@ -131,17 +130,16 @@
                     ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DownloadsDG_SelectionChanged"
                     VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" />
-                    <DataGridTextColumn Binding="{Binding sourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
+                    <DataGridTextColumn Binding="{Binding Name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" />
+                    <DataGridTextColumn Binding="{Binding SourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
                     <DataGridTemplateColumn Header="{common:Localize Key={x:Static system:LOC.UdmProgress}}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <ProgressBar Name="DownloadPB" Value="{Binding progress}" />
+                                    <ProgressBar Name="DownloadPB" Value="{Binding Progress}" />
                                     <TextBlock
                                             Margin="0,2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                            Style="{DynamicResource HawkeyeTextBlockStyle}"
-                                            Text="{Binding progress, StringFormat={}{0:0}%}" />
+                                            Text="{Binding Progress, StringFormat={}{0:0}%}" />
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -149,15 +147,15 @@
                     <DataGridTextColumn Header="{common:Localize Key={x:Static system:LOC.UdmDownloaded}}">
                         <DataGridTextColumn.Binding>
                             <MultiBinding StringFormat="{}{0} / {1}">
-                                <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="downloadedBytes" />
-                                <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="downloadSizeBytes" />
+                                <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="DownloadedBytes" />
+                                <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="DownloadSizeBytes" />
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding installSizeBytes, Converter={StaticResource NumericalSizeToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteInstallSizeLabel}}" />
-                    <DataGridTextColumn Binding="{Binding status, Converter={StaticResource DownloadStatusEnumToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
-                    <DataGridTextColumn Binding="{Binding addedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteAddedLabel}}" />
-                    <DataGridTextColumn Binding="{Binding completedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadCompletedColumn}}" />
+                    <DataGridTextColumn Binding="{Binding InstallSizeBytes, Converter={StaticResource NumericalSizeToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteInstallSizeLabel}}" />
+                    <DataGridTextColumn Binding="{Binding Status, Converter={StaticResource DownloadStatusEnumToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
+                    <DataGridTextColumn Binding="{Binding AddedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteAddedLabel}}" />
+                    <DataGridTextColumn Binding="{Binding CompletedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadCompletedColumn}}" />
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Name="FiltersSepSP" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal">
@@ -224,34 +222,34 @@
             <TextBlock
                 Name="GameTitleTB" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5"
                 HorizontalAlignment="Left"
-                Text="{Binding ActiveTask.name, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding ActiveTask.Name, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock
                 x:Name="DescriptionTB" Grid.Row="2" Margin="0,0,0,5" HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
-                Text="{Binding ActiveTask.activity, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding ActiveTask.Activity, UpdateSourceTrigger=PropertyChanged}" />
             <StackPanel
                 Grid.Row="4" Grid.Column="0" Margin="0,0,0,5" HorizontalAlignment="Left"
                 VerticalAlignment="Top" Orientation="Horizontal">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDownloadSpeed}}" />
-                <TextBlock Name="DownloadSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.downloadSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
+                <TextBlock Name="DownloadSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.DownloadSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="4" Grid.Column="1" Margin="0,0,0,5" HorizontalAlignment="Left"
                 VerticalAlignment="Top" Orientation="Horizontal">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmElapsed}}" />
-                <TextBlock Name="ElapsedTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.elapsed, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Name="ElapsedTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.Elapsed, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" HorizontalAlignment="Left"
                 VerticalAlignment="Top" Orientation="Horizontal">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmDiskSpeed}}" />
-                <TextBlock Name="DiskSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.diskWriteSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
+                <TextBlock Name="DiskSpeedTB" Margin="5,0,30,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.DiskWriteSpeedBytes, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource SpeedConverter}}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" HorizontalAlignment="Left"
                 VerticalAlignment="Top" Orientation="Horizontal">
                 <TextBlock Text="{common:Localize Key={x:Static system:LOC.UdmEta}}" />
-                <TextBlock Name="EtaTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.eta, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Name="EtaTB" Margin="5,0,0,0" HorizontalAlignment="Left" Text="{Binding ActiveTask.Eta, Converter={StaticResource DurationConverter}, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </Grid>
 

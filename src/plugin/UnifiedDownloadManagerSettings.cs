@@ -1,94 +1,85 @@
 ﻿using CommonPlugin.Enums;
-using Playnite.SDK;
-using Playnite.SDK.Data;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Playnite;
+using Playnite.Common;
 using UnifiedDownloadManagerNS.Enums;
 
 namespace UnifiedDownloadManagerNS
 {
-    public class UnifiedDownloadManagerSettings : ObservableObject
+    public partial class UnifiedDownloadManagerSettings : ObservableObject
     {
-        public bool DisplayDownloadTaskFinishedNotifications { get; set; } = true;
-        public bool DisplayDownloadSpeedInBits { get; set; } = false;
-        public DownloadCompleteAction DoActionAfterDownloadComplete { get; set; } = DownloadCompleteAction.Nothing;
-        public ClearCacheTime AutoRemoveCompletedDownloads { get; set; } = ClearCacheTime.Never;
-        public long NextRemovingCompletedDownloadsTime { get; set; } = 0;
+        [ObservableProperty] private bool _displayDownloadTaskFinishedNotifications = true;
+
+        [ObservableProperty] private bool _displayDownloadSpeedInBits = false;
+
+        [ObservableProperty]
+        private DownloadCompleteAction _doActionAfterDownloadComplete = DownloadCompleteAction.Nothing;
+
+        [ObservableProperty] private ClearCacheTime _autoRemoveCompletedDownloads = ClearCacheTime.Never;
+
+        [ObservableProperty] private long _nextRemovingCompletedDownloadsTime = 0;
     }
 
-    public class UnifiedDownloadManagerSettingsViewModel : ObservableObject, ISettings
+    [INotifyPropertyChanged]
+    public partial class UnifiedDownloadManagerSettingsViewModel(UnifiedDownloadManager plugin) : PluginSettingsHandler
     {
-        private readonly UnifiedDownloadManager plugin;
-        private UnifiedDownloadManagerSettings editingClone { get; set; }
+        private static readonly ILogger Logger = LogManager.GetLogger();
 
-        private UnifiedDownloadManagerSettings settings;
-        public UnifiedDownloadManagerSettings Settings
+        [ObservableProperty] private UnifiedDownloadManagerSettings _settings = new();
+
+        public override UserControl GetEditView(GetSettingsViewArgs args)
         {
-            get => settings;
-            set
+            return new UnifiedDownloadManagerSettingsView { DataContext = this };
+        }
+
+        public static UnifiedDownloadManagerSettings LoadPluginSettings(string dataDir)
+        {
+            UnifiedDownloadManagerSettings? settings = null;
+            var settingsFile = Path.Combine(dataDir, "settings.json");
+            if (File.Exists(settingsFile))
             {
-                settings = value;
-                OnPropertyChanged();
+                var content = FileSystem.ReadFileAsStringSafe(settingsFile);
+                if (!Serialization.TryFromJson(content, out settings))
+                {
+                    Logger.Error("Failed to load plugin settings.");
+                }
             }
+            return settings ?? new UnifiedDownloadManagerSettings();
         }
 
-        public UnifiedDownloadManagerSettingsViewModel(UnifiedDownloadManager plugin)
+        public override async Task BeginEditAsync(BeginEditArgs args)
         {
-            // Injecting your plugin instance is required for Save/Load method because Playnite saves data to a location based on what plugin requested the operation.
-            this.plugin = plugin;
-
-            // Load saved settings.
-            var savedSettings = plugin.LoadPluginSettings<UnifiedDownloadManagerSettings>();
-
-            // LoadPluginSettings returns null if no saved data is available.
-            if (savedSettings != null)
-            {
-                Settings = savedSettings;
-            }
-            else
-            {
-                Settings = new UnifiedDownloadManagerSettings();
-            }
+            Settings = plugin.Settings.GetClone();
+            await Task.CompletedTask;
         }
 
-        public void BeginEdit()
+        public override async Task CancelEditAsync(CancelEditArgs args)
         {
-            // Code executed when settings view is opened and user starts editing values.
-            editingClone = Serialization.GetClone(Settings);
+            await Task.CompletedTask;
         }
 
-        public void CancelEdit()
+        public override async Task EndEditAsync(EndEditArgs args)
         {
-            // Code executed when user decides to cancel any changes made since BeginEdit was called.
-            // This method should revert any changes made to Option1 and Option2.
-            Settings = editingClone;
-        }
-
-        public void EndEdit()
-        {
-            if (editingClone.AutoRemoveCompletedDownloads != Settings.AutoRemoveCompletedDownloads)
+            if (plugin.Settings.AutoRemoveCompletedDownloads != Settings.AutoRemoveCompletedDownloads)
             {
                 if (Settings.AutoRemoveCompletedDownloads != ClearCacheTime.Never)
                 {
-                    Settings.NextRemovingCompletedDownloadsTime = UnifiedDownloadManager.GetNextClearingTime(Settings.AutoRemoveCompletedDownloads);
+                    Settings.NextRemovingCompletedDownloadsTime =
+                        UnifiedDownloadManager.GetNextClearingTime(Settings.AutoRemoveCompletedDownloads);
                 }
                 else
                 {
                     Settings.NextRemovingCompletedDownloadsTime = 0;
                 }
             }
-
-            // Code executed when user decides to confirm changes made since BeginEdit was called.
-            // This method should save settings made to Option1 and Option2.
-            plugin.SavePluginSettings(Settings);
-        }
-
-        public bool VerifySettings(out List<string> errors)
-        {
-            // Code execute when user decides to confirm changes made since BeginEdit was called.
-            // Executed before EndEdit is called and EndEdit is not called if false is returned.
-            // List of errors is presented to user if verification fails.
-            errors = new List<string>();
-            return true;
+            plugin.Settings = Settings;
+            plugin.SavePluginSettings(UnifiedDownloadManager.PlayniteApi.UserDataDir, Settings);
+            await Task.CompletedTask;
         }
     }
 }

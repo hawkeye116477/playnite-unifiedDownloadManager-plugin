@@ -1,4 +1,4 @@
-﻿using Playnite.SDK;
+﻿using Playnite;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -9,48 +9,47 @@ namespace UnifiedDownloadManagerApiNS
 {
     public class UnifiedDownloadManagerApi
     {
-        private IPlayniteAPI playniteAPI = API.Instance;
-        private Playnite.SDK.Plugins.Plugin udmPlugin => playniteAPI.Addons.Plugins.Find(plugin => plugin.Id.Equals(UnifiedDownloadManagerSharedProperties.Id));
-        private readonly IUnifiedTaskManager manager;
+        private Plugin UdmPlugin { get; set; }
+        private readonly IUnifiedTaskManager? manager;
 
-        public UnifiedDownloadManagerApi()
+        public UnifiedDownloadManagerApi(IPlayniteApi playniteApi)
         {
             manager = GetTaskManager();
+            UdmPlugin = playniteApi.Addons.GetPlugin(UnifiedDownloadManagerSharedProperties.Id)!;
             if (manager == null)
             {
-                return;
             }
         }
 
-        private IUnifiedTaskManager GetTaskManager()
+        private IUnifiedTaskManager? GetTaskManager()
         {
-            var pluginInterface = udmPlugin as IUnifiedDownloadManager;
-            return pluginInterface.Manager;
+            var pluginInterface = UdmPlugin as IUnifiedDownloadManager;
+            return pluginInterface?.Manager;
         }
 
         public async Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
         {
-            await manager.AddTasks(downloadManagerDataList, silently);
+            await manager?.AddTasks(downloadManagerDataList, silently)!;
         }
 
-        public UnifiedDownload GetTask(string appId, string pluginId)
+        public UnifiedDownload? GetTask(string appId, string pluginId)
         {
-            return manager.GetTask(appId, pluginId);
+            return manager?.GetTask(appId, pluginId);
         }
         
-        public ObservableCollection<UnifiedDownload> GetAllDownloads()
+        public ObservableCollection<UnifiedDownload>? GetAllDownloads()
         {
-            return manager.Downloads;
+            return manager?.Downloads;
         }
 
         public async Task PauseAllTasks(string pluginId)
         {
-            await manager.PauseAllTasks(pluginId);
+            await manager?.PauseAllTasks(pluginId)!;
         }
 
         public void RemoveTask(UnifiedDownload downloadItem)
         {
-            manager.RemoveTask(downloadItem);
+            manager?.RemoveTask(downloadItem);
         }
 
     }

@@ -1,23 +1,23 @@
 ﻿using ByteSizeLib;
 using System;
 using System.IO;
-using Playnite.SDK.Data;
 using System.Globalization;
-using Playnite.SDK;
-using Playnite.SDK.Plugins;
+using Playnite;
 using System.Windows;
 using System.Reflection;
+using System.Threading.Tasks;
 using Playnite.Common;
+using UnifiedDownloadManagerNS;
 
 namespace CommonPlugin
 {
     public class CommonHelpers
     {
-        public Plugin plugin { get; set; }
+        public IPlayniteApi PlayniteApi { get; set; }
 
-        public CommonHelpers(Plugin plugin)
+        public CommonHelpers(IPlayniteApi playniteApi)
         {
-            this.plugin = plugin;
+            this.PlayniteApi = playniteApi;
         }
 
         public static string FormatSize(double size, string unit = "B", bool toBits = false)
@@ -58,7 +58,7 @@ namespace CommonPlugin
             {
                 if (insidePluginUserData)
                 {
-                    path = Path.Combine(plugin.GetPluginUserDataPath(), path);
+                    path = Path.Combine(PlayniteApi.UserDataDir, path);
                 }
                 if (!Directory.Exists(path))
                 {
@@ -69,7 +69,7 @@ namespace CommonPlugin
             }
         }
 
-        public static bool IsDirectoryWritable(string folderPath, string permissionErrorString = "")
+        public async Task<bool> IsDirectoryWritable(string folderPath, string permissionErrorString = "")
         {
             try
             {
@@ -85,8 +85,7 @@ namespace CommonPlugin
             {
                 if (permissionErrorString != "")
                 {
-                    var playniteAPI = API.Instance;
-                    playniteAPI.Dialogs.ShowErrorMessage(LocalizationManager.Instance.GetString(permissionErrorString));
+                    await PlayniteApi.Dialogs.ShowErrorMessageAsync(LocalizationManager.Instance.GetString(permissionErrorString));
                 }
                 return false;
             }
@@ -100,10 +99,8 @@ namespace CommonPlugin
 
         public static double ToDouble(string value)
         {
-            double result;
-
             // Try parsing in the current culture
-            if (!double.TryParse(value, NumberStyles.Float, CultureInfo.CurrentCulture, out result) &&
+            if (!double.TryParse(value, NumberStyles.Float, CultureInfo.CurrentCulture, out var result) &&
                 // Then try in US english
                 !double.TryParse(value, NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out result) &&
                 // Then in neutral language
@@ -115,13 +112,7 @@ namespace CommonPlugin
             return result;
         }
 
-        public static int CpuThreadsNumber
-        {
-            get
-            {
-                return Environment.ProcessorCount;
-            }
-        }
+        public static int CpuThreadsNumber => Environment.ProcessorCount;
 
         public static string NormalizePath(string path) => Path.GetFullPath(new Uri(path).LocalPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
@@ -140,7 +131,7 @@ namespace CommonPlugin
             {
                 var resDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Resources");
                 var stylesName = "NormalStyles.xaml";
-                if (plugin.PlayniteApi.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+                if (PlayniteApi.AppInfo.Mode == AppMode.Fullscreen)
                 {
                     stylesName = "FullScreenStyles.xaml";
                 }
@@ -149,13 +140,12 @@ namespace CommonPlugin
             }
         }
 
-        public static void SetControlBackground(DependencyObject windowDependency)
+        public void SetControlBackground(DependencyObject windowDependency)
         {
-            var playniteAPI = API.Instance;
-            if (playniteAPI.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            if (PlayniteApi.AppInfo.Mode == AppMode.Fullscreen)
             {
                 var thisWindow = Window.GetWindow(windowDependency);
-                thisWindow.Background = (System.Windows.Media.Brush)ResourceProvider.GetResource("ControlBackgroundBrush");
+                thisWindow?.Background = (System.Windows.Media.Brush)Application.Current?.TryFindResource("ControlBackgroundBrush")!;
             }
         }
     }

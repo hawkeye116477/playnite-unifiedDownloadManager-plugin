@@ -419,3 +419,5 @@ FodyWeavers.xsd
 
 # Ignore changelog draft
 changelog.txt
+
+.idea/

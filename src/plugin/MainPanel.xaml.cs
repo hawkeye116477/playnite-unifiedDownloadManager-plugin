@@ -1,8 +1,7 @@
 ﻿using CommonPlugin;
 using Linguini.Shared.Types.Bundle;
 using Playnite.Common;
-using Playnite.SDK;
-using Playnite.SDK.Plugins;
+using Playnite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +15,7 @@ using System.Windows.Input;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
+using MessageBoxResult = Playnite.MessageBoxResult;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -24,17 +24,17 @@ namespace UnifiedDownloadManagerNS
     /// </summary>
     public partial class MainPanel : UserControl
     {
-        public SidebarItem downloadPanel = UnifiedDownloadManager.GetPanel();
         private readonly TaskManager _manager;
-        private IPlayniteAPI playniteAPI = API.Instance;
-        public ObservableCollection<UnifiedDownloadStatus> SelectedStatuses { get; set; } = new ObservableCollection<UnifiedDownloadStatus>();
-        public ObservableCollection<string> SelectedSources = new ObservableCollection<string>();
+        public ObservableCollection<UnifiedDownloadStatus> SelectedStatuses { get; set; } = [];
+        public ObservableCollection<string> SelectedSources { get; set; } = [];
+        public IPlayniteApi PlayniteApi { get; set; }
 
         public MainPanel(TaskManager manager)
         {
             InitializeComponent();
             _manager = manager;
             DataContext = manager;
+            PlayniteApi = UnifiedDownloadManager.PlayniteApi;
             SelectAllBtn.ToolTip = GetToolTipWithKey(LOC.UdmSelectAllEntries, "Ctrl+A");
             RemoveDownloadBtn.ToolTip = GetToolTipWithKey(LOC.UdmRemoveEntry, "Delete");
             MoveTopBtn.ToolTip = GetToolTipWithKey(LOC.UdmMoveEntryTop, "Alt+Home");
@@ -55,18 +55,18 @@ namespace UnifiedDownloadManagerNS
             if (DownloadsDG.SelectedIndex != -1)
             {
                 var cancelableDownloads = DownloadsDG.SelectedItems.Cast<UnifiedDownload>()
-                                                                   .Where(i => i.status != UnifiedDownloadStatus.Completed && i.status != UnifiedDownloadStatus.Canceled)
+                                                                   .Where(i => i.Status != UnifiedDownloadStatus.Completed && i.Status != UnifiedDownloadStatus.Canceled)
                                                                    .ToList();
                 if (cancelableDownloads.Count > 0)
                 {
-                    string messageText = LocalizationManager.Instance.GetString(LOC.UdmCancelDownloadConfirm, new Dictionary<string, IFluentType> { ["appName"] = (FluentString)cancelableDownloads[0].name, ["count"] = (FluentNumber)cancelableDownloads.Count });
-                    var result = playniteAPI.Dialogs.ShowMessage(messageText, LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteCancelLabel), MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    string messageText = LocalizationManager.Instance.GetString(LOC.UdmCancelDownloadConfirm, new Dictionary<string, IFluentType> { ["appName"] = (FluentString)cancelableDownloads[0].Name, ["count"] = (FluentNumber)cancelableDownloads.Count });
+                    var result = await PlayniteApi.Dialogs.ShowMessageAsync(messageText, LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteCancelLabel), MessageBoxButtons.YesNo, MessageBoxSeverity.Question);
                     if (result == MessageBoxResult.Yes)
                     {
                         foreach (var cancelableDownload in cancelableDownloads)
                         {
-                            var unifiedDownloadLogic = _manager.GetUnifiedDownloadLogic(cancelableDownload.pluginId);
-                            if (cancelableDownload.status != UnifiedDownloadStatus.Running)
+                            var unifiedDownloadLogic = _manager.GetUnifiedDownloadLogic(cancelableDownload.PluginId);
+                            if (cancelableDownload.Status != UnifiedDownloadStatus.Running)
                             {
                                 await unifiedDownloadLogic.OnCancelDownload(cancelableDownload);
                             }
@@ -118,7 +118,7 @@ namespace UnifiedDownloadManagerNS
         {
             if (DownloadsDG.SelectedIndex != -1)
             {
-                var runningOrQueuedDownloads = DownloadsDG.SelectedItems.Cast<UnifiedDownload>().Where(i => i.status == UnifiedDownloadStatus.Running || i.status == UnifiedDownloadStatus.Queued).ToList();
+                var runningOrQueuedDownloads = DownloadsDG.SelectedItems.Cast<UnifiedDownload>().Where(i => i.Status == UnifiedDownloadStatus.Running || i.Status == UnifiedDownloadStatus.Queued).ToList();
                 if (runningOrQueuedDownloads.Count > 0)
                 {
                     foreach (var selectedRow in runningOrQueuedDownloads)
@@ -237,8 +237,8 @@ namespace UnifiedDownloadManagerNS
                                                                   .ToList();
                 if (removableDownloads.Count > 0)
                 {
-                    string messageText = LocalizationManager.Instance.GetString(LOC.UdmRemoveEntryConfirm, new Dictionary<string, IFluentType> { ["entryName"] = (FluentString)removableDownloads[0].name, ["count"] = (FluentNumber)removableDownloads.Count });
-                    var result = playniteAPI.Dialogs.ShowMessage(messageText, LocalizationManager.Instance.GetString(LOC.UdmRemoveEntry), MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    string messageText = LocalizationManager.Instance.GetString(LOC.UdmRemoveEntryConfirm, new Dictionary<string, IFluentType> { ["entryName"] = (FluentString)removableDownloads[0].Name, ["count"] = (FluentNumber)removableDownloads.Count });
+                    var result = await PlayniteApi.Dialogs.ShowMessageAsync(messageText, LocalizationManager.Instance.GetString(LOC.UdmRemoveEntry), MessageBoxButtons.YesNo, MessageBoxSeverity.Question);
                     if (result == MessageBoxResult.Yes)
                     {
                         foreach (var selectedRow in removableDownloads)
@@ -255,12 +255,12 @@ namespace UnifiedDownloadManagerNS
         {
             if (DownloadsDG.Items.Count > 0)
             {
-                var result = playniteAPI.Dialogs.ShowMessage(LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloadsConfirm), LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloads), MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var result = await PlayniteApi.Dialogs.ShowMessageAsync(LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloadsConfirm), LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloads), MessageBoxButtons.YesNo, MessageBoxSeverity.Question);
                 if (result == MessageBoxResult.Yes)
                 {
                     foreach (var row in DownloadsDG.Items.Cast<UnifiedDownload>().ToList())
                     {
-                        if (row.status == UnifiedDownloadStatus.Completed)
+                        if (row.Status == UnifiedDownloadStatus.Completed)
                         {
                             await _manager.RemoveDownloadEntry(row);
                         }
@@ -270,17 +270,17 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        private void OpenDownloadDirectoryBtn_Click(object sender, RoutedEventArgs e)
+        private async void OpenDownloadDirectoryBtn_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = DownloadsDG.SelectedItems[0] as UnifiedDownload;
-            var fullInstallPath = selectedItem.fullInstallPath;
+            var fullInstallPath = selectedItem?.FullInstallPath;
             if (fullInstallPath != "" && Directory.Exists(fullInstallPath))
             {
-                ProcessStarter.StartProcess(selectedItem.fullInstallPath);
+                ProcessStarter.StartProcess(fullInstallPath);
             }
             else
             {
-                playniteAPI.Dialogs.ShowErrorMessage($"{selectedItem.fullInstallPath}\n{LocalizationManager.Instance.GetString(LOC.CommonPathNotExistsError)}");
+                await PlayniteApi.Dialogs.ShowErrorMessageAsync($"{fullInstallPath}\n{LocalizationManager.Instance.GetString(LOC.CommonPathNotExistsError)}");
             }
         }
 
@@ -289,17 +289,17 @@ namespace UnifiedDownloadManagerNS
             if (DownloadsDG.SelectedIndex != -1)
             {
                 var downloadsToResume = DownloadsDG.SelectedItems.Cast<UnifiedDownload>()
-                                                                 .Where(i => i.status != UnifiedDownloadStatus.Completed
-                                                                             && i.status != UnifiedDownloadStatus.Running
-                                                                             && i.status != UnifiedDownloadStatus.Queued)
+                                                                 .Where(i => i.Status != UnifiedDownloadStatus.Completed
+                                                                             && i.Status != UnifiedDownloadStatus.Running
+                                                                             && i.Status != UnifiedDownloadStatus.Queued)
                                                                  .ToList();
                 await _manager.ResumeTasks(downloadsToResume);
             }
         }
 
-        private void OpenPluginSettingsBtn_Click(object sender, RoutedEventArgs e)
+        private async void OpenPluginSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
-            playniteAPI.MainView.OpenPluginSettings(UnifiedDownloadManager.Instance.Id);
+            await PlayniteApi.MainView.OpenPluginSettingsAsync(UnifiedDownloadManager.Id.ToString());
         }
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -343,30 +343,30 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        private void BackHl_Click(object sender, RoutedEventArgs e)
+        private async void BackHl_Click(object sender, RoutedEventArgs e)
         {
-            if (playniteAPI.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
+            if (PlayniteApi.AppInfo.Mode == AppMode.Fullscreen)
             {
-                Window.GetWindow(this).Close();
+                Window.GetWindow(this)?.Close();
             }
             else
             {
-                playniteAPI.MainView.SwitchToLibraryView();
+                await PlayniteApi.MainView.SwitchToViewAsync("LibraryView");
             }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            CommonHelpers.SetControlBackground(this);
+            UnifiedDownloadManager.Instance.CommonHelpersInstance.SetControlBackground(this);
             FilterSP.Visibility = Visibility.Collapsed;
             FiltersSepSP.Visibility = FilterSP.Visibility;
             RightCol.Width = new GridLength(0, GridUnitType.Auto);
-            StatusCBo.ItemsSource = Enum.GetValues(typeof(UnifiedDownloadStatus)).Cast<UnifiedDownloadStatus>();
+            StatusCBo.ItemsSource = Enum.GetValues<UnifiedDownloadStatus>();
         }
 
         private void StatusChk_Changed(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkBox && checkBox.DataContext is UnifiedDownloadStatus status)
+            if (sender is CheckBox { DataContext: UnifiedDownloadStatus status } checkBox)
             {
                 if (checkBox.IsChecked == true)
                 {
@@ -392,7 +392,7 @@ namespace UnifiedDownloadManagerNS
 
         private bool DownloadsFilter(object obj)
         {
-            if (!(obj is UnifiedDownload download))
+            if (obj is not UnifiedDownload download)
             {
                 return false;
             }
@@ -401,14 +401,14 @@ namespace UnifiedDownloadManagerNS
                 return false;
             }
             bool sourceContains = true;
-            if (SelectedSources.Count > 0)
+            if (SelectedSources != null && SelectedSources.Count > 0)
             {
-                sourceContains = SelectedSources.Contains(download.sourceName);
+                sourceContains = SelectedSources.Contains(download.SourceName);
             }
             bool statusContains = true;
             if (SelectedStatuses.Count > 0)
             {
-                statusContains = SelectedStatuses.Contains(download.status);
+                statusContains = SelectedStatuses.Contains(download.Status);
             }
             if (SelectedSources.Count > 0 || SelectedStatuses.Count > 0)
             {
@@ -446,7 +446,7 @@ namespace UnifiedDownloadManagerNS
 
         private void SourceChk_Changed(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkBox && checkBox.DataContext is string source)
+            if (sender is CheckBox { DataContext: string source } checkBox)
             {
                 if (checkBox.IsChecked == true)
                 {

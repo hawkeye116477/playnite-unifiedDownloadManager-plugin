@@ -10,7 +10,7 @@ namespace UnifiedDownloadManagerApiNS.Interfaces
     {
         ObservableCollection<UnifiedDownload> Downloads { get; set; }
         Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false);
-        UnifiedDownload GetTask(string appId, string pluginId);
+        UnifiedDownload? GetTask(string appId, string pluginId);
         Task PauseAllTasks(string pluginId);
         void RemoveTask(UnifiedDownload downloadItem);
     }
