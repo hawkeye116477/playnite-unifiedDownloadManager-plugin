@@ -220,7 +220,7 @@ namespace UnifiedDownloadManagerNS
                 {
                     Description = LocalizationManager.Instance.GetString(LOC.UdmDownloadManager),
                     MenuSection = $"@{Instance.PluginName}",
-                    Icon = UnifiedDownloadManager.Icon,
+                    Icon = Icon,
                     Action = (args) =>
                     {
                         Window window = PlayniteApi.Dialogs.CreateWindow(new WindowCreationOptions
@@ -272,13 +272,20 @@ namespace UnifiedDownloadManagerNS
 
         public override async void OnControllerButtonStateChanged(OnControllerButtonStateChangedArgs args)
         {
-            if (DownloadManagerPanel == null || !DownloadManagerPanel.IsVisible)
+            if (DownloadManagerPanel != null && DownloadManagerPanel.IsVisible)
             {
-                return;
+                if (args.State == ControllerInputState.Pressed)
+                {
+                    await DownloadManagerPanel.HandleControllerInput(args.Button);
+                }
             }
-            if (args.State == ControllerInputState.Pressed)
+            var msgDialogOpen = Application.Current.Windows.OfType<MessageCheckBoxDialog>().Any(w => w.IsVisible);
+            if (msgDialogOpen)
             {
-                await DownloadManagerPanel.HandleControllerInput(args.Button);
+                if (args.State == ControllerInputState.Pressed)
+                {
+                    MessageCheckBoxDialog.HandleControllerInput(args.Button);
+                }
             }
         }
 

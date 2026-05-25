@@ -64,8 +64,8 @@ namespace UnifiedDownloadManagerNS
                 if (cancelableDownloads.Count > 0)
                 {
                     string messageText = LocalizationManager.Instance.GetString(LOC.UdmCancelDownloadConfirm, new Dictionary<string, IFluentType> { ["appName"] = (FluentString)cancelableDownloads[0].name, ["count"] = (FluentNumber)cancelableDownloads.Count });
-                    var result = playniteAPI.Dialogs.ShowMessage(messageText, LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteCancelLabel), MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
+                    var result = MessageCheckBoxDialog.ShowMessage(LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteCancelLabel), messageText, null, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result.Result)
                     {
                         foreach (var cancelableDownload in cancelableDownloads)
                         {
@@ -259,8 +259,8 @@ namespace UnifiedDownloadManagerNS
                 if (removableDownloads.Count > 0)
                 {
                     string messageText = LocalizationManager.Instance.GetString(LOC.UdmRemoveEntryConfirm, new Dictionary<string, IFluentType> { ["entryName"] = (FluentString)removableDownloads[0].name, ["count"] = (FluentNumber)removableDownloads.Count });
-                    var result = playniteAPI.Dialogs.ShowMessage(messageText, LocalizationManager.Instance.GetString(LOC.UdmRemoveEntry), MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
+                    var result = MessageCheckBoxDialog.ShowMessage(LocalizationManager.Instance.GetString(LOC.UdmRemoveEntry), messageText, null, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result.Result)
                     {
                         foreach (var selectedRow in removableDownloads)
                         {
@@ -276,8 +276,8 @@ namespace UnifiedDownloadManagerNS
         {
             if (DownloadsDG.Items.Count > 0)
             {
-                var result = playniteAPI.Dialogs.ShowMessage(LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloadsConfirm), LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloads), MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
+                var result = MessageCheckBoxDialog.ShowMessage(LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloads), LocalizationManager.Instance.GetString(LOC.UdmRemoveCompletedDownloadsConfirm), null, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result.Result)
                 {
                     foreach (var row in DownloadsDG.Items.Cast<UnifiedDownload>().ToList())
                     {
