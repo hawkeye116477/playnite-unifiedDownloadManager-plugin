@@ -270,7 +270,7 @@ namespace UnifiedDownloadManagerNS
             return Instance.settings?.Settings ?? null;
         }
 
-        public override void OnControllerButtonStateChanged(OnControllerButtonStateChangedArgs args)
+        public override async void OnControllerButtonStateChanged(OnControllerButtonStateChangedArgs args)
         {
             if (DownloadManagerPanel == null || !DownloadManagerPanel.IsVisible)
             {
@@ -278,27 +278,7 @@ namespace UnifiedDownloadManagerNS
             }
             if (args.State == ControllerInputState.Pressed)
             {
-                switch (args.Button)
-                {
-                    case ControllerInput.LeftShoulder:
-                        DownloadManagerPanel.FocusFirstEnabledButton();
-                        break;
-                    case ControllerInput.RightShoulder:
-                        DownloadManagerPanel.FocusLastEnabledButton();
-                        break;
-                    case ControllerInput.A:
-                        if (Keyboard.FocusedElement is Button btn)
-                        {
-                            btn.RaiseEvent(
-                                new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
-                        }
-                        break;
-                    case ControllerInput.B:
-                        Window.GetWindow(DownloadManagerPanel).Close();
-                        break;
-                    default:
-                        break;
-                }
+                await DownloadManagerPanel.HandleControllerInput(args.Button);
             }
         }
 

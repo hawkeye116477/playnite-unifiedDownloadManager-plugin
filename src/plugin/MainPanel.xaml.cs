@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -53,7 +54,7 @@ namespace UnifiedDownloadManagerNS
             return $"{LocalizationManager.Instance.GetString(description)} [{shortcut}]";
         }
 
-        private async void CancelDownloadBtn_Click(object sender, RoutedEventArgs e)
+        private async Task CancelSelectedDownloads()
         {
             if (DownloadsDG.SelectedIndex != -1)
             {
@@ -78,6 +79,11 @@ namespace UnifiedDownloadManagerNS
                     }
                 }
             }
+        }
+
+        private async void CancelDownloadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await CancelSelectedDownloads();
         }
 
         private void DownloadsDG_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -498,7 +504,7 @@ namespace UnifiedDownloadManagerNS
             StatusCBo.Items.Refresh();
         }
 
-        public void FocusFirstEnabledButton()
+        private void FocusFirstEnabledButton()
         {
             var firstEnabledBtn = LogicalTreeHelper.GetChildren(ButtonsSP).OfType<Button>().FirstOrDefault(b => b.IsEnabled);
             if (firstEnabledBtn != null)
@@ -507,7 +513,7 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        public void FocusLastEnabledButton()
+        private void FocusLastEnabledButton()
         {
             var lastEnabledBtn = ButtonsSP.Children.OfType<Button>().LastOrDefault(b => b.IsEnabled);
             if (lastEnabledBtn != null)
@@ -516,6 +522,67 @@ namespace UnifiedDownloadManagerNS
                            .LastOrDefault(b => b.IsEnabled && b.IsVisible);
 
                 Keyboard.Focus(last);
+            }
+        }
+
+        private async Task PauseOrResumeSelectedEntries()
+        {
+            if (DownloadsDG.SelectedIndex != -1)
+            {
+                var downloadsToResume = DownloadsDG.SelectedItems.Cast<UnifiedDownload>()
+                                                                 .Where(i => i.status != UnifiedDownloadStatus.Completed
+                                                                             && i.status != UnifiedDownloadStatus.Running
+                                                                             && i.status != UnifiedDownloadStatus.Queued)
+                                                                 .ToList();
+                if (downloadsToResume.Count > 0)
+                {
+                    await _manager.ResumeTasks(downloadsToResume);
+                }
+                else
+                {
+                    var downloadsToPause = DownloadsDG.SelectedItems.Cast<UnifiedDownload>()
+                                                 .Where(i => i.status == UnifiedDownloadStatus.Running
+                                                             || i.status == UnifiedDownloadStatus.Queued)
+                                                 .ToList();
+                    if (downloadsToPause.Count > 0)
+                    {
+                        foreach (var downloadToPause in downloadsToPause)
+                        {
+                            await _manager.PauseTask(downloadToPause);
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task HandleControllerInput(ControllerInput button)
+        {
+            switch (button)
+            {
+                case ControllerInput.LeftShoulder:
+                    FocusFirstEnabledButton();
+                    break;
+                case ControllerInput.RightShoulder:
+                    FocusLastEnabledButton();
+                    break;
+                case ControllerInput.A:
+                    if (Keyboard.FocusedElement is Button btn)
+                    {
+                        btn.RaiseEvent(
+                            new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                    }
+                    break;
+                case ControllerInput.X:
+                    await CancelSelectedDownloads();
+                    break;
+                case ControllerInput.Y:
+                    await PauseOrResumeSelectedEntries();
+                    break;
+                case ControllerInput.B:
+                    Window.GetWindow(this).Close();
+                    break;
+                default:
+                    break;
             }
         }
     }
