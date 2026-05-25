@@ -230,12 +230,24 @@ namespace UnifiedDownloadManagerNS
             MoveEntries(EntryPosition.Bottom);
         }
 
-        private void SelectAllBtn_Click(object sender, RoutedEventArgs e)
+        private void SelectAllEntries()
         {
             if (DownloadsDG.Items.Count > 0)
             {
-                DownloadsDG.SelectAll();
+                if (DownloadsDG.SelectedItems.Count == DownloadsDG.Items.Count)
+                {
+                    DownloadsDG.UnselectAll();
+                }
+                else
+                {
+                    DownloadsDG.SelectAll();
+                }
             }
+        }
+
+        private void SelectAllBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SelectAllEntries();
         }
 
         private async void RemoveDownloadBtn_Click(object sender, RoutedEventArgs e)
@@ -343,13 +355,17 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        private void DownloadPropertiesBtn_Click(object sender, RoutedEventArgs e)
+        private void EditSelectedEntry()
         {
             if (DownloadsDG.SelectedIndex != -1)
             {
                 var selectedItem = DownloadsDG.SelectedItems[0] as UnifiedDownload;
                 _manager.OpenDownloadPropertiesWindows(selectedItem);
             }
+        }
+        private void DownloadPropertiesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            EditSelectedEntry();
         }
 
         private void BackHl_Click(object sender, RoutedEventArgs e)
@@ -451,7 +467,7 @@ namespace UnifiedDownloadManagerNS
             comboBox.SelectedItem = null;
         }
 
-        private void FilterDownloadBtn_Click(object sender, RoutedEventArgs e)
+        private void OpenFiltersPanel()
         {
             if (FilterSP.Visibility == Visibility.Visible)
             {
@@ -464,6 +480,11 @@ namespace UnifiedDownloadManagerNS
                 RightCol.Width = new GridLength(1, GridUnitType.Star);
             }
             FiltersSepSP.Visibility = FilterSP.Visibility;
+        }
+
+        private void FilterDownloadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFiltersPanel();
         }
 
         private void SourceChk_Changed(object sender, RoutedEventArgs e)
@@ -644,6 +665,15 @@ namespace UnifiedDownloadManagerNS
                     {
                         comboBoxFocused.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                     }
+                    break;
+                case ControllerInput.RightStick:
+                    OpenFiltersPanel();
+                    break;
+                case ControllerInput.Start:
+                    EditSelectedEntry();
+                    break;
+                case ControllerInput.Back:
+                    SelectAllEntries();
                     break;
                 default:
                     break;
