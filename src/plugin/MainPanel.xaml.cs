@@ -555,8 +555,32 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
+        // Source: https://learn.microsoft.com/en-us/dotnet/desktop/wpf/data/how-to-find-datatemplate-generated-elements
+        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem item)
+                {
+                    return item;
+                }
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                    {
+                        return childOfChild;
+                    }
+                }
+            }
+            return null;
+        }
+
         public async Task HandleControllerInput(ControllerInput button)
         {
+            var comboBoxFocused = Keyboard.FocusedElement as ComboBox;
+            var comboBoxItemFocused = Keyboard.FocusedElement as ComboBoxItem;
             switch (button)
             {
                 case ControllerInput.LeftShoulder:
@@ -571,6 +595,18 @@ namespace UnifiedDownloadManagerNS
                         btn.RaiseEvent(
                             new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
                     }
+                    else if (comboBoxItemFocused != null)
+                    {
+                        var chk = FindVisualChild<CheckBox>(comboBoxItemFocused);
+                        if (chk != null)
+                        {
+                            chk.IsChecked = !chk.IsChecked;
+                        }
+                    }
+                    else if (comboBoxFocused != null)
+                    {
+                        comboBoxFocused.IsDropDownOpen = true;
+                    }
                     break;
                 case ControllerInput.X:
                     await CancelSelectedDownloads();
@@ -579,7 +615,35 @@ namespace UnifiedDownloadManagerNS
                     await PauseOrResumeSelectedEntries();
                     break;
                 case ControllerInput.B:
+                    if (comboBoxFocused != null)
+                    {
+                        if (comboBoxFocused.IsDropDownOpen)
+                        {
+                            comboBoxFocused.IsDropDownOpen = false;
+                            return;
+                        }
+                    }
+                    if (comboBoxItemFocused != null)
+                    {
+                        var parentComboBox = ItemsControl.ItemsControlFromItemContainer(comboBoxItemFocused) as ComboBox;
+                        parentComboBox.IsDropDownOpen = false;
+                        return;
+                    }
                     Window.GetWindow(this).Close();
+                    break;
+                case ControllerInput.DPadUp:
+                case ControllerInput.LeftStickUp:
+                    if (comboBoxFocused != null && comboBoxFocused.IsDropDownOpen == false)
+                    {
+                        comboBoxFocused.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
+                    }
+                    break;
+                case ControllerInput.DPadDown:
+                case ControllerInput.LeftStickDown:
+                    if (comboBoxFocused != null && comboBoxFocused.IsDropDownOpen == false)
+                    {
+                        comboBoxFocused.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    }
                     break;
                 default:
                     break;
