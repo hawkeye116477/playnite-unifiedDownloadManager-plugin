@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Суспендиране на сис�
 third-party-playnite-menu-hibernate-system = Система за хибернация
 third-party-playnite-settings-label = Настройки
 third-party-playnite-settings-playtime-import-mode-never = Никога
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Хоризонтално превъртане
 third-party-playnite-game-name-title = Име
 third-party-playnite-source-label = Източник
 third-party-playnite-download-error = Грешка при изтегляне

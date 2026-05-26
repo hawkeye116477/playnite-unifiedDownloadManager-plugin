@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Mettre en veille
 third-party-playnite-menu-hibernate-system = Mettre en veille prolongée
 third-party-playnite-settings-label = Paramètres
 third-party-playnite-settings-playtime-import-mode-never = Jamais
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Défilement Horizontal
 third-party-playnite-game-name-title = Nom
 third-party-playnite-source-label = Source
 third-party-playnite-download-error = Erreur de téléchargement

@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = 挂起系统
 third-party-playnite-menu-hibernate-system = 休眠系统
 third-party-playnite-settings-label = 设置
 third-party-playnite-settings-playtime-import-mode-never = 从未
+third-party-playnite-settings-fullscreen-horizontal-scrolling = 水平滚动
 third-party-playnite-game-name-title = 名称
 third-party-playnite-source-label = 来源
 third-party-playnite-download-error = 下载错误

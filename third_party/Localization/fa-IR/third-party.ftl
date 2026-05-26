@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = تعلیق رایانه
 third-party-playnite-menu-hibernate-system = فرستادن رایانه به خواب زمستانی
 third-party-playnite-settings-label = تنظیمات
 third-party-playnite-settings-playtime-import-mode-never = هرگز
+third-party-playnite-settings-fullscreen-horizontal-scrolling = پیمایش افقی
 third-party-playnite-game-name-title = نام
 third-party-playnite-source-label = منبع
 third-party-playnite-download-error = خطا در بارگیری

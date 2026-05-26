@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Sistemi Askıya Al
 third-party-playnite-menu-hibernate-system = Sistemi Hazırda Beklet
 third-party-playnite-settings-label = Ayarlar
 third-party-playnite-settings-playtime-import-mode-never = Asla
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Yatay Kaydırma
 third-party-playnite-game-name-title = İsim
 third-party-playnite-source-label = Kaynak
 third-party-playnite-download-error = İndirme Hatası

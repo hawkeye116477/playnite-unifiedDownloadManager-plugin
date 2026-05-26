@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Αναστολή Λειτουργία
 third-party-playnite-menu-hibernate-system = Αδρανοποίηση
 third-party-playnite-settings-label = Ρυθμίσεις
 third-party-playnite-settings-playtime-import-mode-never = Ποτέ
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Οριζόντια Ολίσθηση
 third-party-playnite-game-name-title = Ονομα
 third-party-playnite-source-label = Πηγή
 third-party-playnite-download-error = Σφάλμα λήψης

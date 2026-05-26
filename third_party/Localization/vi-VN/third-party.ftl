@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Ngưng hệ thống
 third-party-playnite-menu-hibernate-system = Chế độ ngủ đông
 third-party-playnite-settings-label = Cài đặt
 third-party-playnite-settings-playtime-import-mode-never = Không bao giờ
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Cuộn ngang
 third-party-playnite-game-name-title = Tên
 third-party-playnite-source-label = Mã nguồn
 third-party-playnite-download-error = Lỗi Tải Xuống

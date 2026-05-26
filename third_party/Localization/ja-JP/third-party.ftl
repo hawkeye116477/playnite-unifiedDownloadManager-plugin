@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = システムのスリープ
 third-party-playnite-menu-hibernate-system = システムの休止
 third-party-playnite-settings-label = 設定
 third-party-playnite-settings-playtime-import-mode-never = 常に無効
+third-party-playnite-settings-fullscreen-horizontal-scrolling = 横スクロール表示
 third-party-playnite-game-name-title = タイトル
 third-party-playnite-source-label = ソース
 third-party-playnite-download-error = ダウンロードエラー

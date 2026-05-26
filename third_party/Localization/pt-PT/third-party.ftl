@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Suspender Sistema
 third-party-playnite-menu-hibernate-system = Hibernar Sistema
 third-party-playnite-settings-label = Definições
 third-party-playnite-settings-playtime-import-mode-never = Nunca
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Scroll Horizontal
 third-party-playnite-game-name-title = Nome
 third-party-playnite-source-label = Fonte
 third-party-playnite-download-error = Erro na transferência

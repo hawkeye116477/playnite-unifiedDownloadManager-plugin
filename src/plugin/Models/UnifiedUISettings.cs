@@ -14,7 +14,14 @@ namespace UnifiedDownloadManagerNS.Models
 
         public class UnifiedColumnsSettings
         {
-            public List<int> hiddenColumns { get; set; }
+            public Dictionary<string, UnifiedColumn> columns { get; set; }
+            public bool horizontalScrolling { get; set; }
         }
+    }
+
+    public class UnifiedColumn
+    {
+        public bool hidden { get; set; } = false;
+        public int index { get; set; }
     }
 }

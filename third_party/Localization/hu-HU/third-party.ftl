@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Készenléti állapot
 third-party-playnite-menu-hibernate-system = Hibernálás
 third-party-playnite-settings-label = Beállítások
 third-party-playnite-settings-playtime-import-mode-never = Sosem
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Vízszintes görgetés
 third-party-playnite-game-name-title = Név
 third-party-playnite-source-label = Forrás
 third-party-playnite-download-error = Hiba a letöltésben

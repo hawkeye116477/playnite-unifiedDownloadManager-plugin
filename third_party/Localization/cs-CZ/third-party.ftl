@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Uspat Systém
 third-party-playnite-menu-hibernate-system = Hibernovat Systém
 third-party-playnite-settings-label = Nastavení
 third-party-playnite-settings-playtime-import-mode-never = Nikdy
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Horizontální Skrolování
 third-party-playnite-game-name-title = Jméno
 third-party-playnite-source-label = Zdroj
 third-party-playnite-download-error = Chyba při Stahování

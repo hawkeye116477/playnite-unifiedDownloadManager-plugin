@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Systeem Onderbreken
 third-party-playnite-menu-hibernate-system = Systeem in slaapstand zetten
 third-party-playnite-settings-label = Instellingen
 third-party-playnite-settings-playtime-import-mode-never = Nooit
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Horizontaal Scrollen
 third-party-playnite-game-name-title = Naam
 third-party-playnite-source-label = Bron
 third-party-playnite-download-error = Download Fout

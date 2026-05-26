@@ -59,6 +59,7 @@
     <Compile Include="Converters\LongToDateConverter.cs" />
     <Compile Include="Converters\NumericalSizeToStringConverter.cs" />
     <Compile Include="Converters\SpeedConverter.cs" />
+    <Compile Include="DataGridColumnExtensions.cs" />
     <Compile Include="Enums\DownloadCompleteAction.cs" />
     <Compile Include="Models\UnifiedDownloadManagerData.cs" />
     <Compile Include="Models\UnifiedUISettings.cs" />

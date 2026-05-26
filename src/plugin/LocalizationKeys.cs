@@ -166,6 +166,10 @@ namespace System
         /// </summary>
         public const string UdmDownloadManagerWhatsUp = "udm-download-manager-whats-up";
         /// <summary>
+        /// Restore default column settings
+        /// </summary>
+        public const string UdmRestoreDefaultColumnSettings = "udm-restore-default-column-settings";
+        /// <summary>
         /// Once a month
         /// </summary>
         public const string CommonOnceAMonth = "common-once-a-month";
@@ -229,6 +233,10 @@ namespace System
         /// Never
         /// </summary>
         public const string ThirdPartyPlayniteSettingsPlaytimeImportModeNever = "third-party-playnite-settings-playtime-import-mode-never";
+        /// <summary>
+        /// Horizontal Scrolling
+        /// </summary>
+        public const string ThirdPartyPlayniteSettingsFullscreenHorizontalScrolling = "third-party-playnite-settings-fullscreen-horizontal-scrolling";
         /// <summary>
         /// Name
         /// </summary>

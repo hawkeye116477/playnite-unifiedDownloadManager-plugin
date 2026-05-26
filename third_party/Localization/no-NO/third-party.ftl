@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Suspender systemet
 third-party-playnite-menu-hibernate-system = Dvalemodus
 third-party-playnite-settings-label = Innstillinger
 third-party-playnite-settings-playtime-import-mode-never = Aldri
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Vannrett rullefelt
 third-party-playnite-game-name-title = Navn
 third-party-playnite-source-label = Kilde
 third-party-playnite-download-error = Feil ved nedlasting

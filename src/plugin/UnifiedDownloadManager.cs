@@ -25,7 +25,6 @@ namespace UnifiedDownloadManagerNS
     public class UnifiedDownloadManager : GenericPlugin, IUnifiedDownloadManager
     {
         private UnifiedDownloadManagerSettingsViewModel settings { get; set; }
-
         public override Guid Id { get; } = UnifiedDownloadManagerSharedProperties.Id;
         public static UnifiedDownloadManager Instance { get; set; }
 
@@ -37,6 +36,7 @@ namespace UnifiedDownloadManagerNS
         public CommonHelpers CommonHelpersInstance { get; set; }
         private readonly Dictionary<ControllerInput, DateTime> pressStart = new Dictionary<ControllerInput, DateTime>();
         public UnifiedUISettings UnifiedUISettings { get; set; }
+        public bool LayoutChanged { get; set; } = false;
 
         public UnifiedDownloadManager(IPlayniteAPI api) : base(api)
         {
@@ -239,6 +239,10 @@ namespace UnifiedDownloadManagerNS
             if (downloadsChanged)
             {
                 SaveManagerData();
+            }
+            if (LayoutChanged)
+            {
+                SaveUISettings();
             }
         }
 
