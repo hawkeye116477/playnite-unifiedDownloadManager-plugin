@@ -16,8 +16,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
-using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
 
@@ -31,8 +29,11 @@ namespace UnifiedDownloadManagerNS
         public SidebarItem downloadPanel = UnifiedDownloadManager.GetPanel();
         private readonly TaskManager _manager;
         private IPlayniteAPI playniteAPI = API.Instance;
+        private bool selectionMode;
         public ObservableCollection<UnifiedDownloadStatus> SelectedStatuses { get; set; } = new ObservableCollection<UnifiedDownloadStatus>();
         public ObservableCollection<string> SelectedSources = new ObservableCollection<string>();
+        private int lastSelectedIndex = 0;
+        private bool menuEnabled;
 
         public MainPanel(TaskManager manager)
         {
@@ -598,7 +599,43 @@ namespace UnifiedDownloadManagerNS
             return null;
         }
 
-        public async Task HandleControllerInput(ControllerInput button)
+        private void HandleDataGridSelection(string direction)
+        {
+            var grid = DownloadsDG;
+            if (grid == null || grid.Items.Count == 0)
+            {
+                return;
+            }
+
+            var currentItem = grid.CurrentItem ?? grid.SelectedItem;
+            if (currentItem == null)
+            {
+                return;
+            }
+
+            int currentIndex = grid.Items.IndexOf(currentItem);
+            int targetIndex = (direction == "Down") ? currentIndex + 1 : currentIndex - 1;
+
+            if (targetIndex >= 0 && targetIndex < grid.Items.Count)
+            {
+                var targetItem = grid.Items[targetIndex];
+
+                grid.CurrentItem = targetItem;
+
+                if (grid.SelectedItems.Contains(targetItem))
+                {
+                    grid.SelectedItems.Remove(currentItem);
+                }
+                else
+                {
+                    grid.SelectedItems.Add(targetItem);
+                }
+
+                grid.ScrollIntoView(targetItem);
+            }
+        }
+
+        public async Task HandleControllerInput(ControllerInput button, bool isHold)
         {
             var comboBoxFocused = Keyboard.FocusedElement as ComboBox;
             var comboBoxItemFocused = Keyboard.FocusedElement as ComboBoxItem;
@@ -606,9 +643,13 @@ namespace UnifiedDownloadManagerNS
             {
                 case ControllerInput.LeftShoulder:
                     FocusFirstEnabledButton();
+                    lastSelectedIndex = DownloadsDG.SelectedIndex;
+                    menuEnabled = true;
                     break;
                 case ControllerInput.RightShoulder:
                     FocusLastEnabledButton();
+                    lastSelectedIndex = DownloadsDG.SelectedIndex;
+                    menuEnabled = true;
                     break;
                 case ControllerInput.A:
                     if (Keyboard.FocusedElement is Button btn)
@@ -654,6 +695,11 @@ namespace UnifiedDownloadManagerNS
                     break;
                 case ControllerInput.DPadUp:
                 case ControllerInput.LeftStickUp:
+                    if (selectionMode)
+                    {
+                        HandleDataGridSelection("Up");
+                        return;
+                    }
                     if (comboBoxFocused != null && comboBoxFocused.IsDropDownOpen == false)
                     {
                         comboBoxFocused.MoveFocus(new TraversalRequest(FocusNavigationDirection.Up));
@@ -661,22 +707,62 @@ namespace UnifiedDownloadManagerNS
                     break;
                 case ControllerInput.DPadDown:
                 case ControllerInput.LeftStickDown:
+                    if (selectionMode)
+                    {
+                        HandleDataGridSelection("Down");
+                        return;
+                    }
                     if (comboBoxFocused != null && comboBoxFocused.IsDropDownOpen == false)
                     {
                         comboBoxFocused.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    };
+                    if (menuEnabled && ((Keyboard.FocusedElement as DataGridCell) != null))
+                    {
+                        DataGridRow row = (DataGridRow)DownloadsDG.ItemContainerGenerator.ContainerFromIndex(lastSelectedIndex);
+                        row.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+                        menuEnabled = false;
                     }
                     break;
                 case ControllerInput.RightStick:
+                    if (FilterSP.Visibility == Visibility.Collapsed)
+                    {
+                        lastSelectedIndex = DownloadsDG.SelectedIndex;
+                    }
                     OpenFiltersPanel();
+                    if (FilterSP.Visibility == Visibility.Visible)
+                    {
+                        StatusCBo.Focus();
+                    }
+                    else
+                    {
+                        DataGridRow row = (DataGridRow)DownloadsDG.ItemContainerGenerator.ContainerFromIndex(lastSelectedIndex);
+                        row.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+                    }
                     break;
                 case ControllerInput.Start:
                     EditSelectedEntry();
                     break;
                 case ControllerInput.Back:
-                    SelectAllEntries();
+                    if (isHold)
+                    {
+                        selectionMode = false;
+                        SelectAllEntries();
+                    }
+                    else
+                    {
+                        selectionMode = !selectionMode;
+                    }
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void DownloadsDG_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (selectionMode && (e.Key == Key.Up || e.Key == Key.Down))
+            {
+                e.Handled = true;
             }
         }
     }

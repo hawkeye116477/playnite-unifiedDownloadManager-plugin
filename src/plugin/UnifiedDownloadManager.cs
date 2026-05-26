@@ -35,6 +35,7 @@ namespace UnifiedDownloadManagerNS
         public UnifiedDownloadManagerData UnifiedDownloadManagerData { get; set; }
         public string PluginName = "Unified Download Manager";
         public CommonHelpers CommonHelpersInstance { get; set; }
+        private readonly Dictionary<ControllerInput, DateTime> pressStart = new Dictionary<ControllerInput, DateTime>();
 
         public UnifiedDownloadManager(IPlayniteAPI api) : base(api)
         {
@@ -272,12 +273,23 @@ namespace UnifiedDownloadManagerNS
 
         public override async void OnControllerButtonStateChanged(OnControllerButtonStateChangedArgs args)
         {
+            if (args.State == ControllerInputState.Pressed)
+            {
+                pressStart[args.Button] = DateTime.Now;
+                return;
+            }
+            bool isHold = false;
+            if (args.State == ControllerInputState.Released)
+            {
+                if (pressStart.TryGetValue(args.Button, out var start))
+                {
+                    isHold = (DateTime.Now - start).TotalMilliseconds >= 400;
+                    pressStart.Remove(args.Button);
+                }
+            }
             if (DownloadManagerPanel != null && DownloadManagerPanel.IsVisible)
             {
-                if (args.State == ControllerInputState.Pressed)
-                {
-                    await DownloadManagerPanel.HandleControllerInput(args.Button);
-                }
+               await DownloadManagerPanel.HandleControllerInput(args.Button, isHold);
             }
             var msgDialogOpen = Application.Current.Windows.OfType<MessageCheckBoxDialog>().Any(w => w.IsVisible);
             if (msgDialogOpen)

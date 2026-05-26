@@ -39,9 +39,8 @@
             <StackPanel Grid.Row="0" VerticalAlignment="Top" Orientation="Vertical">
                 <StackPanel Margin="0,0,0,10" DockPanel.Dock="Top" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Style="{x:Null}" WindowChrome.IsHitTestVisibleInChrome="True">
-                        <Hyperlink Name="BackHl" Click="BackHl_Click">
-                            <TextBlock FontFamily="{DynamicResource FontIcoFont}" FontSize="26" Style="{x:Null}" Text="&#xea5c;" />
-                        </Hyperlink>
+                        <Button Name="BackHl" Click="BackHl_Click" FontFamily="{DynamicResource FontIcoFont}" FontSize="26" Content="&#xea5c;" BorderThickness="0" Background="Transparent">
+                        </Button>
                     </TextBlock>
                     <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontSize="18" Text="{common:Localize Key={x:Static system:LOC.UdmDownloadManager}}" />
                 </StackPanel>
@@ -129,7 +128,7 @@
                     IsReadOnly="True"
                     ItemsSource="{Binding Downloads}"
                     ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DownloadsDG_SelectionChanged"
-                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" >
+                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" SelectionMode="Extended" PreviewKeyDown="DownloadsDG_PreviewKeyDown">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" />
                     <DataGridTextColumn Binding="{Binding sourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
