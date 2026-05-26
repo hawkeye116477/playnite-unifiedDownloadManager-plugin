@@ -61,6 +61,7 @@
     <Compile Include="Converters\SpeedConverter.cs" />
     <Compile Include="Enums\DownloadCompleteAction.cs" />
     <Compile Include="Models\UnifiedDownloadManagerData.cs" />
+    <Compile Include="Models\UnifiedUISettings.cs" />
     <Compile Include="UnifiedDownloadCompleteActionView.xaml.cs">
       <DependentUpon>UnifiedDownloadCompleteActionView.xaml</DependentUpon>
     </Compile>

@@ -14,6 +14,7 @@ using System.Windows;
 using UnifiedDownloadManagerApiNS.Interfaces;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Enums;
+using UnifiedDownloadManagerNS.Models;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -291,14 +292,14 @@ namespace UnifiedDownloadManagerNS
                 }
                 if (!silently)
                 {
-                    var messagesSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.messagesSettings;
+                    var messagesSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.messagesSettings;
                     if (messagesSettings.dontShowDownloadManagerWhatsUpMsg == false)
                     {
                         var result = MessageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
                         if (result.CheckboxChecked)
                         {
                             messagesSettings.dontShowDownloadManagerWhatsUpMsg = true;
-                            UnifiedDownloadManager.Instance.SaveManagerData();
+                            UnifiedDownloadManager.Instance.SaveUISettings();
                         }
                     }
                 }

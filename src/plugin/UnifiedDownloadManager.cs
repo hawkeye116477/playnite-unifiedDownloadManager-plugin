@@ -36,6 +36,7 @@ namespace UnifiedDownloadManagerNS
         public string PluginName = "Unified Download Manager";
         public CommonHelpers CommonHelpersInstance { get; set; }
         private readonly Dictionary<ControllerInput, DateTime> pressStart = new Dictionary<ControllerInput, DateTime>();
+        public UnifiedUISettings UnifiedUISettings { get; set; }
 
         public UnifiedDownloadManager(IPlayniteAPI api) : base(api)
         {
@@ -49,11 +50,11 @@ namespace UnifiedDownloadManagerNS
             CommonHelpersInstance = new CommonHelpers(Instance);
             CommonHelpersInstance.LoadNeededResources(icons: false);
             Manager = new TaskManager();
-  
             DownloadManagerPanel = new MainPanel((TaskManager)Manager);
             var savedTasks = LoadSavedManagerData();
             UnifiedDownloadManagerData = savedTasks;
             Manager.Downloads = UnifiedDownloadManagerData.downloads;
+            UnifiedUISettings = LoadUISettings();
         }
 
         public static string Icon => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Resources\icon.png");
@@ -99,6 +100,45 @@ namespace UnifiedDownloadManagerNS
                     Directory.CreateDirectory(path);
                 }
                 var dataFile = Path.Combine(path, $"unifiedDownloads.json");
+                File.WriteAllText(dataFile, strConf);
+            }
+        }
+
+        public UnifiedUISettings LoadUISettings()
+        {
+            UnifiedUISettings unifiedUISettings = new UnifiedUISettings();
+            var dataDir = Instance.GetPluginUserDataPath();
+            var dataFile = Path.Combine(dataDir, "unifiedUISettings.json");
+            bool correctJson = false;
+            if (File.Exists(dataFile))
+            {
+                var content = FileSystem.ReadFileAsStringSafe(dataFile);
+                if (!content.IsNullOrWhiteSpace() && Serialization.TryFromJson(content, out unifiedUISettings))
+                {
+                    if (unifiedUISettings != null)
+                    {
+                        correctJson = true;
+                    }
+                }
+            }
+            if (!correctJson)
+            {
+                unifiedUISettings = new UnifiedUISettings();
+            }
+            return unifiedUISettings;
+        }
+
+        public void SaveUISettings()
+        {
+            var strConf = Serialization.ToJson(UnifiedUISettings, true);
+            if (!strConf.IsNullOrEmpty())
+            {
+                var path = Path.Combine(GetPluginUserDataPath());
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                var dataFile = Path.Combine(path, $"unifiedUISettings.json");
                 File.WriteAllText(dataFile, strConf);
             }
         }
