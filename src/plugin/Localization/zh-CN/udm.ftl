@@ -24,6 +24,16 @@ udm-remove-completed-downloads-confirm = 您确定要从列表中移除所有已
 udm-select-all-entries = 选择所有条目
 udm-edit-selected-download-properties = 编辑条目属性
 udm-open-download-directory = 打开下载目录
+udm-remove-entry-confirm =
+    { $count ->
+        [one] 确定要从列表中移除 { $entryName } 吗？
+       *[other] 确定要从列表中移除所选条目吗？
+    }
+udm-cancel-download-confirm =
+    { $count ->
+        [one] 确定要取消下载 { $appName } 吗？
+       *[other] 确定要取消下载所选条目吗？
+    }
 udm-display-download-task-finished-notifications = 显示已完成任务的通知
 udm-display-download-speed-in-bits = 以 比特(bps) 显示下载速度
 udm-after-download-complete = 下载完成后操作
