@@ -48,3 +48,4 @@ udm-download-manager-whats-up = The download will start soon. You can see its st
 udm-restore-default-column-settings = Restore default column settings
 udm-lock-all-columns = Lock all columns
 udm-unlock-all-columns = Unlock all columns
+udm-max-simultaneous-downloads = Maximum number of simultaneous downloads
