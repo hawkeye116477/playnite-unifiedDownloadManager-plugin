@@ -433,6 +433,15 @@ namespace UnifiedDownloadManagerNS
                             column.Width = targetColumnWidth;
                         }
                     }
+                    if (columnSettings.columnsLocked)
+                    {
+                        foreach (var column in DownloadsDG.Columns)
+                        {
+                            column.CanUserReorder = false;
+                            column.CanUserResize = false;
+                        }
+                        DataGridColumnExtensions.SetIsLocked(DownloadsDG, trued=);
+                    }
                 }
             }
         }
@@ -800,6 +809,21 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
+        private string GetColumnHeaderText(DataGridColumn column)
+        {
+            if (column.Header is string s)
+            {
+                return s;
+            }
+
+            if (column.Header is DockPanel g && g.Children[1] is TextBlock tb)
+            {
+                return tb.Text;
+            }
+
+            return string.Empty;
+        }
+
         private void ColumnHeader_ContextMenuOpening(object sender, MouseButtonEventArgs e)
         {
             if (playniteAPI.ApplicationInfo.Mode == ApplicationMode.Fullscreen)
@@ -828,7 +852,7 @@ namespace UnifiedDownloadManagerNS
             {
                 var item = new MenuItem
                 {
-                    Header = column.Header?.ToString(),
+                    Header = GetColumnHeaderText(column),
                     IsCheckable = true,
                     IsChecked = column.Visibility == Visibility.Visible,
                     StaysOpenOnClick = true,
@@ -837,7 +861,9 @@ namespace UnifiedDownloadManagerNS
                 item.Click += ColumnVisibility_Click;
                 menu.Items.Add(item);
             }
+
             menu.Items.Add(new Separator());
+
             var restoreDefaultOption = new MenuItem
             {
                 Header = LocalizationManager.Instance.GetString(LOC.UdmRestoreDefaultColumnSettings),
@@ -864,6 +890,46 @@ namespace UnifiedDownloadManagerNS
                 }
             };
             menu.Items.Add(restoreDefaultOption);
+
+            var lockColumnsOption = new MenuItem
+            {
+                Header = LocalizationManager.Instance.GetString(LOC.UdmLockAllColumns),
+                IsCheckable = false,
+                StaysOpenOnClick = false,
+                Icon = new TextBlock
+                {
+                    Text = "\uec61",
+                    FontFamily = (FontFamily)Application.Current.FindResource("FontIcoFont")
+                },
+            };
+            if (!DownloadsDG.Columns[0].CanUserResize)
+            {
+                lockColumnsOption.Header = LocalizationManager.Instance.GetString(LOC.UdmUnlockAllColumns);
+                lockColumnsOption.Icon = new TextBlock
+                {
+                    Text = "\uec8c",
+                    FontFamily = (FontFamily)Application.Current.FindResource("FontIcoFont")
+                };
+            }
+            lockColumnsOption.Click += (sender, e) =>
+            {
+                var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
+                bool targetCan = false;
+                if (!DownloadsDG.Columns[0].CanUserResize)
+                {
+                    targetCan = true;
+                }
+                foreach (var column in DownloadsDG.Columns)
+                {
+                    column.CanUserReorder = targetCan;
+                    column.CanUserResize = targetCan;
+                }
+                columnSettings.columnsLocked = !targetCan;
+                DataGridColumnExtensions.SetIsLocked(DownloadsDG, columnSettings.columnsLocked);
+                UnifiedDownloadManager.Instance.LayoutChanged = true;
+            };
+            menu.Items.Add(lockColumnsOption);
+
             var horizontalScrollingOption = new MenuItem
             {
                 Header = LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteSettingsFullscreenHorizontalScrolling),
