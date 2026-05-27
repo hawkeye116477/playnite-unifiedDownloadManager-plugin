@@ -440,7 +440,7 @@ namespace UnifiedDownloadManagerNS
                             column.CanUserReorder = false;
                             column.CanUserResize = false;
                         }
-                        DataGridColumnExtensions.SetIsLocked(DownloadsDG, trued=);
+                        DataGridColumnExtensions.SetIsLocked(DownloadsDG, true);
                     }
                 }
             }
