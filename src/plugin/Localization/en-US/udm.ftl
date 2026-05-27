@@ -46,6 +46,5 @@ udm-download-finished = { $appName } download finished. Have fun!
 udm-download-failed = { $appName } download failed. Please check the log files for more information.
 udm-download-manager-whats-up = The download will start soon. You can see its status by accessing { $pluginShortName } Panel via Menu => View or sidebar.
 udm-restore-default-column-settings = Restore default column settings
-udm-horizontal-scrollbar = Horizontal scrollbar
 udm-lock-all-columns = Lock all columns
 udm-unlock-all-columns = Unlock all columns

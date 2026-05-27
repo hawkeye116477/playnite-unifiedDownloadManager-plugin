@@ -170,10 +170,6 @@ namespace System
         /// </summary>
         public const string UdmRestoreDefaultColumnSettings = "udm-restore-default-column-settings";
         /// <summary>
-        /// Horizontal scrollbar
-        /// </summary>
-        public const string UdmHorizontalScrollbar = "udm-horizontal-scrollbar";
-        /// <summary>
         /// Lock all columns
         /// </summary>
         public const string UdmLockAllColumns = "udm-lock-all-columns";
