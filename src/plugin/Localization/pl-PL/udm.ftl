@@ -45,3 +45,6 @@ udm-system-suspend-countdown = System niedługo zostanie zawieszony...
 udm-download-finished = Pobieranie { $appName } zakończone. Miłej zabawy!
 udm-download-failed = Pobieranie { $appName } nie powiodło się. Sprawdź pliki log, aby uzyskać więcej informacji.
 udm-download-manager-whats-up = Pobieranie rozpocznie się już wkrótce. Możesz zobaczyć jego stan, uzyskując dostęp do panelu { $pluginShortName } za pośrednictwem Menu => Widok lub paska bocznego.
+udm-restore-default-column-settings = Przywróć domyślne ustawienia kolumn
+udm-lock-all-columns = Zablokuj wszystkie kolumny
+udm-unlock-all-columns = Odblokuj wszystkie kolumny
