@@ -333,15 +333,7 @@ namespace UnifiedDownloadManagerNS
             }
             if (DownloadManagerPanel != null && DownloadManagerPanel.IsVisible)
             {
-               await DownloadManagerPanel.HandleControllerInput(args.Button, isHold);
-            }
-            var msgDialogOpen = Application.Current.Windows.OfType<MessageCheckBoxDialog>().Any(w => w.IsVisible);
-            if (msgDialogOpen)
-            {
-                if (args.State == ControllerInputState.Pressed)
-                {
-                    MessageCheckBoxDialog.HandleControllerInput(args.Button);
-                }
+                await DownloadManagerPanel.HandleControllerInput(args.Button, isHold);
             }
         }
 
