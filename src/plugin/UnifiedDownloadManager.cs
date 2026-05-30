@@ -331,9 +331,23 @@ namespace UnifiedDownloadManagerNS
                     pressStart.Remove(args.Button);
                 }
             }
-            if (DownloadManagerPanel != null && DownloadManagerPanel.IsVisible)
+
+            var openedWindows = Application.Current.Windows.OfType<Window>();
+            foreach (var openedWindow in openedWindows)
             {
-                await DownloadManagerPanel.HandleControllerInput(args.Button, isHold);
+                if (!openedWindow.IsActive)
+                {
+                    continue;
+                }
+                switch (openedWindow.Content)
+                {
+                    case MainPanel _:
+                        await DownloadManagerPanel.HandleControllerInput(args.Button, isHold);
+                        break;
+                    case MessageCheckBoxDialog _:
+                        MessageCheckBoxDialog.HandleControllerInput(args.Button);
+                        break;
+                }
             }
         }
 
