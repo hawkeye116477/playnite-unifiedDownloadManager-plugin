@@ -678,7 +678,7 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        public async Task HandleControllerInput(ControllerInput button, bool isHold)
+        public async Task HandleControllerInput(ControllerInput button)
         {
             var comboBoxFocused = Keyboard.FocusedElement as ComboBox;
             var comboBoxItemFocused = Keyboard.FocusedElement as ComboBoxItem;
@@ -786,15 +786,7 @@ namespace UnifiedDownloadManagerNS
                     EditSelectedEntry();
                     break;
                 case ControllerInput.Back:
-                    if (isHold)
-                    {
-                        selectionMode = false;
-                        SelectAllEntries();
-                    }
-                    else
-                    {
-                        selectionMode = !selectionMode;
-                    }
+                    selectionMode = !selectionMode;
                     break;
                 default:
                     break;

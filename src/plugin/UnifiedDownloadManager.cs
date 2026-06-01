@@ -319,36 +319,25 @@ namespace UnifiedDownloadManagerNS
         {
             if (args.State == ControllerInputState.Pressed)
             {
-                pressStart[args.Button] = DateTime.Now;
-                return;
-            }
-            bool isHold = false;
-            if (args.State == ControllerInputState.Released)
-            {
-                if (pressStart.TryGetValue(args.Button, out var start))
+                var openedWindows = Application.Current.Windows.OfType<Window>();
+                foreach (var openedWindow in openedWindows)
                 {
-                    isHold = (DateTime.Now - start).TotalMilliseconds >= 400;
-                    pressStart.Remove(args.Button);
+                    if (!openedWindow.IsActive)
+                    {
+                        continue;
+                    }
+                    switch (openedWindow.Content)
+                    {
+                        case MainPanel _:
+                            await DownloadManagerPanel.HandleControllerInput(args.Button);
+                            break;
+                        case MessageCheckBoxDialog _:
+                            MessageCheckBoxDialog.HandleControllerInput(args.Button);
+                            break;
+                    }
                 }
             }
 
-            var openedWindows = Application.Current.Windows.OfType<Window>();
-            foreach (var openedWindow in openedWindows)
-            {
-                if (!openedWindow.IsActive)
-                {
-                    continue;
-                }
-                switch (openedWindow.Content)
-                {
-                    case MainPanel _:
-                        await DownloadManagerPanel.HandleControllerInput(args.Button, isHold);
-                        break;
-                    case MessageCheckBoxDialog _:
-                        MessageCheckBoxDialog.HandleControllerInput(args.Button);
-                        break;
-                }
-            }
         }
 
     }
