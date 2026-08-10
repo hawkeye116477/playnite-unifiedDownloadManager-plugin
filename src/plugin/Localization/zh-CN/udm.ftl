@@ -45,3 +45,7 @@ udm-system-suspend-countdown = 系统即将挂起……
 udm-download-finished = { $appName } 下载完成了。玩得开心！
 udm-download-failed = { $appName } 下载失败。请查看日志文件以获取更多信息。
 udm-download-manager-whats-up = 下载即将开始。您可以通过菜单 => 查看或侧边栏访问 { $pluginShortName } 面板来查看其状态。
+udm-restore-default-column-settings = 恢复默认列设置
+udm-lock-all-columns = 锁定所有列
+udm-unlock-all-columns = 锁定所有列
+udm-max-simultaneous-downloads = 最大同时下载次数

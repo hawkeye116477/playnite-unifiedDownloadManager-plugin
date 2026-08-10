@@ -48,3 +48,4 @@ udm-download-manager-whats-up = Pobieranie rozpocznie się już wkrótce. Możes
 udm-restore-default-column-settings = Przywróć domyślne ustawienia kolumn
 udm-lock-all-columns = Zablokuj wszystkie kolumny
 udm-unlock-all-columns = Odblokuj wszystkie kolumny
+udm-max-simultaneous-downloads = Maksymalna liczba równoległych pobrań
