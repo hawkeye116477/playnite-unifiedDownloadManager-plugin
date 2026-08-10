@@ -156,7 +156,7 @@ namespace UnifiedDownloadManagerNS
         public IUnifiedDownloadLogic GetUnifiedDownloadLogic(string pluginId)
         {
             var targetPlugin = playniteAPI.Addons.Plugins.Find(plugin => plugin.Id == Guid.Parse(pluginId)) as IUnifiedDownloadProvider;
-            return targetPlugin.UnifiedDownloadLogic;
+            return targetPlugin?.UnifiedDownloadLogic;
         }
 
 
@@ -174,57 +174,60 @@ namespace UnifiedDownloadManagerNS
                 if (ActiveTask != null)
                 {
                     var unifiedDownloadLogic = GetUnifiedDownloadLogic(queuedList[0].pluginId);
-                    try
+                    if (unifiedDownloadLogic != null)
                     {
-                        await unifiedDownloadLogic.StartDownload(queuedList[0]);
-                    }
-                    catch (Exception ex)
-                    {
-                        bool isExpectedCancel = ex is OperationCanceledException &&
-                           (queuedList[0].status == UnifiedDownloadStatus.Canceled
-                            || queuedList[0].status == UnifiedDownloadStatus.Paused);
+                        try
+                        {
+                            await unifiedDownloadLogic.StartDownload(queuedList[0]);
+                        }
+                        catch (Exception ex)
+                        {
+                            bool isExpectedCancel = ex is OperationCanceledException &&
+                               (queuedList[0].status == UnifiedDownloadStatus.Canceled
+                                || queuedList[0].status == UnifiedDownloadStatus.Paused);
 
-                        if (!isExpectedCancel)
-                        {
-                            logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
-                            queuedList[0].status = UnifiedDownloadStatus.Error;
-                        }
-                    }
-                    finally
-                    {
-                        if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
-                        {
-                            await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
-                        }
-                        queuedList[0].gracefulCts?.Dispose();
-                        queuedList[0].forcefulCts?.Dispose();
-                        queuedList[0].gracefulCts = null;
-                        queuedList[0].forcefulCts = null;
-                        if (tasksToRemove.TryRemove($"{queuedList[0].pluginId}_{queuedList[0].gameID}", out bool shouldRemove) && shouldRemove)
-                        {
-                            await unifiedDownloadLogic.OnRemoveDownloadEntry(queuedList[0]);
-                            queuedList[0].PropertyChanged -= DownloadTask_PropertyChanged;
-                            Downloads.Remove(queuedList[0]);
-                        }
-                        if (settings.DisplayDownloadTaskFinishedNotifications)
-                        {
-                            var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
-                            var bitmap = new Bitmap(UnifiedDownloadManager.Icon);
-                            var iconHandle = bitmap.GetHicon();
-                            var icon = Icon.FromHandle(iconHandle);
-                            if (ActiveTask.status == UnifiedDownloadStatus.Completed)
+                            if (!isExpectedCancel)
                             {
-                                Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg), null);
+                                logger.Error($"An error occurred while downloading {queuedList[0].name}: {ex}.");
+                                queuedList[0].status = UnifiedDownloadStatus.Error;
                             }
-                            else if (ActiveTask.status == UnifiedDownloadStatus.Error)
-                            {
-                                Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg), null);
-                            }
-                            bitmap.Dispose();
-                            icon.Dispose();
                         }
-                        ActiveTask = null;
-                        await DoNextJobInQueue();
+                        finally
+                        {
+                            if (queuedList[0].status == UnifiedDownloadStatus.Canceled)
+                            {
+                                await unifiedDownloadLogic.OnCancelDownload(queuedList[0]);
+                            }
+                            queuedList[0].gracefulCts?.Dispose();
+                            queuedList[0].forcefulCts?.Dispose();
+                            queuedList[0].gracefulCts = null;
+                            queuedList[0].forcefulCts = null;
+                            if (tasksToRemove.TryRemove($"{queuedList[0].pluginId}_{queuedList[0].gameID}", out bool shouldRemove) && shouldRemove)
+                            {
+                                await unifiedDownloadLogic.OnRemoveDownloadEntry(queuedList[0]);
+                                queuedList[0].PropertyChanged -= DownloadTask_PropertyChanged;
+                                Downloads.Remove(queuedList[0]);
+                            }
+                            if (settings.DisplayDownloadTaskFinishedNotifications)
+                            {
+                                var appNameArg = new Dictionary<string, IFluentType> { ["appName"] = (FluentString)ActiveTask.name };
+                                var bitmap = new Bitmap(UnifiedDownloadManager.Icon);
+                                var iconHandle = bitmap.GetHicon();
+                                var icon = Icon.FromHandle(iconHandle);
+                                if (ActiveTask.status == UnifiedDownloadStatus.Completed)
+                                {
+                                    Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg), null);
+                                }
+                                else if (ActiveTask.status == UnifiedDownloadStatus.Error)
+                                {
+                                    Playnite.WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName, LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg), null);
+                                }
+                                bitmap.Dispose();
+                                icon.Dispose();
+                            }
+                            ActiveTask = null;
+                            await DoNextJobInQueue();
+                        }
                     }
                 }
             }
@@ -366,7 +369,6 @@ namespace UnifiedDownloadManagerNS
 
         public async Task RemoveDownloadEntry(UnifiedDownload selectedEntry)
         {
-            var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
             if (selectedEntry.status == UnifiedDownloadStatus.Running)
             {
                 tasksToRemove[$"{selectedEntry.pluginId}_{selectedEntry.gameID}"] = true;
@@ -374,7 +376,8 @@ namespace UnifiedDownloadManagerNS
             }
             else
             {
-                await unifiedDownloadLogic.OnRemoveDownloadEntry(selectedEntry);
+                var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
+                await unifiedDownloadLogic?.OnRemoveDownloadEntry(selectedEntry);
                 selectedEntry.PropertyChanged -= DownloadTask_PropertyChanged;
                 Downloads.Remove(selectedEntry);
             }
@@ -383,7 +386,7 @@ namespace UnifiedDownloadManagerNS
         public void OpenDownloadPropertiesWindows(UnifiedDownload selectedEntry)
         {
             var unifiedDownloadLogic = GetUnifiedDownloadLogic(selectedEntry.pluginId);
-            unifiedDownloadLogic.OpenDownloadPropertiesWindow(selectedEntry);
+            unifiedDownloadLogic?.OpenDownloadPropertiesWindow(selectedEntry);
         }
 
         public void RemoveTask(UnifiedDownload downloadItem)
