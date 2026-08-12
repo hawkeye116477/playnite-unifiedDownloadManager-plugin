@@ -20,6 +20,6 @@
     <LocalAppData>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</LocalAppData>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Playnite.SDK" Version="11.0.0-alpha11" />
+    <PackageReference Include="Playnite.SDK" Version="11.0.0-zeta10" />
   </ItemGroup>
 </Project>

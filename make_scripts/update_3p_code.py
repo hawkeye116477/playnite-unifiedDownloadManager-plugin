@@ -20,7 +20,7 @@ src_path = pj(main_path, "src")
 if os.path.exists(pj(third_party_path, "PlayniteExtensions")):
     shutil.rmtree(pj(third_party_path, "PlayniteExtensions"))
 
-csproj = ET.parse(pj(src_path, "plugin", "UnifiedDownloadManager.csproj"))
+csproj = ET.parse(pj(src_path, "plugin", "UnifiedDownloadManagerPlugin.csproj"))
 xml_ns = "{http://schemas.microsoft.com/developer/msbuild/2003}"
 for child in csproj.getroot():
     if child.tag == f"{xml_ns}ItemGroup":
@@ -34,14 +34,14 @@ for child in csproj.getroot():
                     os.makedirs(dst)
                 shutil.copy(needed_file, pj(dst, os.path.basename(needed_file)))
 
-shutil.copy(pj(main_path, "..", "PlayniteExtensions", "PlayniteRepo", "LICENSE.md"), pj(third_party_path, "PlayniteExtensions", "PlayniteRepo", "LICENSE.md"))
+#shutil.copy(pj(main_path, "..", "PlayniteExtensions", "PlayniteRepo", "LICENSE.md"), pj(third_party_path, "PlayniteExtensions", "PlayniteRepo", "LICENSE.md"))
 
-with open(pj(third_party_path, "PlayniteExtensions", "PlayniteRepo", "SOURCE_INFO.txt"), "w", encoding="utf-8") as source_info:
-    git_repo = git.Repo(pj(main_path, "..", "PlayniteExtensions", "PlayniteRepo"), search_parent_directories=True)
-    source = git_repo.remotes.origin.url
-    source_info.write(f"Source: {source}\n")
-    commit = git_repo.head.object.hexsha
-    source_info.write(f"Commit: {commit}\n")
+# with open(pj(third_party_path, "PlayniteExtensions", "PlayniteRepo", "SOURCE_INFO.txt"), "w", encoding="utf-8") as source_info:
+#     git_repo = git.Repo(pj(main_path, "..", "PlayniteExtensions", "PlayniteRepo"), search_parent_directories=True)
+#     source = git_repo.remotes.origin.url
+#     source_info.write(f"Source: {source}\n")
+#     commit = git_repo.head.object.hexsha
+#     source_info.write(f"Commit: {commit}\n")
 
 with open(pj(third_party_path, "playnite-common-plugin", "SOURCE_INFO.txt"), "w", encoding="utf-8") as source_info:
     git_repo = git.Repo(pj(main_path, "..", "playnite-common-plugin"), search_parent_directories=True)
