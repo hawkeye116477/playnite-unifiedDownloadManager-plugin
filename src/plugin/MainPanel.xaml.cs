@@ -1,7 +1,7 @@
 ﻿using CommonPlugin;
 using Linguini.Shared.Types.Bundle;
-using Playnite.Common;
 using Playnite;
+using Playnite.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,8 +10,10 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
@@ -362,6 +364,18 @@ namespace UnifiedDownloadManagerNS
             FiltersSepSP.Visibility = FilterSP.Visibility;
             RightCol.Width = new GridLength(0, GridUnitType.Auto);
             StatusCBo.ItemsSource = Enum.GetValues<UnifiedDownloadStatus>();
+
+            var hiddenColumns = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings.hiddenColumns;
+            if (hiddenColumns != null)
+            {
+                foreach (var column in DownloadsDG.Columns)
+                {
+                    if (hiddenColumns.Contains(column.DisplayIndex))
+                    {
+                        column.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
         }
 
         private void StatusChk_Changed(object sender, RoutedEventArgs e)
@@ -480,6 +494,82 @@ namespace UnifiedDownloadManagerNS
             downloadsView.Filter = DownloadsFilter;
             SourceCBo.Items.Refresh();
             StatusCBo.Items.Refresh();
+        }
+
+        private void ColumnHeader_ContextMenuOpening(object sender, MouseButtonEventArgs e)
+        {
+            DependencyObject obj =
+                  e.OriginalSource as DependencyObject;
+
+            while (obj != null &&
+                   !(obj is DataGridColumnHeader))
+            {
+                obj = VisualTreeHelper.GetParent(obj);
+            }
+
+            var header = obj as DataGridColumnHeader;
+
+            if (header == null)
+            {
+                return;
+            }
+
+            var menu = new ContextMenu();
+
+            foreach (var column in DownloadsDG.Columns)
+            {
+                var item = new MenuItem
+                {
+                    Header = column.Header?.ToString(),
+                    IsCheckable = true,
+                    IsChecked = column.Visibility == Visibility.Visible,
+                    StaysOpenOnClick = true,
+                    Tag = column
+                };
+
+                item.Click += ColumnVisibility_Click;
+                menu.Items.Add(item);
+            }
+            header.ContextMenu = menu;
+        }
+
+        private void ColumnVisibility_Click(object sender, RoutedEventArgs e)
+        {
+            var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
+            var item = sender as MenuItem;
+
+            if (item?.Tag is DataGridColumn column)
+            {
+                if (item.IsChecked)
+                {
+                    column.Visibility = Visibility.Visible;
+                    if (columnSettings.hiddenColumns != null && columnSettings.hiddenColumns.Contains(column.DisplayIndex))
+                    {
+                        columnSettings.hiddenColumns.Remove(column.DisplayIndex);
+                    }
+                }
+                else
+                {
+                    int visibleColumnsCount = DownloadsDG.Columns.Count(c => c.Visibility == Visibility.Visible);
+                    if (visibleColumnsCount > 1)
+                    {
+                        column.Visibility = Visibility.Collapsed;
+                        if (columnSettings.hiddenColumns == null)
+                        {
+                            columnSettings.hiddenColumns = new List<int>();
+                        }
+                        if (!columnSettings.hiddenColumns.Contains(column.DisplayIndex))
+                        {
+                            columnSettings.hiddenColumns.Add(column.DisplayIndex);
+                        }
+                    }
+                    else
+                    {
+                        item.IsChecked = true;
+                    }
+                }
+            }
+            UnifiedDownloadManager.Instance.SaveUISettings();
         }
     }
 }

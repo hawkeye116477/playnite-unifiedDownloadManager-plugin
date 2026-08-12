@@ -300,14 +300,14 @@ namespace UnifiedDownloadManagerNS
                 }
                 if (!silently)
                 {
-                    var messagesSettings = UnifiedDownloadManager.Instance.UnifiedDownloadManagerData.messagesSettings;
+                    var messagesSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.messagesSettings;
                     if (messagesSettings.dontShowDownloadManagerWhatsUpMsg == false)
                     {
                         var result = messageCheckBoxDialog.ShowMessage("", LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK, MessageBoxImage.Information);
                         if (result.CheckboxChecked)
                         {
                             messagesSettings.dontShowDownloadManagerWhatsUpMsg = true;
-                            UnifiedDownloadManager.Instance.SaveManagerData();
+                            UnifiedDownloadManager.Instance.SaveUISettings();
                         }
                     }
                 }

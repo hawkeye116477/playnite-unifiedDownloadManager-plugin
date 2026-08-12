@@ -128,7 +128,7 @@
                     IsReadOnly="True"
                     ItemsSource="{Binding Downloads}"
                     ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DownloadsDG_SelectionChanged"
-                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" >
+                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" SelectionMode="Extended" PreviewMouseRightButtonUp="ColumnHeader_ContextMenuOpening">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" />
                     <DataGridTextColumn Binding="{Binding SourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />

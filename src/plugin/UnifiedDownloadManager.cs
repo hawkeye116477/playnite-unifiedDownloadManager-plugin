@@ -30,6 +30,7 @@ namespace UnifiedDownloadManagerNS
         public CommonHelpers? CommonHelpersInstance { get; set; }
         public static IPlayniteApi PlayniteApi { get; private set; } = null!;
         private static readonly ILogger Logger = LogManager.GetLogger();
+        public UnifiedUISettings UnifiedUISettings { get; set; }
 
         public UnifiedDownloadManager()
         {
@@ -50,6 +51,7 @@ namespace UnifiedDownloadManagerNS
             {
                 Manager.Downloads = UnifiedDownloadManagerData.downloads;
             }
+            UnifiedUISettings = LoadUISettings();
             await Task.CompletedTask;
         }
 
@@ -100,6 +102,45 @@ namespace UnifiedDownloadManagerNS
                 }
 
                 var dataFile = Path.Combine(path, $"unifiedDownloads.json");
+                File.WriteAllText(dataFile, strConf);
+            }
+        }
+
+        public UnifiedUISettings LoadUISettings()
+        {
+            UnifiedUISettings unifiedUISettings = new UnifiedUISettings();
+            var dataDir = PlayniteApi.UserDataDir;
+            var dataFile = Path.Combine(dataDir, "unifiedUISettings.json");
+            bool correctJson = false;
+            if (File.Exists(dataFile))
+            {
+                var content = FileSystem.ReadFileAsStringSafe(dataFile);
+                if (!content.IsNullOrWhiteSpace() && Serialization.TryFromJson(content, out unifiedUISettings))
+                {
+                    if (unifiedUISettings != null)
+                    {
+                        correctJson = true;
+                    }
+                }
+            }
+            if (!correctJson)
+            {
+                unifiedUISettings = new UnifiedUISettings();
+            }
+            return unifiedUISettings;
+        }
+
+        public void SaveUISettings()
+        {
+            var strConf = Serialization.ToJson(UnifiedUISettings, true);
+            if (!strConf.IsNullOrEmpty())
+            {
+                var path = Path.Combine(PlayniteApi.UserDataDir);
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                var dataFile = Path.Combine(path, $"unifiedUISettings.json");
                 File.WriteAllText(dataFile, strConf);
             }
         }
