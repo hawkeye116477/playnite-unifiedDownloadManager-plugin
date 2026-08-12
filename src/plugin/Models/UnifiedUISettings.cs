@@ -16,6 +16,7 @@ namespace UnifiedDownloadManagerNS.Models
         {
             public Dictionary<string, UnifiedColumn> columns { get; set; } = [];
             public bool horizontalScrolling { get; set; }
+            public bool columnsLocked { get; set; }
         }
     }
     

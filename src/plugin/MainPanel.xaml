@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <sys:Boolean x:Key="True">True</sys:Boolean>
         <sys:Boolean x:Key="False">False</sys:Boolean>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <localcon:LongToDateConverter x:Key="LongToDateConverter" />
         <localcon:DownloadStatusEnumToStringConverter x:Key="DownloadStatusEnumToStringConverter" />
         <localcon:DurationStringConverter x:Key="DurationConverter" />
@@ -26,7 +27,33 @@
         <Style BasedOn="{StaticResource HawkeyeDataGridStyle}" TargetType="DataGrid" />
         <Style BasedOn="{StaticResource HawkeyeDataGridCellStyle}" TargetType="DataGridCell" />
         <Style BasedOn="{StaticResource HawkeyeDataGridRowStyle}" TargetType="DataGridRow" />
-        <Style BasedOn="{StaticResource HawkeyeDataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader" />
+        <Style BasedOn="{StaticResource HawkeyeDataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+
+                            <TextBlock x:Name="GlobalLockIcon"
+                                       DockPanel.Dock="Right"
+                                       FontFamily="{DynamicResource IcoFont}"
+                                       Text="&#xec61;" 
+                                       VerticalAlignment="Center"
+                                       Visibility="Visible"/>
+                            <ContentPresenter Content="{Binding}" VerticalAlignment="Center"/>
+                        </DockPanel>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Path=(local:DataGridColumnExtensions.IsLocked),
+                                RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                 Value="False">
+                                <Setter TargetName="GlobalLockIcon" Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid Margin="10,10,10,5">
         <Grid.RowDefinitions>
@@ -128,7 +155,7 @@
                     IsReadOnly="True"
                     ItemsSource="{Binding Downloads}"
                     ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DownloadsDG_SelectionChanged"
-                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" SelectionMode="Extended" PreviewMouseRightButtonUp="ColumnHeader_ContextMenuOpening">
+                    VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" SelectionMode="Extended" PreviewMouseRightButtonUp="ColumnHeader_ContextMenuOpening" local:DataGridColumnExtensions.IsLocked="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" local:DataGridColumnExtensions.ColumnId="NameHeader"/>
                     <DataGridTextColumn Binding="{Binding SourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" local:DataGridColumnExtensions.ColumnId="SourceHeader" />
