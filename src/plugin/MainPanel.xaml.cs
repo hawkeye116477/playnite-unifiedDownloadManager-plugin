@@ -17,6 +17,7 @@ using System.Windows.Media;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
+using UnifiedDownloadManagerNS.Models;
 using MessageBoxResult = Playnite.MessageBoxResult;
 
 namespace UnifiedDownloadManagerNS
@@ -365,14 +366,32 @@ namespace UnifiedDownloadManagerNS
             RightCol.Width = new GridLength(0, GridUnitType.Auto);
             StatusCBo.ItemsSource = Enum.GetValues<UnifiedDownloadStatus>();
 
-            var hiddenColumns = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings.hiddenColumns;
-            if (hiddenColumns != null)
+            var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
+            var savedColumns = columnSettings.columns;
+            if (savedColumns != null)
             {
                 foreach (var column in DownloadsDG.Columns)
                 {
-                    if (hiddenColumns.Contains(column.DisplayIndex))
+                    var thisColumnId = DataGridColumnExtensions.GetColumnId(column);
+                    if (savedColumns.TryGetValue(thisColumnId, out var savedColumn))
                     {
-                        column.Visibility = Visibility.Collapsed;
+                        if (savedColumn.hidden)
+                        {
+                            column.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            column.DisplayIndex = savedColumn.index;
+                        }
+                    }
+                }
+                if (columnSettings.horizontalScrolling)
+                {
+                    var targetColumnWidth = DataGridLength.Auto;
+                    DownloadsDG.ColumnWidth = targetColumnWidth;
+                    foreach (var column in DownloadsDG.Columns)
+                    {
+                        column.Width = targetColumnWidth;
                     }
                 }
             }
@@ -526,26 +545,87 @@ namespace UnifiedDownloadManagerNS
                     StaysOpenOnClick = true,
                     Tag = column
                 };
-
                 item.Click += ColumnVisibility_Click;
                 menu.Items.Add(item);
             }
+            menu.Items.Add(new Separator());
+            var restoreDefaultOption = new MenuItem
+            {
+                Header = LocalizationManager.Instance.GetString(LOC.UdmRestoreDefaultColumnSettings),
+                IsCheckable = false,
+                StaysOpenOnClick = false,
+                Icon = new TextBlock
+                {
+                    Text = "\uefd1",
+                    FontFamily = (FontFamily)Application.Current.FindResource("FontIcoFont")
+                }
+            };
+            restoreDefaultOption.Click += (sender, e) =>
+            {
+                var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
+                if (columnSettings.columns != null)
+                {
+                    columnSettings.columns = null;
+                }
+                UnifiedDownloadManager.Instance.LayoutChanged = true;
+                foreach (var column in DownloadsDG.Columns)
+                {
+                    column.DisplayIndex = DownloadsDG.Columns.IndexOf(column);
+                    column.Visibility = Visibility.Visible;
+                }
+            };
+            menu.Items.Add(restoreDefaultOption);
+            var horizontalScrollingOption = new MenuItem
+            {
+                Header = LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteSettingsFullscreenHorizontalScrolling),
+                IsCheckable = true,
+                StaysOpenOnClick = false,
+                IsChecked = DownloadsDG.ColumnWidth == DataGridLength.Auto
+            };
+            horizontalScrollingOption.Click += (sender, e) =>
+            {
+                var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
+                var targetColumnWidth = new DataGridLength(1, DataGridLengthUnitType.Star);
+                if (horizontalScrollingOption.IsChecked)
+                {
+                    targetColumnWidth = DataGridLength.Auto;
+                }
+                DownloadsDG.ColumnWidth = targetColumnWidth;
+                foreach (var column in DownloadsDG.Columns)
+                {
+                    column.Width = targetColumnWidth;
+                }
+                columnSettings.horizontalScrolling = horizontalScrollingOption.IsChecked;
+                UnifiedDownloadManager.Instance.LayoutChanged = true;
+            };
+            menu.Items.Add(new Separator());
+            menu.Items.Add(horizontalScrollingOption);
             header.ContextMenu = menu;
         }
 
         private void ColumnVisibility_Click(object sender, RoutedEventArgs e)
         {
             var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
+            if (columnSettings.columns == null)
+            {
+                columnSettings.columns = new Dictionary<string, UnifiedColumn>();
+            }
             var item = sender as MenuItem;
 
             if (item?.Tag is DataGridColumn column)
             {
+                var thisColumnId = DataGridColumnExtensions.GetColumnId(column);
+                if (!columnSettings.columns.TryGetValue(thisColumnId, out var savedColumn))
+                {
+                    savedColumn = new UnifiedColumn();
+                    columnSettings.columns.Add(thisColumnId, savedColumn);
+                }
                 if (item.IsChecked)
                 {
                     column.Visibility = Visibility.Visible;
-                    if (columnSettings.hiddenColumns != null && columnSettings.hiddenColumns.Contains(column.DisplayIndex))
+                    if (savedColumn != null && savedColumn.hidden)
                     {
-                        columnSettings.hiddenColumns.Remove(column.DisplayIndex);
+                        savedColumn.hidden = false;
                     }
                 }
                 else
@@ -554,14 +634,13 @@ namespace UnifiedDownloadManagerNS
                     if (visibleColumnsCount > 1)
                     {
                         column.Visibility = Visibility.Collapsed;
-                        if (columnSettings.hiddenColumns == null)
+                        if (savedColumn == null)
                         {
-                            columnSettings.hiddenColumns = new List<int>();
+                            savedColumn = new UnifiedColumn();
+                            columnSettings.columns.Add(thisColumnId, savedColumn);
                         }
-                        if (!columnSettings.hiddenColumns.Contains(column.DisplayIndex))
-                        {
-                            columnSettings.hiddenColumns.Add(column.DisplayIndex);
-                        }
+                        savedColumn.index = column.DisplayIndex;
+                        savedColumn.hidden = true;
                     }
                     else
                     {
@@ -569,7 +648,25 @@ namespace UnifiedDownloadManagerNS
                     }
                 }
             }
-            UnifiedDownloadManager.Instance.SaveUISettings();
+            UnifiedDownloadManager.Instance.LayoutChanged = true;
+        }
+
+        private void DownloadsDG_ColumnDisplayIndexChanged(object sender, DataGridColumnEventArgs e)
+        {
+            var thisColumn = e.Column;
+            var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
+            if (columnSettings.columns == null)
+            {
+                columnSettings.columns = new Dictionary<string, UnifiedColumn>();
+            }
+            var thisColumnId = DataGridColumnExtensions.GetColumnId(thisColumn);
+            if (!columnSettings.columns.TryGetValue(thisColumnId, out var savedColumn))
+            {
+                savedColumn = new UnifiedColumn();
+                columnSettings.columns.Add(thisColumnId, savedColumn);
+            }
+            savedColumn.index = thisColumn.DisplayIndex;
+            UnifiedDownloadManager.Instance.LayoutChanged = true;
         }
     }
 }

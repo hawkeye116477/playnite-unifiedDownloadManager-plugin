@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Suspendiraj sustav
 third-party-playnite-menu-hibernate-system = Hibernacija sustava
 third-party-playnite-settings-label = Postavke
 third-party-playnite-settings-playtime-import-mode-never = Nikad
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Vodoravno skrolovanje
 third-party-playnite-game-name-title = Naziv
 third-party-playnite-source-label = Izvor
 third-party-playnite-download-error = Greška pri preuzimanju

@@ -130,9 +130,9 @@
                     ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="DownloadsDG_SelectionChanged"
                     VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Standard" Grid.Row="0" Grid.Column="0" SelectionMode="Extended" PreviewMouseRightButtonUp="ColumnHeader_ContextMenuOpening">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" />
-                    <DataGridTextColumn Binding="{Binding SourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" />
-                    <DataGridTemplateColumn Header="{common:Localize Key={x:Static system:LOC.UdmProgress}}">
+                    <DataGridTextColumn Binding="{Binding Name}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteGameNameTitle}}" local:DataGridColumnExtensions.ColumnId="NameHeader"/>
+                    <DataGridTextColumn Binding="{Binding SourceName}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteSourceLabel}}" local:DataGridColumnExtensions.ColumnId="SourceHeader" />
+                    <DataGridTemplateColumn Header="{common:Localize Key={x:Static system:LOC.UdmProgress}}" local:DataGridColumnExtensions.ColumnId="ProgressHeader">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -144,7 +144,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="{common:Localize Key={x:Static system:LOC.UdmDownloaded}}">
+                    <DataGridTextColumn Header="{common:Localize Key={x:Static system:LOC.UdmDownloaded}}" local:DataGridColumnExtensions.ColumnId="DownloadedHeader">
                         <DataGridTextColumn.Binding>
                             <MultiBinding StringFormat="{}{0} / {1}">
                                 <Binding Converter="{StaticResource NumericalSizeToStringConverter}" Path="DownloadedBytes" />
@@ -152,10 +152,10 @@
                             </MultiBinding>
                         </DataGridTextColumn.Binding>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding InstallSizeBytes, Converter={StaticResource NumericalSizeToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteInstallSizeLabel}}" />
-                    <DataGridTextColumn Binding="{Binding Status, Converter={StaticResource DownloadStatusEnumToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" />
-                    <DataGridTextColumn Binding="{Binding AddedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteAddedLabel}}" />
-                    <DataGridTextColumn Binding="{Binding CompletedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadCompletedColumn}}" />
+                    <DataGridTextColumn Binding="{Binding InstallSizeBytes, Converter={StaticResource NumericalSizeToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteInstallSizeLabel}}" local:DataGridColumnExtensions.ColumnId="InstallSizeHeader"  />
+                    <DataGridTextColumn Binding="{Binding Status, Converter={StaticResource DownloadStatusEnumToStringConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadStatus}}" local:DataGridColumnExtensions.ColumnId="DownloadStatusHeader" />
+                    <DataGridTextColumn Binding="{Binding AddedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.ThirdPartyPlayniteAddedLabel}}" local:DataGridColumnExtensions.ColumnId="AddedHeader" />
+                    <DataGridTextColumn Binding="{Binding CompletedTime, Converter={StaticResource LongToDateConverter}}" Header="{common:Localize Key={x:Static system:LOC.UdmDownloadCompletedColumn}}" local:DataGridColumnExtensions.ColumnId="CompletedHeader" />
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Name="FiltersSepSP" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal">

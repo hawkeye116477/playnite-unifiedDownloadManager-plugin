@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = تعليق النظام
 third-party-playnite-menu-hibernate-system = نظام السُبات
 third-party-playnite-settings-label = إعدادات
 third-party-playnite-settings-playtime-import-mode-never = ابداً
+third-party-playnite-settings-fullscreen-horizontal-scrolling = التمرير الأفقي
 third-party-playnite-game-name-title = الاسم
 third-party-playnite-source-label = مصدر
 third-party-playnite-download-error = خطأ في التحميل

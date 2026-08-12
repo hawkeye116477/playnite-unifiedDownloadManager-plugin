@@ -45,3 +45,4 @@ udm-system-suspend-countdown = System will be suspended soon...
 udm-download-finished = { $appName } download finished. Have fun!
 udm-download-failed = { $appName } download failed. Please check the log files for more information.
 udm-download-manager-whats-up = The download will start soon. You can see its status by accessing { $pluginShortName } Panel via Menu => View or sidebar.
+udm-restore-default-column-settings = Restore default column settings

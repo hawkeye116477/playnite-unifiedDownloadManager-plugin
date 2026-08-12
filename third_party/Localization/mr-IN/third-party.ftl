@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = सिस्टम विलंबि
 third-party-playnite-menu-hibernate-system = सिस्टम हायबरनेट करा
 third-party-playnite-settings-label = सेटिंग्झ
 third-party-playnite-settings-playtime-import-mode-never = कधीच नाही
+third-party-playnite-settings-fullscreen-horizontal-scrolling = आडवे स्क्रोलिंग
 third-party-playnite-game-name-title = नाव
 third-party-playnite-source-label = स्रोत
 third-party-playnite-download-error = डाउनलोड त्रुटी

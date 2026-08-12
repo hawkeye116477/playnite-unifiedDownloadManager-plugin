@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = System-Stand-by
 third-party-playnite-menu-hibernate-system = System-Ruhezustand
 third-party-playnite-settings-label = Einstellungen
 third-party-playnite-settings-playtime-import-mode-never = Niemals
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Horizontales Scrollen
 third-party-playnite-game-name-title = Name
 third-party-playnite-source-label = Quelle
 third-party-playnite-download-error = Fehler beim Herunterladen

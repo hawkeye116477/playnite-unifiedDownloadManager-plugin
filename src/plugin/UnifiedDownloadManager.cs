@@ -31,6 +31,7 @@ namespace UnifiedDownloadManagerNS
         public static IPlayniteApi PlayniteApi { get; private set; } = null!;
         private static readonly ILogger Logger = LogManager.GetLogger();
         public UnifiedUISettings UnifiedUISettings { get; set; }
+        public bool LayoutChanged { get; set; } = false;
 
         public UnifiedDownloadManager()
         {
@@ -251,6 +252,10 @@ namespace UnifiedDownloadManagerNS
             if (downloadsChanged)
             {
                 SaveManagerData();
+            }
+            if (LayoutChanged)
+            {
+                SaveUISettings();
             }
         }
 

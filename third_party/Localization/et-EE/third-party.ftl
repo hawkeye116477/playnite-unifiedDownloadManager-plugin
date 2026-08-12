@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Peata süsteem
 third-party-playnite-menu-hibernate-system = Pane süsteem talveunne
 third-party-playnite-settings-label = Seaded
 third-party-playnite-settings-playtime-import-mode-never = Mitte kunagi
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Horisontaalne kerimine
 third-party-playnite-game-name-title = Nimi
 third-party-playnite-source-label = Allikas
 third-party-playnite-download-error = Allalaadimise viga

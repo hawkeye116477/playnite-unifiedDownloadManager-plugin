@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = השהה מערכת
 third-party-playnite-menu-hibernate-system = מצב שינה
 third-party-playnite-settings-label = הגדרות
 third-party-playnite-settings-playtime-import-mode-never = אף פעם
+third-party-playnite-settings-fullscreen-horizontal-scrolling = גלילה אופקית
 third-party-playnite-game-name-title = שם
 third-party-playnite-source-label = מקור
 third-party-playnite-download-error = שגיאת הורדה

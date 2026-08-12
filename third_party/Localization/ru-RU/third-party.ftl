@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Спящий режим
 third-party-playnite-menu-hibernate-system = Гибернация
 third-party-playnite-settings-label = Настройки
 third-party-playnite-settings-playtime-import-mode-never = Никогда
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Горизонтальная прокрутка
 third-party-playnite-game-name-title = Название игры
 third-party-playnite-source-label = Источник
 third-party-playnite-download-error = Ошибка загрузки

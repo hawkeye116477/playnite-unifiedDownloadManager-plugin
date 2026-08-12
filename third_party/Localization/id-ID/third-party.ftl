@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = Suspend System
 third-party-playnite-menu-hibernate-system = Hibernasikan Sistem
 third-party-playnite-settings-label = Pengaturan
 third-party-playnite-settings-playtime-import-mode-never = Tidak pernah
+third-party-playnite-settings-fullscreen-horizontal-scrolling = Scrollbar Horizontal
 third-party-playnite-game-name-title = Nama
 third-party-playnite-source-label = Sumber
 third-party-playnite-download-error = Download Error

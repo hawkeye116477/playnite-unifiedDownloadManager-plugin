@@ -16,6 +16,7 @@ third-party-playnite-menu-suspend-system = 시스템 정지
 third-party-playnite-menu-hibernate-system = 시스템 최대 절전
 third-party-playnite-settings-label = 설정
 third-party-playnite-settings-playtime-import-mode-never = 가져오지 않음
+third-party-playnite-settings-fullscreen-horizontal-scrolling = 수평 스크롤
 third-party-playnite-game-name-title = 이름
 third-party-playnite-source-label = 소스
 third-party-playnite-download-error = 다운로드 오류
