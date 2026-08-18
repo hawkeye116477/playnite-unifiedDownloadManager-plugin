@@ -11,7 +11,6 @@
     <LangVersion>default</LangVersion>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release</Configurations>
-    <Platforms>x64</Platforms>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <Version>1.0.3.11</Version>
   </PropertyGroup>

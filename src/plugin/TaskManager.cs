@@ -79,7 +79,7 @@ namespace UnifiedDownloadManagerNS
         }
 
         private ConcurrentDictionary<string, bool> tasksToRemove = new ConcurrentDictionary<string, bool>();
-        private List<UnifiedDownload> selectedItems = new List<UnifiedDownload>();
+        private List<UnifiedDownload> selectedItems = [];
 
         private void ActiveTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {

@@ -24,22 +24,22 @@ namespace UnifiedDownloadManagerNS
         public static UnifiedDownloadManager Instance { get; set; } = null!;
 
         private MainPanel? downloadManagerPanel;
-        public IUnifiedTaskManager? Manager { get; set; }
+        public IUnifiedTaskManager Manager { get; set; } = null!;
         public UnifiedDownloadManagerData? UnifiedDownloadManagerData { get; set; }
         public string PluginName = "Unified Download Manager";
         public CommonHelpers? CommonHelpersInstance { get; set; }
         public static IPlayniteApi PlayniteApi { get; private set; } = null!;
         private static readonly ILogger Logger = LogManager.GetLogger();
-        public UnifiedUISettings UnifiedUISettings { get; set; }
+        public UnifiedUISettings UnifiedUISettings { get; set; } = null!;
         public bool LayoutChanged { get; set; } = false;
 
         public UnifiedDownloadManager()
         {
-            Instance = this;
         }
 
         public override async Task InitializeAsync(InitializeArgs args)
         {
+            Instance = this;
             PlayniteApi = args.Api;
             Settings = UnifiedDownloadManagerSettingsViewModel.LoadPluginSettings(PlayniteApi.UserDataDir);
             CommonHelpersInstance = new CommonHelpers(PlayniteApi);
@@ -52,12 +52,12 @@ namespace UnifiedDownloadManagerNS
             {
                 Manager.Downloads = UnifiedDownloadManagerData.downloads;
             }
+
             UnifiedUISettings = LoadUISettings();
-            await Task.CompletedTask;
         }
 
         public static string Icon => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!,
-                                                  @"Resources\icon.png");
+            @"Resources\icon.png");
 
         private static UnifiedDownloadManagerData? LoadSavedManagerData()
         {
@@ -124,10 +124,12 @@ namespace UnifiedDownloadManagerNS
                     }
                 }
             }
+
             if (!correctJson)
             {
                 unifiedUISettings = new UnifiedUISettings();
             }
+
             return unifiedUISettings;
         }
 
@@ -141,6 +143,7 @@ namespace UnifiedDownloadManagerNS
                 {
                     Directory.CreateDirectory(path);
                 }
+
                 var dataFile = Path.Combine(path, $"unifiedUISettings.json");
                 File.WriteAllText(dataFile, strConf);
             }
@@ -157,14 +160,14 @@ namespace UnifiedDownloadManagerNS
             LocalizationManager.Instance.SetCommonArgs(commonFluentArgs);
         }
 
-        // public static AppViewItem? GetPanel()
-        // {
-        //     Instance._downloadManagerSidebarItem = new BasicSidebarItem(UIIcon.FromFontIcon("ef08",
-        //                                                                     Playnite.Fonts.IcoFont),
-        //                                                                 (async ) => GetDownloadManagerPanel(),
-        //                                                                 tooltip: Instance.pluginName);
-        //     return Instance._downloadManagerSidebarItem;
-        // }
+        //public static AppViewItem? GetPanel()
+        //{
+        //    Instance._downloadManagerSidebarItem = new BasicSidebarItem(UIIcon.FromFontIcon("ef08",
+        //                                                                    Playnite.Fonts.IcoFont),
+        //                                                                (async) => GetDownloadManagerPanel(),
+        //                                                                tooltip: Instance.pluginName);
+        //    return Instance._downloadManagerSidebarItem;
+        //}
 
         public static MainPanel? GetDownloadManagerPanel()
         {
@@ -188,10 +191,9 @@ namespace UnifiedDownloadManagerNS
             return
             [
                 new AppViewItemDescriptor("UDM.panel",
-                                          "Unified Download Manager",
-                                          (iconArgs) => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont),
-                                          (iconArgs) =>
-                                              UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont, new SolidColorBrush(Colors.DeepSkyBlue)))
+                    "Unified Download Manager",
+                    (iconArgs) => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont),
+                    (iconArgs) => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont, new SolidColorBrush(Colors.DeepSkyBlue)))
             ];
         }
 
@@ -253,6 +255,7 @@ namespace UnifiedDownloadManagerNS
             {
                 SaveManagerData();
             }
+
             if (LayoutChanged)
             {
                 SaveUISettings();
@@ -270,31 +273,31 @@ namespace UnifiedDownloadManagerNS
             FileSystem.WriteStringToFile(settingsFile, Serialization.ToJson(settings, true));
         }
 
-        // public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
-        // {
-        //     if (PlayniteApi.AppInfo.Mode == AppMode.Fullscreen)
-        //     {
-        //         yield return new MainMenuItem
-        //         {
-        //             Description = LocalizationManager.Instance.GetString(LOC.UdmDownloadManager),
-        //             MenuSection = $"@{Instance.pluginName}",
-        //             Icon = UnifiedDownloadManager.Icon,
-        //             Action = (args) =>
-        //                      {
-        //                          Window window = PlayniteApi.Dialogs.CreateWindow(new WindowCreationOptions
-        //                          {
-        //                              ShowMaximizeButton = true,
-        //                          });
-        //                          window.ResizeMode = ResizeMode.CanResize;
-        //                          window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        //                          window.Title = UnifiedDownloadManager.Instance.pluginName;
-        //                          window.Content = GetDownloadManagerPanel();
-        //                          window.Owner = PlayniteApi.Dialogs.GetCurrentAppWindow();
-        //                          window.ShowDialog();
-        //                      }
-        //         };
-        //     }
-        // }
+        //public override IEnumerable<MainMenuItem> GetMainMenuItems(GetMainMenuItemsArgs args)
+        //{
+        //    if (PlayniteApi.AppInfo.Mode == AppMode.Fullscreen)
+        //    {
+        //        yield return new MainMenuItem
+        //        {
+        //            Description = LocalizationManager.Instance.GetString(LOC.UdmDownloadManager),
+        //            MenuSection = $"@{Instance.pluginName}",
+        //            Icon = UnifiedDownloadManager.Icon,
+        //            Action = (args) =>
+        //                     {
+        //                         Window window = PlayniteApi.Dialogs.CreateWindow(new WindowCreationOptions
+        //                         {
+        //                             ShowMaximizeButton = true,
+        //                         });
+        //                         window.ResizeMode = ResizeMode.CanResize;
+        //                         window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        //                         window.Title = UnifiedDownloadManager.Instance.pluginName;
+        //                         window.Content = GetDownloadManagerPanel();
+        //                         window.Owner = PlayniteApi.Dialogs.GetCurrentAppWindow();
+        //                         window.ShowDialog();
+        //                     }
+        //        };
+        //    }
+        //}
 
         public static long GetNextClearingTime(ClearCacheTime frequency)
         {
@@ -325,6 +328,16 @@ namespace UnifiedDownloadManagerNS
         public static UnifiedDownloadManagerSettings? GetSettings()
         {
             return Instance.Settings;
+        }
+
+        public override async Task<object?> OnPluginCallRequestAsync(PluginCallRequestAsyncArgs args)
+        {
+            if (args.CallId == UnifiedDownloadManagerSharedProperties.GetApi)
+            {
+                return this.Manager;
+            }
+
+            return null;
         }
     }
 }

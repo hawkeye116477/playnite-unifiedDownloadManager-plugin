@@ -10,7 +10,6 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <LangVersion>default</LangVersion>
     <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU;x64</Platforms>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -24,6 +23,7 @@
     <LocalAppData>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</LocalAppData>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\api\UnifiedDownloadManagerApi.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="extension.toml">
@@ -120,11 +120,6 @@
     <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Winuser.cs" Link="Shared\Playnite\Native\Winuser.cs" />
     <ApplicationDefinition Remove="App.xaml" />
     <Page Include="App.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="UnifiedDownloadManagerApi">
-      <HintPath>..\api\bin\Release\net10.0-windows\UnifiedDownloadManagerApi.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="python &quot;$(ProjectDir)..\..\make_scripts\after_build.py&quot; $(TargetDir)" />

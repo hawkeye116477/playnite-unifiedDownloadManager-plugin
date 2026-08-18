@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="api/UnifiedDownloadManagerApi.csproj" />
+  <Project Path="plugin/UnifiedDownloadManagerPlugin.csproj" />
+</Solution>
