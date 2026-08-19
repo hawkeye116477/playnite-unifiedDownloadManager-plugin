@@ -277,7 +277,6 @@ namespace UnifiedDownloadManagerNS
 
         public async Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false)
         {
-            var messageCheckBoxDialog = new MessageCheckBoxDialog(PlayniteApi);
             var existingKeys = new HashSet<(string gameID, string pluginId)>(Downloads.Where(d => true)
                                                                                       .Select(d => (d.GameId, d.PluginId)));
             var uniqueTasks = downloadManagerDataList
@@ -328,11 +327,10 @@ namespace UnifiedDownloadManagerNS
                     var messagesSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.messagesSettings;
                     if (messagesSettings.dontShowDownloadManagerWhatsUpMsg == false)
                     {
-                        var result = messageCheckBoxDialog.ShowMessage("",
-                            LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp),
-                            LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                        if (result.CheckboxChecked)
+                        var response = new MessageBoxResponse(LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteOkLabel));
+                        var dontShowDownloadManagerWhatsUpMsgCheckbox = new MessageBoxOption(LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), false);
+                        var result = await PlayniteApi.Dialogs.ShowMessageAsync(LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), "", MessageBoxSeverity.Information, [response], [dontShowDownloadManagerWhatsUpMsgCheckbox]);
+                        if (dontShowDownloadManagerWhatsUpMsgCheckbox.IsSelected)
                         {
                             messagesSettings.dontShowDownloadManagerWhatsUpMsg = true;
                             UnifiedDownloadManager.Instance.SaveUISettings();
