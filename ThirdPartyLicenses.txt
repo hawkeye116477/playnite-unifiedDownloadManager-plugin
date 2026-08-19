@@ -28,3 +28,8 @@ IndexRange - https://github.com/bgrainger/IndexRange
 MIT License
 Copyright (c) 2019–2022 Bradley Grainger
 
+
+----------------------------------------------------------------------------------------
+Hardcodet NotifyIcon for WPF - https://github.com/hardcodet/wpf-notifyicon
+The MIT License (MIT)
+Copyright (c) Philipp Sumi

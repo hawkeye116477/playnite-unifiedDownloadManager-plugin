@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ByteSize" Version="2.1.2" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="Linguini.Bundle" Version="0.11.0" />
     <PackageReference Include="Playnite.SDK" Version="11.0.0-zeta10" />
   </ItemGroup>
