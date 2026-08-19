@@ -6,7 +6,7 @@
     <AssemblyTitle>UnifiedDownloadManager</AssemblyTitle>
     <Product>UnifiedDownloadManager</Product>
     <Copyright>Copyright © 2026 hawkeye116477</Copyright>
-    <Version>1.0.8.11</Version>
+    <Version>1.1.0.11</Version>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <LangVersion>default</LangVersion>
     <Configurations>Debug;Release</Configurations>
