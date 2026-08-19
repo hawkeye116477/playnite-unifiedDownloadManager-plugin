@@ -6,7 +6,6 @@ using Playnite;
 using System.Windows;
 using System.Reflection;
 using System.Threading.Tasks;
-using Playnite.Common;
 using UnifiedDownloadManagerNS;
 
 namespace CommonPlugin

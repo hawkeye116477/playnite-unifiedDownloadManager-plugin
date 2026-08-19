@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 
-namespace Playnite.Common
+namespace Playnite
 {
     public class Xaml
     {
