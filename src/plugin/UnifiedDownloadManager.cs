@@ -2,7 +2,6 @@
 using CommonPlugin.Enums;
 using Linguini.Shared.Types.Bundle;
 using Playnite;
-using Playnite.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,25 +16,20 @@ using UnifiedDownloadManagerNS.Models;
 
 namespace UnifiedDownloadManagerNS
 {
-    public class UnifiedDownloadManager : Plugin, IUnifiedDownloadManager
+    public class UnifiedDownloadManager : Plugin
     {
-        public UnifiedDownloadManagerSettings Settings { get; set; } = new();
+        public UnifiedDownloadManagerSettings Settings { get; set; } = null!;
         public static readonly string Id = UnifiedDownloadManagerSharedProperties.Id;
         public static UnifiedDownloadManager Instance { get; set; } = null!;
 
         private MainPanel? downloadManagerPanel;
-        public IUnifiedTaskManager Manager { get; set; } = null!;
+        public IUnifiedDownloadManagerApi Manager { get; set; } = null!;
         public UnifiedDownloadManagerData? UnifiedDownloadManagerData { get; set; }
         public string PluginName = "Unified Download Manager";
-        public CommonHelpers? CommonHelpersInstance { get; set; }
+        public CommonHelpers CommonHelpersInstance { get; set; } = null!;
         public static IPlayniteApi PlayniteApi { get; private set; } = null!;
-        private static readonly ILogger Logger = LogManager.GetLogger();
         public UnifiedUISettings UnifiedUISettings { get; set; } = null!;
-        public bool LayoutChanged { get; set; } = false;
-
-        public UnifiedDownloadManager()
-        {
-        }
+        public bool LayoutChanged { get; set; }
 
         public override async Task InitializeAsync(InitializeArgs args)
         {
@@ -93,17 +87,20 @@ namespace UnifiedDownloadManagerNS
 
         public void SaveManagerData()
         {
-            var strConf = Serialization.ToJson(UnifiedDownloadManagerData, true);
-            if (!strConf.IsNullOrEmpty())
+            if (UnifiedDownloadManagerData != null)
             {
-                var path = PlayniteApi.UserDataDir;
-                if (!Directory.Exists(path))
+                var strConf = Serialization.ToJson(UnifiedDownloadManagerData, true);
+                if (!strConf.IsNullOrEmpty())
                 {
-                    Directory.CreateDirectory(path);
-                }
+                    var path = PlayniteApi.UserDataDir;
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
 
-                var dataFile = Path.Combine(path, $"unifiedDownloads.json");
-                File.WriteAllText(dataFile, strConf);
+                    var dataFile = Path.Combine(path, $"unifiedDownloads.json");
+                    File.WriteAllText(dataFile, strConf);
+                }
             }
         }
 
@@ -116,11 +113,12 @@ namespace UnifiedDownloadManagerNS
             if (File.Exists(dataFile))
             {
                 var content = FileSystem.ReadFileAsStringSafe(dataFile);
-                if (!content.IsNullOrWhiteSpace() && Serialization.TryFromJson(content, out unifiedUISettings))
+                if (!content.IsNullOrWhiteSpace() && Serialization.TryFromJson(content, out UnifiedUISettings? newUnifiedUISettings))
                 {
-                    if (unifiedUISettings != null)
+                    if (newUnifiedUISettings != null)
                     {
                         correctJson = true;
+                        unifiedUISettings = newUnifiedUISettings;
                     }
                 }
             }
@@ -207,48 +205,40 @@ namespace UnifiedDownloadManagerNS
             bool downloadsChanged = false;
             bool settingsChanged = false;
             var settings = GetSettings();
-            if (settings != null)
+            if (settings.AutoRemoveCompletedDownloads != ClearCacheTime.Never)
             {
-                if (settings.AutoRemoveCompletedDownloads != ClearCacheTime.Never)
+                var nextRemovingCompletedDownloadsTime = settings.NextRemovingCompletedDownloadsTime;
+                if (nextRemovingCompletedDownloadsTime != 0)
                 {
-                    var nextRemovingCompletedDownloadsTime = settings.NextRemovingCompletedDownloadsTime;
-                    if (nextRemovingCompletedDownloadsTime != 0)
+                    DateTimeOffset now = DateTime.UtcNow;
+                    if (now.ToUnixTimeSeconds() >= nextRemovingCompletedDownloadsTime)
                     {
-                        DateTimeOffset now = DateTime.UtcNow;
-                        if (now.ToUnixTimeSeconds() >= nextRemovingCompletedDownloadsTime)
+                        foreach (var downloadItem in Manager.Downloads.ToList())
                         {
-                            if (Manager != null)
+                            if (downloadItem.Status == UnifiedDownloadStatus.Completed)
                             {
-                                foreach (var downloadItem in Manager.Downloads.ToList())
-                                {
-                                    if (downloadItem.Status == UnifiedDownloadStatus.Completed)
-                                    {
-                                        Manager.Downloads.Remove(downloadItem);
-                                        downloadsChanged = true;
-                                    }
-                                }
+                                Manager.Downloads.Remove(downloadItem);
+                                downloadsChanged = true;
                             }
-
-                            settings.NextRemovingCompletedDownloadsTime =
-                                GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
-                            settingsChanged = true;
                         }
-                    }
-                    else
-                    {
+
                         settings.NextRemovingCompletedDownloadsTime =
                             GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
                         settingsChanged = true;
                     }
                 }
+                else
+                {
+                    settings.NextRemovingCompletedDownloadsTime =
+                        GetNextClearingTime(settings.AutoRemoveCompletedDownloads);
+                    settingsChanged = true;
+                }
             }
 
+
             if (settingsChanged)
-            {
-                if (settings != null)
-                {
-                    SavePluginSettings(UnifiedDownloadManager.PlayniteApi.UserDataDir, settings);
-                }
+            { 
+                SavePluginSettings(UnifiedDownloadManager.PlayniteApi.UserDataDir, settings);
             }
 
             if (downloadsChanged)
@@ -325,7 +315,7 @@ namespace UnifiedDownloadManagerNS
             return clearingTime?.ToUnixTimeSeconds() ?? 0;
         }
 
-        public static UnifiedDownloadManagerSettings? GetSettings()
+        public static UnifiedDownloadManagerSettings GetSettings()
         {
             return Instance.Settings;
         }

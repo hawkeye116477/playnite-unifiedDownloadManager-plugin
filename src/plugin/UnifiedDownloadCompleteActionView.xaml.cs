@@ -14,7 +14,7 @@ namespace UnifiedDownloadManagerNS
     public partial class UnifiedDownloadCompleteActionView : UserControl
     {
         private DownloadCompleteAction downloadCompleteAction = UnifiedDownloadManager.GetSettings().DoActionAfterDownloadComplete;
-        private DispatcherTimer timer;
+        private DispatcherTimer timer = null!;
         private int time = 60;
 
         public UnifiedDownloadCompleteActionView()
@@ -50,7 +50,7 @@ namespace UnifiedDownloadManagerNS
             {
                 Interval = TimeSpan.FromSeconds(1)
             };
-            timer.Tick += Timer_Tick;
+            timer.Tick += Timer_Tick!;
             timer.Start();
         }
 
@@ -69,6 +69,7 @@ namespace UnifiedDownloadManagerNS
                 StartDownloadCompleteAction();
             }
         }
+        
         public void StartDownloadCompleteAction()
         {
             switch (downloadCompleteAction)
@@ -85,21 +86,19 @@ namespace UnifiedDownloadManagerNS
                 case DownloadCompleteAction.Sleep:
                     Playnite.Native.Powrprof.SetSuspendState(false, true, false);
                     break;
-                default:
-                    break;
             }
         }
 
         private void ActionBtn_Click(object sender, RoutedEventArgs e)
         {
-            Window.GetWindow(this).Close();
+            Window.GetWindow(this)?.Close();
             timer.Stop();
             StartDownloadCompleteAction();
         }
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
             timer.Stop();
-            Window.GetWindow(this).Close();
+            Window.GetWindow(this)?.Close();
         }
 
     }

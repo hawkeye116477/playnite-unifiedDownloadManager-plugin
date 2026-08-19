@@ -6,7 +6,7 @@ using UnifiedDownloadManagerApiNS.Models;
 
 namespace UnifiedDownloadManagerApiNS.Interfaces
 {
-    public interface IUnifiedTaskManager : INotifyPropertyChanged
+    public interface IUnifiedDownloadManagerApi : INotifyPropertyChanged
     {
         ObservableCollection<UnifiedDownload> Downloads { get; set; }
         Task AddTasks(List<UnifiedDownload> downloadManagerDataList, bool silently = false);

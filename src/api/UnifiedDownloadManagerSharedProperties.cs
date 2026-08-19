@@ -1,10 +1,9 @@
-﻿using System;
-
-namespace UnifiedDownloadManagerApiNS
+﻿namespace UnifiedDownloadManagerApiNS
 {
     public static class UnifiedDownloadManagerSharedProperties
     {
         public static string Id { get; } = "hawkeye116477.UDM";
         public static readonly string GetApi = "get_api";
+        public static readonly string GetDownloadLogic = "get_download_logic";
     }
 }

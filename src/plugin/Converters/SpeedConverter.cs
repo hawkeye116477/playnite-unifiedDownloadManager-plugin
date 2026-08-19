@@ -8,7 +8,7 @@ namespace UnifiedDownloadManagerNS.Converters
 {
     public class SpeedConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             var downloadSpeedBytes = value;
             var displayDownloadSpeedInBits = UnifiedDownloadManager.GetSettings().DisplayDownloadSpeedInBits;
@@ -20,7 +20,7 @@ namespace UnifiedDownloadManagerNS.Converters
             return "";
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

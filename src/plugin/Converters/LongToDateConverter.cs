@@ -6,9 +6,9 @@ namespace UnifiedDownloadManagerNS.Converters
 {
     public class LongToDateConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (!(value is long seconds))
+            if (value is not long seconds)
                 return value;
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             if (seconds == 0)
@@ -19,7 +19,7 @@ namespace UnifiedDownloadManagerNS.Converters
             return dateTime.AddSeconds(seconds).ToLocalTime().ToString(formatInfo);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return new NotImplementedException();
         }

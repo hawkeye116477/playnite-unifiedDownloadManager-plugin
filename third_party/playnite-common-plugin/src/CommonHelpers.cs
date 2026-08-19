@@ -73,7 +73,7 @@ namespace CommonPlugin
             try
             {
                 Directory.CreateDirectory(folderPath);
-                using (FileStream fs = File.Create(Path.Combine(folderPath, Path.GetRandomFileName()),
+                await using (FileStream fs = File.Create(Path.Combine(folderPath, Path.GetRandomFileName()),
                                                    1,
                                                    FileOptions.DeleteOnClose)
                 )
@@ -128,7 +128,7 @@ namespace CommonPlugin
             }
             if (styles)
             {
-                var resDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Resources");
+                var resDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Resources");
                 var stylesName = "NormalStyles.xaml";
                 if (PlayniteApi.AppInfo.Mode == AppMode.Fullscreen)
                 {

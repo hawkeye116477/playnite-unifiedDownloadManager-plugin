@@ -1,7 +1,6 @@
 ﻿using CommonPlugin;
 using Linguini.Shared.Types.Bundle;
 using Playnite;
-using Playnite.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +13,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
 using UnifiedDownloadManagerNS.Models;
@@ -28,8 +26,8 @@ namespace UnifiedDownloadManagerNS
     public partial class MainPanel : UserControl
     {
         private readonly TaskManager _manager;
-        public ObservableCollection<UnifiedDownloadStatus> SelectedStatuses { get; set; } = [];
-        public ObservableCollection<string> SelectedSources { get; set; } = [];
+        public ObservableCollection<UnifiedDownloadStatus>? SelectedStatuses { get; set; } = [];
+        public ObservableCollection<string>? SelectedSources { get; set; } = [];
         public IPlayniteApi PlayniteApi { get; set; }
 
         public MainPanel(TaskManager manager)
@@ -68,8 +66,8 @@ namespace UnifiedDownloadManagerNS
                     {
                         foreach (var cancelableDownload in cancelableDownloads)
                         {
-                            var unifiedDownloadLogic = _manager.GetUnifiedDownloadLogic(cancelableDownload.PluginId);
-                            if (cancelableDownload.Status != UnifiedDownloadStatus.Running)
+                            var unifiedDownloadLogic = await _manager.GetUnifiedDownloadLogic(cancelableDownload.PluginId);
+                            if (cancelableDownload.Status != UnifiedDownloadStatus.Running && unifiedDownloadLogic != null)
                             {
                                 await unifiedDownloadLogic.OnCancelDownload(cancelableDownload);
                             }
@@ -302,7 +300,7 @@ namespace UnifiedDownloadManagerNS
 
         private async void OpenPluginSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
-            await PlayniteApi.MainView.OpenPluginSettingsAsync(UnifiedDownloadManager.Id.ToString());
+            await PlayniteApi.MainView.OpenPluginSettingsAsync(UnifiedDownloadManager.Id);
         }
 
         private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -337,12 +335,14 @@ namespace UnifiedDownloadManagerNS
             }
         }
 
-        private void DownloadPropertiesBtn_Click(object sender, RoutedEventArgs e)
+        private async void DownloadPropertiesBtn_Click(object sender, RoutedEventArgs e)
         {
             if (DownloadsDG.SelectedIndex != -1)
             {
-                var selectedItem = DownloadsDG.SelectedItems[0] as UnifiedDownload;
-                _manager.OpenDownloadPropertiesWindows(selectedItem);
+                if (DownloadsDG.SelectedItems[0] is UnifiedDownload selectedItem)
+                {
+                    await _manager.OpenDownloadPropertiesWindows(selectedItem);
+                }
             }
         }
 
@@ -412,20 +412,23 @@ namespace UnifiedDownloadManagerNS
             {
                 if (checkBox.IsChecked == true)
                 {
-                    if (!SelectedStatuses.Contains(status))
+                    if (SelectedStatuses != null && !SelectedStatuses.Contains(status))
                     {
                         SelectedStatuses.Add(status);
                     }
                 }
                 else
                 {
-                    SelectedStatuses.Remove(status);
+                    SelectedStatuses?.Remove(status);
                 }
 
                 var converter = new DownloadStatusEnumToStringConverter();
 
-                var text = SelectedStatuses.Select(s => converter.Convert(s, null, null, null).ToString());
-                StatusTb.Text = string.Join(", ", text);
+                if (SelectedStatuses != null)
+                {
+                    var text = SelectedStatuses.Select(s => converter.Convert(s, null, null, null)?.ToString());
+                    StatusTb.Text = string.Join(", ", text);
+                }
             }
 
             ICollectionView downloadsView = CollectionViewSource.GetDefaultView(DownloadsDG.ItemsSource);
@@ -443,16 +446,16 @@ namespace UnifiedDownloadManagerNS
                 return false;
             }
             bool sourceContains = true;
-            if (SelectedSources != null && SelectedSources.Count > 0)
+            if (SelectedSources is { Count: > 0 })
             {
                 sourceContains = SelectedSources.Contains(download.SourceName);
             }
             bool statusContains = true;
-            if (SelectedStatuses.Count > 0)
+            if (SelectedStatuses is { Count: > 0 })
             {
                 statusContains = SelectedStatuses.Contains(download.Status);
             }
-            if (SelectedSources.Count > 0 || SelectedStatuses.Count > 0)
+            if (SelectedSources != null && SelectedStatuses != null && (SelectedSources.Count > 0 || SelectedStatuses.Count > 0))
             {
                 FilterDownloadBtn.Content = "\uef29 " + LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteFilterActiveLabel);
                 ClearFiltersBtn.IsEnabled = true;
@@ -492,16 +495,20 @@ namespace UnifiedDownloadManagerNS
             {
                 if (checkBox.IsChecked == true)
                 {
-                    if (!SelectedSources.Contains(source))
+                    if (SelectedSources != null && !SelectedSources.Contains(source))
                     {
                         SelectedSources.Add(source);
                     }
                 }
                 else
                 {
-                    SelectedSources.Remove(source);
+                    SelectedSources?.Remove(source);
                 }
-                SourceTb.Text = string.Join(", ", SelectedSources);
+
+                if (SelectedSources != null)
+                {
+                    SourceTb.Text = string.Join(", ", SelectedSources);
+                }
             }
             ICollectionView downloadsView = CollectionViewSource.GetDefaultView(DownloadsDG.ItemsSource);
             downloadsView.Filter = DownloadsFilter;
@@ -514,8 +521,8 @@ namespace UnifiedDownloadManagerNS
 
         private void ClearFiltersBtn_Click(object sender, RoutedEventArgs e)
         {
-            SelectedSources.Clear();
-            SelectedStatuses.Clear();
+            SelectedSources?.Clear();
+            SelectedStatuses?.Clear();
             StatusTb.Text = "";
             SourceTb.Text = "";
             ICollectionView downloadsView = CollectionViewSource.GetDefaultView(DownloadsDG.ItemsSource);
@@ -541,7 +548,7 @@ namespace UnifiedDownloadManagerNS
 
         private void ColumnHeader_ContextMenuOpening(object sender, MouseButtonEventArgs e)
         {
-            DependencyObject obj =
+            DependencyObject? obj =
                   e.OriginalSource as DependencyObject;
 
             while (obj != null &&
@@ -583,7 +590,7 @@ namespace UnifiedDownloadManagerNS
                 Icon = new TextBlock
                 {
                     Text = "\uefd1",
-                    FontFamily = (FontFamily)Application.Current.FindResource("IcoFont")
+                    FontFamily = (FontFamily)Application.Current.FindResource("IcoFont")!
                 }
             };
             restoreDefaultOption.Click += (sender, e) =>
@@ -610,7 +617,7 @@ namespace UnifiedDownloadManagerNS
                 Icon = new TextBlock
                 {
                     Text = "\uec61",
-                    FontFamily = (FontFamily)Application.Current.FindResource("IcoFont")
+                    FontFamily = (FontFamily)Application.Current.FindResource("IcoFont")!
                 },
             };
             if (!DownloadsDG.Columns[0].CanUserResize)
@@ -619,17 +626,13 @@ namespace UnifiedDownloadManagerNS
                 lockColumnsOption.Icon = new TextBlock
                 {
                     Text = "\uec8c",
-                    FontFamily = (FontFamily)Application.Current.FindResource("IcoFont")
+                    FontFamily = (FontFamily)Application.Current.FindResource("IcoFont")!
                 };
             }
             lockColumnsOption.Click += (sender, e) =>
             {
                 var columnSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.columnsSettings;
-                bool targetCan = false;
-                if (!DownloadsDG.Columns[0].CanUserResize)
-                {
-                    targetCan = true;
-                }
+                bool targetCan = false || !DownloadsDG.Columns[0].CanUserResize;
                 foreach (var column in DownloadsDG.Columns)
                 {
                     column.CanUserReorder = targetCan;
@@ -689,7 +692,7 @@ namespace UnifiedDownloadManagerNS
                 if (item.IsChecked)
                 {
                     column.Visibility = Visibility.Visible;
-                    if (savedColumn != null && savedColumn.hidden)
+                    if (savedColumn.hidden)
                     {
                         savedColumn.hidden = false;
                     }
@@ -700,11 +703,6 @@ namespace UnifiedDownloadManagerNS
                     if (visibleColumnsCount > 1)
                     {
                         column.Visibility = Visibility.Collapsed;
-                        if (savedColumn == null)
-                        {
-                            savedColumn = new UnifiedColumn();
-                            columnSettings.columns.Add(thisColumnId, savedColumn);
-                        }
                         savedColumn.index = column.DisplayIndex;
                         savedColumn.hidden = true;
                     }

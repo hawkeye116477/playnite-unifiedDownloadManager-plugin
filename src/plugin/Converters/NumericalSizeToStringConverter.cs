@@ -7,14 +7,14 @@ namespace UnifiedDownloadManagerNS.Converters
 {
     public class NumericalSizeToStringConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (!(value is double bytes))
+            if (value is not double bytes)
                 return value;
             return CommonHelpers.FormatSize(bytes);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return new NotImplementedException();
         }

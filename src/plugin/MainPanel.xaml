@@ -20,7 +20,7 @@
         <Style BasedOn="{StaticResource HawkeyeSeparatorStyle}" TargetType="Separator" />
         <Style BasedOn="{StaticResource HawkeyeBorderStyle}" TargetType="Border" />
         <Style BasedOn="{StaticResource HawkeyeListBoxStyle}" TargetType="ListBox" />
-        <Style BasedOn="{StaticResource HawkeyeTextBlockStyle}" TargetType="TextBlock" />
+        <Style TargetType="TextBlock" BasedOn="{StaticResource HawkeyeTextBlockStyle}" />
         <Style BasedOn="{StaticResource HawkeyeButtonStyle}" TargetType="Button" />
         <Style BasedOn="{StaticResource HawkeyeExpanderStyle}" TargetType="Expander" />
         <Style BasedOn="{StaticResource HawkeyeTabControlStyle}" TargetType="TabControl" />
@@ -166,7 +166,7 @@
                                     <ProgressBar Name="DownloadPB" Value="{Binding Progress}" />
                                     <TextBlock
                                             Margin="0,2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                            Text="{Binding Progress, StringFormat={}{0:0}%}" />
+                                            Text="{Binding Progress, StringFormat={}{0:0}%}" Style="{DynamicResource HawkeyeTextBlockStyle}"/>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -1,12 +1,9 @@
 ﻿using CommonPlugin.Enums;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Playnite;
-using Playnite.Common;
 using UnifiedDownloadManagerNS.Enums;
 
 namespace UnifiedDownloadManagerNS
@@ -15,14 +12,14 @@ namespace UnifiedDownloadManagerNS
     {
         [ObservableProperty] private bool _displayDownloadTaskFinishedNotifications = true;
 
-        [ObservableProperty] private bool _displayDownloadSpeedInBits = false;
+        [ObservableProperty] private bool _displayDownloadSpeedInBits;
 
         [ObservableProperty]
         private DownloadCompleteAction _doActionAfterDownloadComplete = DownloadCompleteAction.Nothing;
 
         [ObservableProperty] private ClearCacheTime _autoRemoveCompletedDownloads = ClearCacheTime.Never;
 
-        [ObservableProperty] private long _nextRemovingCompletedDownloadsTime = 0;
+        [ObservableProperty] private long _nextRemovingCompletedDownloadsTime;
     }
 
     [INotifyPropertyChanged]
@@ -44,9 +41,13 @@ namespace UnifiedDownloadManagerNS
             if (File.Exists(settingsFile))
             {
                 var content = FileSystem.ReadFileAsStringSafe(settingsFile);
-                if (!Serialization.TryFromJson(content, out settings))
+                if (!Serialization.TryFromJson(content, out UnifiedDownloadManagerSettings? newSettings))
                 {
                     Logger.Error("Failed to load plugin settings.");
+                }
+                else
+                {
+                    settings = newSettings;
                 }
             }
             return settings ?? new UnifiedDownloadManagerSettings();

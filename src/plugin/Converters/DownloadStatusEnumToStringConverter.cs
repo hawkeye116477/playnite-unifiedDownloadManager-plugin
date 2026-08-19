@@ -8,7 +8,7 @@ namespace UnifiedDownloadManagerNS.Converters
 {
     public class DownloadStatusEnumToStringConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type? targetType, object? parameter, CultureInfo? culture)
         {
             switch (value)
             {
@@ -34,7 +34,7 @@ namespace UnifiedDownloadManagerNS.Converters
             return value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

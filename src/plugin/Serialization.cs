@@ -50,7 +50,6 @@ namespace UnifiedDownloadManagerNS
         {
             return JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(source, JsonSerializerSettings)) ??
                    throw new Exception("Failed to clone object via serialization");
-            ;
         }
     }
 }
