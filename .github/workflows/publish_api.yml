@@ -1,0 +1,27 @@
+name: Publish API as Nuget
+
+permissions:
+  packages: write
+  contents: read
+
+on:
+  workflow_dispatch: null
+  
+jobs:
+  package-and-publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install correct .NET
+        run: |
+          choco install netfx-4.6.2-devpack
+      - name: Generate NuGet package
+        run: |
+          nuget restore src/api/UnifiedDownloadManagerApi.csproj
+          nuget pack src/api/ -Build -Properties Configuration=Release -OutputDirectory NugetPackages
+      - name: Publish NuGet package
+        run: |
+          nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" -Username "github-actions[bot]" -Password "${{ secrets.GITHUB_TOKEN }}"
+          ls
+          nuget push NugetPackages\*.nupkg -Source "GitHub"

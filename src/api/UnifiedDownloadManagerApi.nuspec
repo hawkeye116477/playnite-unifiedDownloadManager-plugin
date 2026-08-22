@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>hawkeye116477</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin</projectUrl>
+    <description>UDM plugin API for Playnite 10.x</description>
+    <releaseNotes>First release as Nuget package.</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>UDM api</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+            <dependency id="PlayniteSDK" version="6.14.0" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
