@@ -1,7 +1,6 @@
 name: Publish API as Nuget
 
 permissions:
-  packages: write
   contents: read
 
 on:
@@ -21,7 +20,8 @@ jobs:
           nuget restore src/api/UnifiedDownloadManagerApi.csproj
           nuget pack src/api/ -Build -Properties Configuration=Release -OutputDirectory NugetPackages
       - name: Publish NuGet package
+        env:
+          NOUGAT_TOKEN: ${{ secrets.NOUGAT_TOKEN }}
         run: |
-          nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" -Username "github-actions[bot]" -Password "${{ secrets.GITHUB_TOKEN }}"
-          ls
-          nuget push NugetPackages\*.nupkg -Source "GitHub"
+          nuget source Add -Name "HawkeyeNougatRegistry" -Source "https://gitlab.com/api/v4/projects/85661048/packages/nuget/index.json" -Username "HawkeyeNougatHelper" -Password "$env:NOUGAT_TOKEN"
+          nuget push NugetPackages\*.nupkg -Source "HawkeyeNougatRegistry"
