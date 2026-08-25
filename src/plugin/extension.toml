@@ -5,3 +5,5 @@ version =  "_version_"
 icon = "Resources\\icon.png"
 module = "UnifiedDownloadManager.dll"
 shared_modules = ["UnifiedDownloadManagerApi.dll"]
+source_link = "https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/tree/P11"
+help_link = "https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/wiki"
