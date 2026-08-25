@@ -4,13 +4,7 @@ namespace UnifiedDownloadManagerNS.Models
 {
     public class UnifiedUISettings
     {
-        public UnifiedMessagesSettings messagesSettings { get; } = new UnifiedMessagesSettings();
         public UnifiedColumnsSettings columnsSettings { get; set; } = new UnifiedColumnsSettings();
-
-        public class UnifiedMessagesSettings
-        {
-            public bool dontShowDownloadManagerWhatsUpMsg { get; set; } = false;
-        }
 
         public class UnifiedColumnsSettings
         {

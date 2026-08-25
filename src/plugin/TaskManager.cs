@@ -324,18 +324,7 @@ namespace UnifiedDownloadManagerNS
 
                 if (!silently)
                 {
-                    var messagesSettings = UnifiedDownloadManager.Instance.UnifiedUISettings.messagesSettings;
-                    if (messagesSettings.dontShowDownloadManagerWhatsUpMsg == false)
-                    {
-                        var response = new MessageBoxResponse(LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteOkLabel));
-                        var dontShowDownloadManagerWhatsUpMsgCheckbox = new MessageBoxOption(LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDontShowAgainTitle), false);
-                        var result = await PlayniteApi.Dialogs.ShowMessageAsync(LocalizationManager.Instance.GetString(LOC.UdmDownloadManagerWhatsUp), "", MessageBoxSeverity.Information, [response], [dontShowDownloadManagerWhatsUpMsgCheckbox]);
-                        if (dontShowDownloadManagerWhatsUpMsgCheckbox.IsSelected)
-                        {
-                            messagesSettings.dontShowDownloadManagerWhatsUpMsg = true;
-                            UnifiedDownloadManager.Instance.SaveUISettings();
-                        }
-                    }
+                    await PlayniteApi.MainView.SwitchToViewAsync("UDM.panel");
                 }
 
                 await DoNextJobInQueue();
