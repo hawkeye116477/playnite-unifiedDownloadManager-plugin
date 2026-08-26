@@ -115,4 +115,4 @@ if os.path.exists(extFile):
 
     git_repo = git.Repo(mainPath)
     version = version.replace(".2026", "-2026")
-    git_repo.create_tag(version)
+    git_repo.create_tag(f"P11_{version}")
