@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using CommonPlugin;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Playnite;
 using UnifiedDownloadManagerNS.Enums;
@@ -10,16 +11,20 @@ namespace UnifiedDownloadManagerNS
 {
     public partial class UnifiedDownloadManagerSettings : ObservableObject
     {
-        [ObservableProperty] private bool _displayDownloadTaskFinishedNotifications = true;
-
-        [ObservableProperty] private bool _displayDownloadSpeedInBits;
+        [ObservableProperty]
+        public partial bool DisplayDownloadTaskFinishedNotifications { get; set; } = true;
 
         [ObservableProperty]
-        private DownloadCompleteAction _doActionAfterDownloadComplete = DownloadCompleteAction.Nothing;
+        public partial bool DisplayDownloadSpeedInBits { get; set; }
 
-        [ObservableProperty] private ClearCacheTime _autoRemoveCompletedDownloads = ClearCacheTime.Never;
+        [ObservableProperty]
+        public partial DownloadCompleteAction DoActionAfterDownloadComplete { get; set; } = DownloadCompleteAction.Nothing;
 
-        [ObservableProperty] private long _nextRemovingCompletedDownloadsTime;
+        [ObservableProperty]
+        public partial ClearCacheTime AutoRemoveCompletedDownloads { get; set; } = ClearCacheTime.Never;
+
+        [ObservableProperty]
+        public partial long NextRemovingCompletedDownloadsTime { get; set; }
     }
 
     [INotifyPropertyChanged]
@@ -27,7 +32,8 @@ namespace UnifiedDownloadManagerNS
     {
         private static readonly ILogger Logger = LogManager.GetLogger();
 
-        [ObservableProperty] private UnifiedDownloadManagerSettings _settings = new();
+        [ObservableProperty]
+        public partial UnifiedDownloadManagerSettings Settings { get; set; } = new();
 
         public override UserControl GetEditView(GetSettingsViewArgs args)
         {
@@ -50,13 +56,13 @@ namespace UnifiedDownloadManagerNS
                     settings = newSettings;
                 }
             }
+
             return settings ?? new UnifiedDownloadManagerSettings();
         }
 
         public override async Task BeginEditAsync(BeginEditArgs args)
         {
             Settings = plugin.Settings.GetClone();
-            await Task.CompletedTask;
         }
 
         public override async Task CancelEditAsync(CancelEditArgs args)
@@ -78,9 +84,9 @@ namespace UnifiedDownloadManagerNS
                     Settings.NextRemovingCompletedDownloadsTime = 0;
                 }
             }
+
             plugin.Settings = Settings;
             plugin.SavePluginSettings(UnifiedDownloadManager.PlayniteApi.UserDataDir, Settings);
-            await Task.CompletedTask;
         }
     }
 }

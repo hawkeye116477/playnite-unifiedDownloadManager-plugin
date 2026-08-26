@@ -167,6 +167,7 @@ namespace UnifiedDownloadManagerNS
             {
                 pluginDownloadLogic = newPluginDownloadLogic;
             }
+
             return pluginDownloadLogic;
         }
 
@@ -238,12 +239,12 @@ namespace UnifiedDownloadManagerNS
                             var icon = Icon.FromHandle(iconHandle);
                             if (ActiveTask.Status == UnifiedDownloadStatus.Completed)
                             {
-                                WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName,
+                                WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.PluginName,
                                     LocalizationManager.Instance.GetString(LOC.UdmDownloadFinished, appNameArg));
                             }
                             else if (ActiveTask.Status == UnifiedDownloadStatus.Error)
                             {
-                                WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.Instance.PluginName,
+                                WindowsNotifyIconManager.Notify(icon, UnifiedDownloadManager.PluginName,
                                     LocalizationManager.Instance.GetString(LOC.UdmDownloadFailed, appNameArg));
                             }
 
@@ -265,7 +266,7 @@ namespace UnifiedDownloadManagerNS
                     {
                         ShowMaximizeButton = false,
                     });
-                    window.Title = UnifiedDownloadManager.Instance.PluginName;
+                    window.Title = UnifiedDownloadManager.PluginName;
                     window.Content = new UnifiedDownloadCompleteActionView();
                     window.Owner = PlayniteApi.GetLastActiveWindow();
                     window.SizeToContent = SizeToContent.WidthAndHeight;

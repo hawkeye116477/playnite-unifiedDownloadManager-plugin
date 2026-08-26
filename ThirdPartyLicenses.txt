@@ -5,9 +5,9 @@ Copyright (c) 2020 Josef Nemec
 
 
 ----------------------------------------------------------------------------------------
-corefx - https://github.com/dotnet/corefx
+Microsoft.Windows.CsWin32 - https://github.com/microsoft/CsWin32
 The MIT License (MIT)
-Copyright (c) .NET Foundation and Contributors
+Copyright (c) Microsoft Corporation
 All rights reserved.
 
 
@@ -21,12 +21,6 @@ Copyright (c) 2013-2022 Omar Khudeira (http://omar.io)
 Linguini - https://github.com/Ygg01/Linguini/
 License: MIT (dual-licensed MIT / Apache 2.0)
 Copyright 2021 Daniel Fath
-
-
-----------------------------------------------------------------------------------------
-IndexRange - https://github.com/bgrainger/IndexRange
-MIT License
-Copyright (c) 2019–2022 Bradley Grainger
 
 
 ----------------------------------------------------------------------------------------

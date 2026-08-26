@@ -24,9 +24,9 @@ namespace UnifiedDownloadManagerNS
         public static UnifiedDownloadManager Instance { get; set; } = null!;
 
         private MainPanel? downloadManagerPanel;
-        public IUnifiedDownloadManagerApi Manager { get; set; } = null!;
-        public UnifiedDownloadManagerData? UnifiedDownloadManagerData { get; set; }
-        public string PluginName = "Unified Download Manager";
+        private IUnifiedDownloadManagerApi Manager { get; set; } = null!;
+        private UnifiedDownloadManagerData? UnifiedDownloadManagerData { get; set; }
+        public const string PluginName = "Unified Download Manager";
         public CommonHelpers CommonHelpersInstance { get; set; } = null!;
         public static IPlayniteApi PlayniteApi { get; private set; } = null!;
         public UnifiedUISettings UnifiedUISettings { get; set; } = null!;
@@ -39,7 +39,7 @@ namespace UnifiedDownloadManagerNS
             PlayniteApi = args.Api;
             Settings = UnifiedDownloadManagerSettingsViewModel.LoadPluginSettings(PlayniteApi.UserDataDir);
             CommonHelpersInstance = new CommonHelpers(PlayniteApi);
-            CommonHelpersInstance.LoadNeededResources(icons: false);
+            CommonHelpersInstance.LoadNeededResources();
             Load3PLocalization();
             Manager = new TaskManager();
             downloadManagerPanel = new MainPanel((TaskManager)Manager);
@@ -57,13 +57,13 @@ namespace UnifiedDownloadManagerNS
 
         private static UnifiedDownloadManagerData? LoadSavedManagerData()
         {
-            UnifiedDownloadManagerData? downloadManagerData = new UnifiedDownloadManagerData
+            var downloadManagerData = new UnifiedDownloadManagerData
             {
                 downloads = []
             };
             var dataDir = PlayniteApi.UserDataDir;
             var dataFile = Path.Combine(dataDir, "unifiedDownloads.json");
-            bool correctJson = false;
+            var correctJson = false;
             if (File.Exists(dataFile))
             {
                 var content = FileSystem.ReadFileAsStringSafe(dataFile);
@@ -100,13 +100,13 @@ namespace UnifiedDownloadManagerNS
                         Directory.CreateDirectory(path);
                     }
 
-                    var dataFile = Path.Combine(path, $"unifiedDownloads.json");
+                    var dataFile = Path.Combine(path, "unifiedDownloads.json");
                     File.WriteAllText(dataFile, strConf);
                 }
             }
         }
 
-        public UnifiedUISettings LoadUISettings()
+        private UnifiedUISettings LoadUISettings()
         {
             UnifiedUISettings unifiedUISettings = new UnifiedUISettings();
             var dataDir = PlayniteApi.UserDataDir;
@@ -133,7 +133,7 @@ namespace UnifiedDownloadManagerNS
             return unifiedUISettings;
         }
 
-        public void SaveUISettings()
+        private void SaveUISettings()
         {
             var strConf = Serialization.ToJson(UnifiedUISettings, true);
             if (!strConf.IsNullOrEmpty())
@@ -144,12 +144,12 @@ namespace UnifiedDownloadManagerNS
                     Directory.CreateDirectory(path);
                 }
 
-                var dataFile = Path.Combine(path, $"unifiedUISettings.json");
+                var dataFile = Path.Combine(path, "unifiedUISettings.json");
                 File.WriteAllText(dataFile, strConf);
             }
         }
 
-        public void Load3PLocalization()
+        private void Load3PLocalization()
         {
             var currentLanguage = PlayniteApi.Settings.Language;
             LocalizationManager.Instance.SetLanguage(currentLanguage);
@@ -192,8 +192,8 @@ namespace UnifiedDownloadManagerNS
             [
                 new AppViewItemDescriptor("UDM.panel",
                     "Unified Download Manager",
-                    (iconArgs) => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont),
-                    (iconArgs) => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont, new SolidColorBrush(Colors.DeepSkyBlue)))
+                    iconArgs => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont),
+                    iconArgs => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont, new SolidColorBrush(Colors.DeepSkyBlue)))
             ];
         }
 
@@ -240,7 +240,7 @@ namespace UnifiedDownloadManagerNS
 
             if (settingsChanged)
             {
-                SavePluginSettings(UnifiedDownloadManager.PlayniteApi.UserDataDir, settings);
+                SavePluginSettings(PlayniteApi.UserDataDir, settings);
             }
 
             if (downloadsChanged)
@@ -326,7 +326,7 @@ namespace UnifiedDownloadManagerNS
         {
             if (args.CallId == UnifiedDownloadManagerSharedProperties.GetApi)
             {
-                return this.Manager;
+                return Manager;
             }
 
             return null;
@@ -335,7 +335,7 @@ namespace UnifiedDownloadManagerNS
         public override async Task<CollectDiagnosticDataArgsAsyncResult?> CollectDiagnosticDataArgsAsync(CollectDiagnosticDataArgs args)
         {
             var logsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp",
-                $"Playnite", UnifiedDownloadManagerSharedProperties.Id, "Logs");
+                "Playnite", UnifiedDownloadManagerSharedProperties.Id, "Logs");
             try
             {
                 if (Directory.Exists(logsPath))

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using UnifiedDownloadManagerNS.Enums;
+using Windows.Win32;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -44,6 +45,7 @@ namespace UnifiedDownloadManagerNS
                     CountdownTB.Text = LocalizationManager.Instance.GetString(LOC.UdmSystemSuspendCountdown);
                     break;
             }
+
             CountdownPB.Maximum = time;
             CountdownSecondsTB.Text = $"{time} s";
             timer = new DispatcherTimer
@@ -69,7 +71,7 @@ namespace UnifiedDownloadManagerNS
                 StartDownloadCompleteAction();
             }
         }
-        
+
         public void StartDownloadCompleteAction()
         {
             switch (downloadCompleteAction)
@@ -81,10 +83,10 @@ namespace UnifiedDownloadManagerNS
                     Process.Start("shutdown", "/r /t 0");
                     break;
                 case DownloadCompleteAction.Hibernate:
-                    Playnite.Native.Powrprof.SetSuspendState(true, true, false);
+                    PInvoke.SetSuspendState(true, true, false);
                     break;
                 case DownloadCompleteAction.Sleep:
-                    Playnite.Native.Powrprof.SetSuspendState(false, true, false);
+                    PInvoke.SetSuspendState(false, true, false);
                     break;
             }
         }
@@ -95,11 +97,11 @@ namespace UnifiedDownloadManagerNS
             timer.Stop();
             StartDownloadCompleteAction();
         }
+
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
             timer.Stop();
             Window.GetWindow(this)?.Close();
         }
-
     }
 }

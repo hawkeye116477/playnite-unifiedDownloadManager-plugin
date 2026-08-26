@@ -13,11 +13,10 @@ namespace UnifiedDownloadManagerNS.Models
             public bool columnsLocked { get; set; }
         }
     }
-    
+
     public class UnifiedColumn
     {
         public bool hidden { get; set; } = false;
         public int index { get; set; }
     }
-    
 }

@@ -7,5 +7,5 @@
         Reboot,
         Hibernate,
         Sleep
-    };
+    }
 }

@@ -15,6 +15,7 @@ namespace UnifiedDownloadManagerNS.Converters
             {
                 return "";
             }
+
             DateTimeFormatInfo formatInfo = CultureInfo.CurrentCulture.DateTimeFormat;
             return dateTime.AddSeconds(seconds).ToLocalTime().ToString(formatInfo);
         }

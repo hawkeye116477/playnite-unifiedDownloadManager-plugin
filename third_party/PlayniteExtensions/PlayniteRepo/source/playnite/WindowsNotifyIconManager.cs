@@ -6,7 +6,7 @@ namespace Playnite
 {
     public static class WindowsNotifyIconManager
     {
-        public static void Notify(Icon icon, string title, string body, Action clickAction = null)
+        public static void Notify(Icon icon, string title, string body, Action? clickAction = null)
         {
             var notifyIcon = new NotifyIcon
             {

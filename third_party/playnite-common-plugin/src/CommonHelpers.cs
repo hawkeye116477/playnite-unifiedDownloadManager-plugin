@@ -1,23 +1,20 @@
 ﻿using ByteSizeLib;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
 using Playnite;
 using System.Windows;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
-using UnifiedDownloadManagerNS;
+using Playnite.Common;
 
 namespace CommonPlugin
 {
-    public class CommonHelpers
+    public class CommonHelpers(IPlayniteApi playniteApi)
     {
-        public IPlayniteApi PlayniteApi { get; set; }
-
-        public CommonHelpers(IPlayniteApi playniteApi)
-        {
-            this.PlayniteApi = playniteApi;
-        }
+        private IPlayniteApi PlayniteApi { get; set; } = playniteApi;
 
         public static string FormatSize(double size, string unit = "B", bool toBits = false)
         {
@@ -73,10 +70,9 @@ namespace CommonPlugin
             try
             {
                 Directory.CreateDirectory(folderPath);
-                await using (FileStream fs = File.Create(Path.Combine(folderPath, Path.GetRandomFileName()),
-                                                   1,
-                                                   FileOptions.DeleteOnClose)
-                )
+                await using (File.Create(Path.Combine(folderPath, Path.GetRandomFileName()),
+                                 1,
+                                 FileOptions.DeleteOnClose))
                 { }
                 return true;
             }
@@ -115,17 +111,9 @@ namespace CommonPlugin
 
         public static string NormalizePath(string path) => Path.GetFullPath(new Uri(path).LocalPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-        public void LoadNeededResources(bool icons = true, bool styles = true)
+        public void LoadNeededResources(bool styles = true)
         {
             var dictionaries = Application.Current.Resources.MergedDictionaries;
-            if (icons)
-            {
-                ResourceDictionary iconsDict = new ResourceDictionary
-                {
-                    Source = new Uri($"/{GetType().Assembly.GetName().Name};component/Shared/Resources/Icons.xaml", UriKind.RelativeOrAbsolute)
-                };
-                dictionaries.Add(iconsDict);
-            }
             if (styles)
             {
                 var resDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Resources");
@@ -145,6 +133,44 @@ namespace CommonPlugin
             {
                 var thisWindow = Window.GetWindow(windowDependency);
                 thisWindow?.Background = (System.Windows.Media.Brush)Application.Current?.TryFindResource("ControlBackgroundBrush")!;
+            }
+        }
+        
+        public static IEnumerable<string> SplitArguments(string commandLine)
+        {
+            var currentArgument = new StringBuilder();
+            bool inSingleQuote = false;
+            bool inDoubleQuote = false;
+
+            foreach (char c in commandLine)
+            {
+                switch (c)
+                {
+                    case '\'' when !inDoubleQuote:
+                        inSingleQuote = !inSingleQuote;
+                        break;
+
+                    case '"' when !inSingleQuote:
+                        inDoubleQuote = !inDoubleQuote;
+                        break;
+
+                    case ' ' when !inSingleQuote && !inDoubleQuote:
+                        if (currentArgument.Length > 0)
+                        {
+                            yield return currentArgument.ToString();
+                            currentArgument.Clear();
+                        }
+                        break;
+
+                    default:
+                        currentArgument.Append(c);
+                        break;
+                }
+            }
+
+            if (currentArgument.Length > 0)
+            {
+                yield return currentArgument.ToString();
             }
         }
     }

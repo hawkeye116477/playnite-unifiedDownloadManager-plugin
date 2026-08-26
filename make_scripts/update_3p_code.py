@@ -23,7 +23,7 @@ if os.path.exists(pj(third_party_path, "PlayniteExtensions")):
 csproj = ET.parse(pj(src_path, "plugin", "UnifiedDownloadManagerPlugin.csproj"))
 xml_ns = "{http://schemas.microsoft.com/developer/msbuild/2003}"
 for child in csproj.getroot():
-    if child.tag == f"{xml_ns}ItemGroup":
+    if child.tag == "ItemGroup":
         if "Label" in child.attrib:
             for compile_items in child:
                 needed_file = compile_items.get('Include').replace("..\\..\\third_party\\", "")

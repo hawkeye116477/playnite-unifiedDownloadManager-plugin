@@ -31,6 +31,7 @@ namespace UnifiedDownloadManagerNS.Converters
                     value = LocalizationManager.Instance.GetString(LOC.ThirdPartyPlayniteDownloadError);
                     break;
             }
+
             return value;
         }
 

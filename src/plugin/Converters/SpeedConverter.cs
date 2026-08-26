@@ -17,6 +17,7 @@ namespace UnifiedDownloadManagerNS.Converters
             {
                 return CommonHelpers.FormatSize((double)downloadSpeedBytes, "B", displayDownloadSpeedInBits) + "/s";
             }
+
             return "";
         }
 

@@ -1,11 +1,13 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Playnite;
 
-namespace UnifiedDownloadManagerNS
+namespace CommonPlugin
 {
     public static class Serialization
     {
+        private static readonly ILogger Logger = LogManager.GetLogger();
         private static readonly JsonSerializerOptions JsonSerializerSettings = new()
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -14,7 +16,12 @@ namespace UnifiedDownloadManagerNS
             PropertyNameCaseInsensitive = true,
         };
 
-        public static bool TryFromJson<T>(string json, out T? deserialized) where T : class
+        public static T? FromJson<T>(string json) where T : class
+        {
+            return JsonSerializer.Deserialize<T>(json, JsonSerializerSettings);
+        }
+        
+        public static bool TryFromJson<T>(string json, out T? deserialized, bool writeToLog = true) where T : class
         {
             try
             {
@@ -24,6 +31,10 @@ namespace UnifiedDownloadManagerNS
             catch (Exception e)
             {
                 deserialized = null;
+                if (writeToLog)
+                {
+                    Logger.Error(e, "An error occured during reading json");
+                }
                 return false;
             }
         }

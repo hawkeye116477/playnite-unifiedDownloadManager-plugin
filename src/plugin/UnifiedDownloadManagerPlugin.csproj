@@ -1,121 +1,117 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>UnifiedDownloadManagerNS</RootNamespace>
-    <AssemblyName>UnifiedDownloadManager</AssemblyName>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <AssemblyTitle>UnifiedDownloadManager</AssemblyTitle>
-    <Product>UnifiedDownloadManager</Product>
-    <Copyright>Copyright © 2026 hawkeye116477</Copyright>
-    <Version>1.1.0.11</Version>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <LangVersion>default</LangVersion>
-    <Configurations>Debug;Release</Configurations>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)/..'))=Dev:/playnite-unified-download-manager-plugin/src/plugin</PathMap>
-    <LocalAppData>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</LocalAppData>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\api\UnifiedDownloadManagerApi.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="extension.toml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Localization\en_US.ftl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="pluginicon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Localization\*\*.ftl">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\third_party\Localization\*\*.ftl">
-      <Link>Localization\%(RecursiveDir)\%(Filename)%(Extension)</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\third_party\CommonLocalization\*\*.ftl">
-      <Link>Localization\%(RecursiveDir)\%(Filename)%(Extension)</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="$(LocalAppData)\Playnite\Templates\Themes\Fonts\icofont.ttf">
-      <Link>Fonts/icofont.ttf</Link>
-    </None>
-    <None Include="..\..\LICENSE">
-      <Link>LICENSE</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\ThirdPartyLicenses.txt">
-      <Link>ThirdPartyLicenses.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ByteSize" Version="2.1.2" />
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
-    <PackageReference Include="Linguini.Bundle" Version="0.11.0" />
-    <PackageReference Include="Playnite.SDK" Version="11.0.0-zeta10" />
-  </ItemGroup>
-  <ItemGroup Label="compileInclude3p">
-    <Compile Include="..\..\third_party\playnite-common-plugin\src\LocalizationManager.cs" Link="Shared\LocalizationManager.cs" />
-    <Compile Include="..\..\third_party\playnite-common-plugin\src\LocalizeExtension.cs" Link="Shared\LocalizeExtension.cs" />
-    <Compile Include="..\..\third_party\playnite-common-plugin\src\Enums\ClearCacheTime.cs" Link="Shared\Enums\ClearCacheTime.cs" />
-    <Compile Include="..\..\third_party\playnite-common-plugin\src\CommonHelpers.cs" Link="Shared\CommonHelpers.cs" />
-    <None Include="..\..\third_party\playnite-common-plugin\src\Resources\FullScreenStyles.xaml">
-      <Link>Shared\Resources\FullScreenStyles.xaml</Link>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>Resources\FullScreenStyles.xaml</TargetPath>
-    </None>
-    <None Include="..\..\third_party\playnite-common-plugin\src\Resources\NormalStyles.xaml">
-      <Link>Shared\Resources\NormalStyles.xaml</Link>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>Resources\NormalStyles.xaml</TargetPath>
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-
-		      <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\WindowsNotifyIconManager.cs" Link="Shared\Playnite\WindowsNotifyIconManager.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\FileSystem.cs" Link="Shared\Playnite\FileSystem.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\Paths.cs" Link="Shared\Playnite\Paths.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\ProcessStarter.cs" Link="Shared\Playnite\ProcessStarter.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\extensions\StringExtensions.cs" Link="Shared\Playnite\StringExtensions.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\Playnite\Common\Xaml.cs" Link="Shared\Playnite\Xaml.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Fileapi.cs" Link="Shared\Playnite\Native\Fileapi.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Kernel32.cs" Link="Shared\Playnite\Native\Kernel32.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Ntdll.cs" Link="Shared\Playnite\Native\Ntdll.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Powrprof.cs" Link="Shared\Playnite\Native\Powrprof.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Processthreadsapi.cs" Link="Shared\Playnite\Native\Processthreadsapi.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Shlwapi.cs" Link="Shared\Playnite\Native\Shlwapi.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Winbase.cs" Link="Shared\Playnite\Native\Winbase.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Windef.cs" Link="Shared\Playnite\Native\Windef.cs" />
-    <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\native\Winuser.cs" Link="Shared\Playnite\Native\Winuser.cs" />
-    <ApplicationDefinition Remove="App.xaml" />
-    <Page Include="App.xaml" />
-  </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="python &quot;$(ProjectDir)..\..\make_scripts\after_build.py&quot; $(TargetDir)" />
-  </Target>
+    <PropertyGroup>
+        <RootNamespace>UnifiedDownloadManagerNS</RootNamespace>
+        <AssemblyName>UnifiedDownloadManager</AssemblyName>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <AssemblyTitle>UnifiedDownloadManager</AssemblyTitle>
+        <Product>UnifiedDownloadManager</Product>
+        <Copyright>Copyright © 2026 hawkeye116477</Copyright>
+        <Version>1.1.0.11</Version>
+        <OutputPath>bin\$(Configuration)\</OutputPath>
+        <LangVersion>default</LangVersion>
+        <Configurations>Debug;Release</Configurations>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <IsPackable>false</IsPackable>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugType>full</DebugType>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)/..'))=Dev:/playnite-unified-download-manager-plugin/src/plugin</PathMap>
+        <LocalAppData>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</LocalAppData>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\api\UnifiedDownloadManagerApi.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="extension.toml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Localization\en_US.ftl">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="pluginicon.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Localization\*\*.ftl">
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="..\..\third_party\Localization\*\*.ftl">
+            <Link>Localization\%(RecursiveDir)\%(Filename)%(Extension)</Link>
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="..\..\third_party\CommonLocalization\*\*.ftl">
+            <Link>Localization\%(RecursiveDir)\%(Filename)%(Extension)</Link>
+            <Generator>MSBuild:Compile</Generator>
+            <SubType>Designer</SubType>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="$(LocalAppData)\Playnite\Templates\Themes\Fonts\icofont.ttf">
+            <Link>Fonts/icofont.ttf</Link>
+        </None>
+        <None Include="..\..\LICENSE">
+            <Link>LICENSE</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="..\..\ThirdPartyLicenses.txt">
+            <Link>ThirdPartyLicenses.txt</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Resources\icon.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="ByteSize" Version="2.1.2"/>
+        <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1"/>
+        <PackageReference Include="Linguini.Bundle" Version="0.11.0"/>
+        <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.321">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Playnite.SDK" Version="11.0.0-zeta10"/>
+    </ItemGroup>
+    <ItemGroup Label="compileInclude3p">
+        <Compile Include="..\..\third_party\playnite-common-plugin\src\CommonHelpers.cs" Link="Shared\CommonHelpers.cs"/>
+        <Compile Include="..\..\third_party\playnite-common-plugin\src\LocalizationManager.cs" Link="Shared\LocalizationManager.cs"/>
+        <Compile Include="..\..\third_party\playnite-common-plugin\src\LocalizeExtension.cs" Link="Shared\LocalizeExtension.cs"/>
+        <Compile Include="..\..\third_party\playnite-common-plugin\src\Serialization.cs" Link="Shared\Serialization.cs"/>
+        <Compile Include="..\..\third_party\playnite-common-plugin\src\Enums\ClearCacheTime.cs" Link="Shared\Enums\ClearCacheTime.cs"/>
+        <None Include="..\..\third_party\playnite-common-plugin\src\Resources\FullScreenStyles.xaml">
+            <Link>Shared\Resources\FullScreenStyles.xaml</Link>
+            <SubType>Designer</SubType>
+            <Generator>MSBuild:Compile</Generator>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>Resources\FullScreenStyles.xaml</TargetPath>
+        </None>
+        <None Include="..\..\third_party\playnite-common-plugin\src\Resources\NormalStyles.xaml">
+            <Link>Shared\Resources\NormalStyles.xaml</Link>
+            <SubType>Designer</SubType>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>Resources\NormalStyles.xaml</TargetPath>
+            <Generator>MSBuild:Compile</Generator>
+        </None>
+        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\WindowsNotifyIconManager.cs" Link="Shared\Playnite\WindowsNotifyIconManager.cs"/>
+        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\FileSystem.cs" Link="Shared\Playnite\FileSystem.cs"/>
+        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\Paths.cs" Link="Shared\Playnite\Paths.cs"/>
+        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\ProcessStarter.cs" Link="Shared\Playnite\ProcessStarter.cs"/>
+        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\extensions\StringExtensions.cs" Link="Shared\Playnite\StringExtensions.cs"/>
+        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\Playnite\Common\Xaml.cs" Link="Shared\Playnite\Xaml.cs"/>
+        <ApplicationDefinition Remove="App.xaml"/>
+        <Page Include="App.xaml"/>
+    </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="python &quot;$(ProjectDir)..\..\make_scripts\after_build.py&quot; $(TargetDir)"/>
+    </Target>
 </Project>

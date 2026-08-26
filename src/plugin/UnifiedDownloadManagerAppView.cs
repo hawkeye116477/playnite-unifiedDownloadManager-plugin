@@ -9,7 +9,7 @@ public class UnifiedDownloadManagerAppView : AppViewItem
     {
         View = UnifiedDownloadManager.GetDownloadManagerPanel();
     }
-    
+
     public override async Task ActivateViewAsync(ActivateViewAsyncArgs args)
     {
         // This gets called when the view is activated.

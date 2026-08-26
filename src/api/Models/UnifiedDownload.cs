@@ -12,48 +12,46 @@ namespace UnifiedDownloadManagerApiNS.Models
         public string FullInstallPath { get; set; } = "";
 
         [ObservableProperty]
-        private double _downloadSizeBytes;
-        
+        public partial double DownloadSizeBytes { get; set; }
+
         [ObservableProperty]
-        private double _installSizeBytes;
+        private double installSizeBytes;
 
         public long AddedTime { get; set; }
 
         [ObservableProperty]
-        private long _completedTime;
-
-        [ObservableProperty] 
-        private UnifiedDownloadStatus _status;
+        public partial long CompletedTime { get; set; }
 
         [ObservableProperty]
-        private double _progress;
+        public partial UnifiedDownloadStatus Status { get; set; }
 
         [ObservableProperty]
-        private double _downloadedBytes;
+        public partial double Progress { get; set; }
 
+        [ObservableProperty]
+        public partial double DownloadedBytes { get; set; }
         public required string PluginId { get; set; }
         public required string SourceName { get; set; }
-        
-        [JsonIgnore] 
+
+        [field: JsonIgnore]
         [ObservableProperty]
-        /* This is extended description of status (ex. Verifying example file)*/
-        private string _activity = "";
+        public partial string Activity { get; set; } = "";
+
+        [field: JsonIgnore]
+        [ObservableProperty]
+        public partial TimeSpan Elapsed { get; set; }
 
         [JsonIgnore]
         [ObservableProperty]
-        private TimeSpan _elapsed;
-        
-        [JsonIgnore]
+        private TimeSpan eta;
+
+        [field: JsonIgnore]
         [ObservableProperty]
-        private TimeSpan _eta;
+        public partial double DownloadSpeedBytes { get; set; }
 
         [JsonIgnore]
         [ObservableProperty]
-        private double _downloadSpeedBytes;
-        
-        [JsonIgnore]
-        [ObservableProperty]
-        private double _diskWriteSpeedBytes;
+        private double diskWriteSpeedBytes;
         
         [JsonIgnore]
         public CancellationTokenSource? GracefulCts { get; set; }

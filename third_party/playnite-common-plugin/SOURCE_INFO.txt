@@ -1,2 +1,2 @@
 Source: https://github.com/hawkeye116477/playnite-common-plugin.git
-Commit: aab5111709b6ec19eb5f467b1b6308bae0ca742f
+Commit: 7745af45b04a0a2f15244a080d1f8473c1baf547
