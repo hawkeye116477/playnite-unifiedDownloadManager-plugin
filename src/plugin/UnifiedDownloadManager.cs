@@ -5,6 +5,7 @@ using Playnite;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace UnifiedDownloadManagerNS
         public static IPlayniteApi PlayniteApi { get; private set; } = null!;
         public UnifiedUISettings UnifiedUISettings { get; set; } = null!;
         public bool LayoutChanged { get; set; }
+        private static readonly ILogger Logger = LogManager.GetLogger();
 
         public override async Task InitializeAsync(InitializeArgs args)
         {
@@ -237,7 +239,7 @@ namespace UnifiedDownloadManagerNS
 
 
             if (settingsChanged)
-            { 
+            {
                 SavePluginSettings(UnifiedDownloadManager.PlayniteApi.UserDataDir, settings);
             }
 
@@ -328,6 +330,60 @@ namespace UnifiedDownloadManagerNS
             }
 
             return null;
+        }
+
+        public override async Task<CollectDiagnosticDataArgsAsyncResult?> CollectDiagnosticDataArgsAsync(CollectDiagnosticDataArgs args)
+        {
+            var logsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp",
+                $"Playnite", UnifiedDownloadManagerSharedProperties.Id, "Logs");
+            try
+            {
+                if (Directory.Exists(logsPath))
+                {
+                    Directory.Delete(logsPath, true);
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            Directory.CreateDirectory(logsPath);
+            var zipPath = Path.Combine(logsPath, $"{UnifiedDownloadManagerSharedProperties.Id}.zip");
+            try
+            {
+                Directory.CreateDirectory(logsPath);
+                var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
+                await File.WriteAllTextAsync(Path.Combine(logsPath, "Readme.txt"),
+                    $"To report a bug, please fill form at: \n" +
+                    $"<https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/issues/new?assignees=&labels=bug&projects=&template=bugs.yml&pluginV={fvi.FileVersion}&playniteV={PlayniteApi.AppInfo.ApplicationVersion}> \n" +
+                    $"and attach generated zip file.");
+
+                var pluginLogFiles = Directory.GetFiles(PlayniteApi.UserDataDir, "plugin*.log", SearchOption.TopDirectoryOnly);
+                var playniteLogFiles = Directory.GetFiles(PlayniteApi.AppInfo.ConfigurationDirectory, "playnite*.log",
+                    SearchOption.TopDirectoryOnly);
+                var files = new List<string>();
+                files.AddRange(pluginLogFiles);
+                files.AddRange(playniteLogFiles);
+
+                await using var zipArchive = await ZipFile.OpenAsync(zipPath, ZipArchiveMode.Update);
+                foreach (var singleFile in files)
+                {
+                    await using var source = new FileStream(singleFile, FileMode.Open, FileAccess.Read,
+                        FileShare.ReadWrite | FileShare.Delete);
+                    await source.CopyToAsync(await zipArchive.CreateEntry(Path.GetFileName(singleFile)).OpenAsync());
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex);
+            }
+
+            var newResults = new CollectDiagnosticDataArgsAsyncResult
+            {
+                ResultFile = zipPath
+            };
+            return newResults;
         }
     }
 }
