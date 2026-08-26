@@ -15,9 +15,7 @@ main_path = pn(script_path + "/..")
 src_path = pj(main_path, "src", "plugin")
 compiled_path = pj(src_path, "bin", "Release", "net10.0-windows", "UnifiedDownloadManager.dll")
 
-def run(replace_minus=True):
+def run():
     """Let's start"""
-    v = DotNetVersionInfo.GetVersionInfo(compiled_path).ProductVersion
-    if replace_minus:
-        v = v.replace("-", ".")
+    v = DotNetVersionInfo.GetVersionInfo(compiled_path).ProductVersion.replace("-", ".")
     return v
