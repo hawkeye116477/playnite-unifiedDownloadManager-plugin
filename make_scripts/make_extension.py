@@ -115,4 +115,5 @@ if os.path.exists(extFile):
                       sort_keys=False, Dumper=MyDumper)
 
         git_repo = git.Repo(mainPath)
+        version = get_extension_version.run(False)
         git_repo.create_tag(version)

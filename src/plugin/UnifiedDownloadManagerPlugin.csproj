@@ -6,7 +6,9 @@
         <AssemblyTitle>UnifiedDownloadManager</AssemblyTitle>
         <Product>UnifiedDownloadManager</Product>
         <Copyright>Copyright © 2026 hawkeye116477</Copyright>
-        <Version>1.1.0.11</Version>
+        <VersionPrefix>2.0.0</VersionPrefix>
+        <VersionSuffix>$([System.DateTime]::UtcNow.ToString("yyyyMMdd"))</VersionSuffix>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <OutputPath>bin\$(Configuration)\</OutputPath>
         <LangVersion>default</LangVersion>
         <Configurations>Debug;Release</Configurations>

@@ -356,7 +356,7 @@ namespace UnifiedDownloadManagerNS
                 var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
                 await File.WriteAllTextAsync(Path.Combine(logsPath, "Readme.txt"),
                     $"To report a bug, please fill form at: \n" +
-                    $"<https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/issues/new?assignees=&labels=bug&projects=&template=bugs.yml&pluginV={fvi.FileVersion}&playniteV={PlayniteApi.AppInfo.ApplicationVersion}> \n" +
+                    $"<https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/issues/new?assignees=&labels=bug&projects=&template=bugs.yml&pluginV={fvi.ProductVersion}&playniteV={PlayniteApi.AppInfo.ApplicationVersion}> \n" +
                     $"and attach generated zip file.");
 
                 var pluginLogFiles = Directory.GetFiles(PlayniteApi.UserDataDir, "plugin*.log", SearchOption.TopDirectoryOnly);
