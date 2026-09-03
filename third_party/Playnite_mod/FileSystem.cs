@@ -1,17 +1,11 @@
-﻿using System.IO;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using Playnite;
 
-#if VanaraDep || PlayniteDeps
-using Vanara.PInvoke;
-#endif
-
-namespace Playnite;
+namespace PlayniteMod;
 
 public enum FileSystemItem
 {
@@ -19,9 +13,9 @@ public enum FileSystemItem
     Directory
 }
 
-public static partial class FileSystem
+public static class FileSystem
 {
-    private static readonly ILogger logger = LogManager.GetLogger();
+    private static readonly ILogger Logger = LogManager.GetLogger(typeof(FileSystem));
 
     public static void CreateDirectory(string path)
     {
@@ -70,10 +64,8 @@ public static partial class FileSystem
         {
             return !Directory.EnumerateFileSystemEntries(path).Any();
         }
-        else
-        {
-            return true;
-        }
+
+        return true;
     }
 
     public static void DeleteFile(string path)
@@ -86,7 +78,7 @@ public static partial class FileSystem
 
     public static void CreateFile(string path)
     {
-        FileSystem.PrepareSaveFile(path);
+        PrepareSaveFile(path);
         File.Create(path).Dispose();
     }
 
@@ -164,7 +156,7 @@ public static partial class FileSystem
             }
             catch (IOException exc)
             {
-                logger.Debug($"Can't read from file, trying again. {path}");
+                Logger.Debug($"Can't read from file, trying again. {path}");
                 ioException = exc;
                 Task.Delay(500).Wait();
             }
@@ -184,7 +176,7 @@ public static partial class FileSystem
             }
             catch (IOException exc)
             {
-                logger.Debug($"Can't read from file, trying again. {path}");
+                Logger.Debug($"Can't read from file, trying again. {path}");
                 ioException = exc;
                 Task.Delay(500).Wait();
             }
@@ -204,7 +196,7 @@ public static partial class FileSystem
             }
             catch (IOException exc)
             {
-                logger.Debug($"Can't open write file stream, trying again. {path}");
+                Logger.Debug($"Can't open write file stream, trying again. {path}");
                 ioException = exc;
                 Task.Delay(500).Wait();
             }
@@ -224,7 +216,7 @@ public static partial class FileSystem
             }
             catch (IOException exc)
             {
-                logger.Debug($"Can't open read file stream, trying again. {path}");
+                Logger.Debug($"Can't open read file stream, trying again. {path}");
                 ioException = exc;
                 Task.Delay(500).Wait();
             }
@@ -259,7 +251,7 @@ public static partial class FileSystem
             }
             catch (IOException exc)
             {
-                logger.Debug($"Can't write to a file, trying again. {path}");
+                Logger.Debug($"Can't write to a file, trying again. {path}");
                 ioException = exc;
                 Task.Delay(500).Wait();
             }
@@ -285,13 +277,13 @@ public static partial class FileSystem
             }
             catch (IOException exc)
             {
-                logger.Debug($"Can't detele file, trying again. {path}");
+                Logger.Debug($"Can't detele file, trying again. {path}");
                 ioException = exc;
                 Task.Delay(500).Wait();
             }
             catch (UnauthorizedAccessException exc)
             {
-                logger.Error(exc, $"Can't detele file, UnauthorizedAccessException. {path}");
+                Logger.Error(exc, $"Can't detele file, UnauthorizedAccessException. {path}");
                 return;
             }
         }
@@ -302,15 +294,14 @@ public static partial class FileSystem
     public static long GetFreeSpace(string drivePath)
     {
         var root = Path.GetPathRoot(drivePath);
-        var drive = DriveInfo.GetDrives().FirstOrDefault(a => a.RootDirectory.FullName.Equals(root, StringComparison.OrdinalIgnoreCase)); ;
+        var drive = DriveInfo.GetDrives().FirstOrDefault(a => a.RootDirectory.FullName.Equals(root, StringComparison.OrdinalIgnoreCase));
+        ;
         if (drive is not null)
         {
             return drive.AvailableFreeSpace;
         }
-        else
-        {
-            return 0;
-        }
+
+        return 0;
     }
 
     public static long GetFileSize(string path)
@@ -366,7 +357,8 @@ public static partial class FileSystem
         return PathExistsOnAnyDrive(directoryPath, path => Directory.Exists(path), out existringPath);
     }
 
-    private static bool PathExistsOnAnyDrive(string originalPath, Predicate<string> predicate, [NotNullWhen(true)] out string? existringPath)
+    private static bool PathExistsOnAnyDrive(
+        string originalPath, Predicate<string> predicate, [NotNullWhen(true)] out string? existringPath)
     {
         existringPath = null;
         try
@@ -396,7 +388,7 @@ public static partial class FileSystem
         }
         catch (Exception ex) when (!Debugger.IsAttached)
         {
-            logger.Error(ex, $"Error checking if path exists on different drive \"{originalPath}\"");
+            Logger.Error(ex, $"Error checking if path exists on different drive \"{originalPath}\"");
         }
 
         return false;
@@ -463,75 +455,4 @@ public static partial class FileSystem
             Array.Clear(buffer2);
         }
     }
-
-#if Vanara || PlayniteDeps
-    public static long GetDirectorySize(string path, bool getSizeOnDisk)
-    {
-        return GetDirectorySize(new DirectoryInfo(path), getSizeOnDisk);
-    }
-
-    // TODO RC: test with symlinks
-    // TODO RC: test with broken symlinks
-    private static long GetDirectorySize(DirectoryInfo dirInfo, bool getSizeOnDisk, CancellationToken cancelToken = default)
-    {
-        long size = 0;
-        foreach (var fileInfo in dirInfo.EnumerateFiles("*", new EnumerationOptions
-        {
-            IgnoreInaccessible = true,
-            MatchType = MatchType.Simple,
-            RecurseSubdirectories = true,
-            MaxRecursionDepth = 2048
-        }))
-        {
-            if (cancelToken.IsCancellationRequested)
-                return size;
-
-            size += getSizeOnDisk ? GetFileSizeOnDisk(fileInfo) : GetFileSize(fileInfo);
-        }
-
-        return size;
-    }
-
-    public static long GetFileSizeOnDisk(string path)
-    {
-        return GetFileSizeOnDisk(new FileInfo(path));
-    }
-
-    public static long GetFileSizeOnDisk(FileInfo fileInfo)
-    {
-        // Method will fail if file is a symlink that has a target
-        // that does not exist. To avoid, we can check its lenght before continuing
-        if (fileInfo.Length == 0)
-            return 0;
-
-        // Method will fail when checking a file that's not valid on Windows,
-        // for example files used by Proton containing a colon (:).
-        // 'Directory' will be null when encountering such a file.
-        if (fileInfo.Directory is null)
-            return 0;
-
-        // From https://stackoverflow.com/a/3751135
-        if (!Kernel32.GetDiskFreeSpace(fileInfo.Directory!.Root.FullName, out var sectorsPerCluster, out var bytesPerSector, out var _, out var _))
-        {
-            logger.Trace($"Failed to get size of {fileInfo.FullName}:");
-            logger.Trace(Win32Error.GetLastError().ToString());
-            return 0;
-        }
-
-        uint clusterSize = sectorsPerCluster * bytesPerSector;
-#pragma warning disable CS0618 // Type or member is obsolete
-        uint losize = Kernel32.GetCompressedFileSize(Paths.FormatAsLongPath(fileInfo.FullName), out uint hosize);
-#pragma warning restore CS0618 // Type or member is obsolete
-        var error = Win32Error.GetLastError();
-        if (losize == 0xFFFFFFFF && error != Win32Error.ERROR_SUCCESS)
-        {
-            logger.Trace($"Failed to get size of {fileInfo.FullName}:");
-            logger.Trace(error.ToString());
-            return 0;
-        }
-
-        var size = (long)hosize << 32 | losize;
-        return ((size + clusterSize - 1) / clusterSize) * clusterSize;
-    }
-#endif
 }

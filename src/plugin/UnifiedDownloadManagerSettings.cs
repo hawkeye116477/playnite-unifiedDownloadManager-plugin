@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using CommonPlugin;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Playnite;
+using PlayniteMod;
 using UnifiedDownloadManagerNS.Enums;
 
 namespace UnifiedDownloadManagerNS
@@ -30,7 +31,7 @@ namespace UnifiedDownloadManagerNS
     [INotifyPropertyChanged]
     public partial class UnifiedDownloadManagerSettingsViewModel(UnifiedDownloadManager plugin) : PluginSettingsHandler
     {
-        private static readonly ILogger Logger = LogManager.GetLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger<UnifiedDownloadManagerSettingsViewModel>();
 
         [ObservableProperty]
         public partial UnifiedDownloadManagerSettings Settings { get; set; } = new();

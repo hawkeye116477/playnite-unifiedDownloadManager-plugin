@@ -13,6 +13,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using PlayniteMod;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Converters;
 using UnifiedDownloadManagerNS.Models;

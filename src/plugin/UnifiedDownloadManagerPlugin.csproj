@@ -16,7 +16,9 @@
         <UseWPF>true</UseWPF>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <IsPackable>false</IsPackable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DebugType>full</DebugType>
@@ -78,11 +80,11 @@
         <PackageReference Include="ByteSize" Version="2.1.2"/>
         <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1"/>
         <PackageReference Include="Linguini.Bundle" Version="0.11.0"/>
-        <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.321">
+        <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.333">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Playnite.SDK" Version="11.0.0-zeta10"/>
+        <PackageReference Include="Playnite.SDK" Version="11.0.0-alpha14" />
     </ItemGroup>
     <ItemGroup Label="compileInclude3p">
         <Compile Include="..\..\third_party\playnite-common-plugin\src\CommonHelpers.cs" Link="Shared\CommonHelpers.cs"/>
@@ -104,12 +106,14 @@
             <TargetPath>Resources\NormalStyles.xaml</TargetPath>
             <Generator>MSBuild:Compile</Generator>
         </None>
-        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\WindowsNotifyIconManager.cs" Link="Shared\Playnite\WindowsNotifyIconManager.cs"/>
-        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\FileSystem.cs" Link="Shared\Playnite\FileSystem.cs"/>
-        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\Paths.cs" Link="Shared\Playnite\Paths.cs"/>
-        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\ProcessStarter.cs" Link="Shared\Playnite\ProcessStarter.cs"/>
-        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\playnite\common\extensions\StringExtensions.cs" Link="Shared\Playnite\StringExtensions.cs"/>
-        <Compile Include="..\..\third_party\PlayniteExtensions\PlayniteRepo\source\Playnite\Common\Xaml.cs" Link="Shared\Playnite\Xaml.cs"/>
+        <Compile Include="..\..\third_party\Playnite_mod\WindowsNotifyIconManager.cs" Link="Shared\Playnite_mod\WindowsNotifyIconManager.cs"/>
+        <Compile Include="..\..\third_party\Playnite_mod\FileSystem.cs" Link="Shared\Playnite_mod\FileSystem.cs"/>
+        <Compile Include="..\..\third_party\Playnite_mod\Paths.cs" Link="Shared\Playnite_mod\Paths.cs"/>
+        <Compile Include="..\..\third_party\Playnite_mod\ProcessStarter.cs" Link="Shared\Playnite_mod\ProcessStarter.cs"/>
+        <Compile Include="..\..\third_party\Playnite_mod\Extensions\StringExtensions.cs" Link="Shared\Playnite_mod\StringExtensions.cs"/>
+        <Compile Include="..\..\third_party\Playnite_mod\Xaml.cs" Link="Shared\Playnite_mod\Xaml.cs"/>
+    </ItemGroup>
+    <ItemGroup>
         <ApplicationDefinition Remove="App.xaml"/>
         <Page Include="App.xaml"/>
     </ItemGroup>

@@ -1,1 +1,3 @@
 SetSuspendState
+CreateFile
+GetFinalPathNameByHandle

@@ -17,6 +17,9 @@ main_path = pn(pj(script_path, ".."))
 third_party_path = pj(main_path, "third_party")
 src_path = pj(main_path, "src")
 
+if os.path.exists(pj(third_party_path, "playnite-common-plugin")):
+    shutil.rmtree(pj(third_party_path, "playnite-common-plugin"))
+
 if os.path.exists(pj(third_party_path, "PlayniteExtensions")):
     shutil.rmtree(pj(third_party_path, "PlayniteExtensions"))
 
@@ -24,24 +27,24 @@ csproj = ET.parse(pj(src_path, "plugin", "UnifiedDownloadManagerPlugin.csproj"))
 xml_ns = "{http://schemas.microsoft.com/developer/msbuild/2003}"
 for child in csproj.getroot():
     if child.tag == "ItemGroup":
-        if "Label" in child.attrib:
+        if "Label" in child.attrib and child.get("Label") == "compileInclude3p":
             for compile_items in child:
-                needed_file = compile_items.get('Include').replace("..\\..\\third_party\\", "")
-                needed_file = pn(pj(main_path, "..", needed_file))
-                dst = os.path.relpath(os.path.dirname(needed_file), pj(main_path, ".."))
-                dst = pj(third_party_path, dst)
-                if not os.path.exists(dst):
-                    os.makedirs(dst)
-                shutil.copy(needed_file, pj(dst, os.path.basename(needed_file)))
+                include_tag = compile_items.get('Include')
+                if include_tag is not None:
+                    needed_file = include_tag.replace("..\\..\\third_party\\", "")
+                    needed_file = needed_file.replace("Playnite_mod", "playnite-common-plugin/third_party/Playnite_mod")
+                    needed_file = pn(pj(main_path, "..", needed_file))
+                    dst = os.path.relpath(os.path.dirname(needed_file), pj(main_path, ".."))
+                    dst = pj(third_party_path, dst)
+                    if "Playnite_mod" in dst:
+                        dst = dst.replace(f"third_party{os.sep}Playnite_mod", "")
+                        dst = dst.replace("playnite-common-plugin", "Playnite_mod")
+                    if not os.path.exists(dst):
+                        os.makedirs(dst)
+                    shutil.copy(needed_file, pj(dst, os.path.basename(needed_file)))
 
-#shutil.copy(pj(main_path, "..", "PlayniteExtensions", "PlayniteRepo", "LICENSE.md"), pj(third_party_path, "PlayniteExtensions", "PlayniteRepo", "LICENSE.md"))
-
-# with open(pj(third_party_path, "PlayniteExtensions", "PlayniteRepo", "SOURCE_INFO.txt"), "w", encoding="utf-8") as source_info:
-#     git_repo = git.Repo(pj(main_path, "..", "PlayniteExtensions", "PlayniteRepo"), search_parent_directories=True)
-#     source = git_repo.remotes.origin.url
-#     source_info.write(f"Source: {source}\n")
-#     commit = git_repo.head.object.hexsha
-#     source_info.write(f"Commit: {commit}\n")
+shutil.copy(pj(main_path, "..", "playnite-common-plugin", "third_party", "Playnite_mod", "LICENSE.md"), pj(third_party_path, "Playnite_mod", "LICENSE.md"))
+shutil.copy(pj(main_path, "..", "playnite-common-plugin", "third_party", "Playnite_mod", "SOURCE_INFO.txt"), pj(third_party_path, "Playnite_mod", "SOURCE_INFO.txt"))
 
 with open(pj(third_party_path, "playnite-common-plugin", "SOURCE_INFO.txt"), "w", encoding="utf-8") as source_info:
     git_repo = git.Repo(pj(main_path, "..", "playnite-common-plugin"), search_parent_directories=True)

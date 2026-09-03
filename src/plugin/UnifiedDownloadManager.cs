@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using PlayniteMod;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Interfaces;
 using UnifiedDownloadManagerApiNS.Models;
@@ -31,7 +32,7 @@ namespace UnifiedDownloadManagerNS
         public static IPlayniteApi PlayniteApi { get; private set; } = null!;
         public UnifiedUISettings UnifiedUISettings { get; set; } = null!;
         public bool LayoutChanged { get; set; }
-        private static readonly ILogger Logger = LogManager.GetLogger();
+        private static readonly ILogger Logger = LogManager.GetLogger<UnifiedDownloadManager>();
 
         public override async Task InitializeAsync(InitializeArgs args)
         {

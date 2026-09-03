@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using PlayniteMod;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Interfaces;
 using UnifiedDownloadManagerApiNS.Models;
@@ -20,7 +21,7 @@ namespace UnifiedDownloadManagerNS
 {
     public class TaskManager : IUnifiedDownloadManagerApi
     {
-        public ILogger logger = LogManager.GetLogger();
+        public ILogger Logger = LogManager.GetLogger<TaskManager>();
         public ObservableCollection<UnifiedDownload> Downloads { get; set; } = [];
         private IPlayniteApi PlayniteApi = UnifiedDownloadManager.PlayniteApi;
         private UnifiedDownload? _activeTask { get; set; }
@@ -201,7 +202,7 @@ namespace UnifiedDownloadManagerNS
 
                         if (!isExpectedCancel)
                         {
-                            logger.Error($"An error occurred while downloading {queuedList[0].Name}: {ex}.");
+                            Logger.Error($"An error occurred while downloading {queuedList[0].Name}: {ex}.");
                             queuedList[0].Status = UnifiedDownloadStatus.Error;
                         }
                     }
@@ -296,24 +297,24 @@ namespace UnifiedDownloadManagerNS
                     bool canAdd = true;
                     if (uniqueTask.SourceName.IsNullOrEmpty())
                     {
-                        logger.Warn("Empty source for download item.");
+                        Logger.Warn("Empty source for download item.");
                     }
 
                     if (uniqueTask.GameId.IsNullOrEmpty())
                     {
-                        logger.Error("Empty game id for download item isn't allowed.");
+                        Logger.Error("Empty game id for download item isn't allowed.");
                         canAdd = false;
                     }
 
                     if (uniqueTask.PluginId.IsNullOrEmpty())
                     {
-                        logger.Error("Empty plugin id for download item isn't allowed.");
+                        Logger.Error("Empty plugin id for download item isn't allowed.");
                         canAdd = false;
                     }
 
                     if (uniqueTask.Name.IsNullOrEmpty())
                     {
-                        logger.Warn("Empty name for download item.");
+                        Logger.Warn("Empty name for download item.");
                     }
 
                     if (canAdd)
