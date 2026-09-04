@@ -23,7 +23,7 @@ namespace UnifiedDownloadManagerNS
         public static UnifiedDownloadManager Instance { get; set; } = null!;
 
         private MainPanel? downloadManagerPanel;
-        private IUnifiedDownloadManagerApi Manager { get; set; } = null!;
+        private TaskManager Manager { get; set; } = null!;
         private UnifiedDownloadManagerData? UnifiedDownloadManagerData { get; set; }
         public const string PluginName = "Unified Download Manager";
         public CommonHelpers CommonHelpersInstance { get; set; } = null!;
