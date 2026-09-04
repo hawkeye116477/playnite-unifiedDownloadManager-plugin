@@ -1,20 +1,18 @@
-﻿using CommonPlugin;
+﻿using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Reflection;
+using System.Windows.Media;
+using CommonPlugin;
 using CommonPlugin.Enums;
 using Linguini.Shared.Types.Bundle;
 using Playnite;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using PlayniteMod;
 using UnifiedDownloadManagerApiNS;
 using UnifiedDownloadManagerApiNS.Interfaces;
 using UnifiedDownloadManagerApiNS.Models;
 using UnifiedDownloadManagerNS.Models;
+using Fonts = Playnite.Fonts;
 
 namespace UnifiedDownloadManagerNS
 {
@@ -193,8 +191,8 @@ namespace UnifiedDownloadManagerNS
             [
                 new AppViewItemDescriptor("UDM.panel",
                     "Unified Download Manager",
-                    iconArgs => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont),
-                    iconArgs => UIIcon.FromFontIcon("ef08", Playnite.Fonts.IcoFont, new SolidColorBrush(Colors.DeepSkyBlue)))
+                    iconArgs => UIIcon.FromFontIcon("ef08", Fonts.IcoFont),
+                    iconArgs => UIIcon.FromFontIcon("ef08", Fonts.IcoFont, new SolidColorBrush(Colors.DeepSkyBlue)))
             ];
         }
 
@@ -354,7 +352,7 @@ namespace UnifiedDownloadManagerNS
             try
             {
                 Directory.CreateDirectory(logsPath);
-                var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
+                var fvi = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
                 await File.WriteAllTextAsync(Path.Combine(logsPath, "Readme.txt"),
                     $"To report a bug, please fill form at: \n" +
                     $"<https://github.com/hawkeye116477/playnite-unifiedDownloadManager-plugin/issues/new?assignees=&labels=bug&projects=&template=bugs.yml&pluginV={fvi.ProductVersion}&playniteV={PlayniteApi.AppInfo.ApplicationVersion}> \n" +

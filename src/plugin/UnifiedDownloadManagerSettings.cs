@@ -1,8 +1,7 @@
-﻿using CommonPlugin.Enums;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows.Controls;
 using CommonPlugin;
+using CommonPlugin.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Playnite;
 using PlayniteMod;

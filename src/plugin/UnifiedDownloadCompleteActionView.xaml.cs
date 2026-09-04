@@ -1,11 +1,10 @@
-﻿using CommonPlugin;
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using UnifiedDownloadManagerNS.Enums;
 using Windows.Win32;
+using CommonPlugin;
+using UnifiedDownloadManagerNS.Enums;
 
 namespace UnifiedDownloadManagerNS
 {

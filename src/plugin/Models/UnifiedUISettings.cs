@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace UnifiedDownloadManagerNS.Models
+﻿namespace UnifiedDownloadManagerNS.Models
 {
     public class UnifiedUISettings
     {

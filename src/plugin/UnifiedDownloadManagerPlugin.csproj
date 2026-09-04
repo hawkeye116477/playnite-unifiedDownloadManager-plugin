@@ -84,7 +84,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Playnite.SDK" Version="11.0.0-alpha14" />
+        <PackageReference Include="Playnite.SDK" Version="11.0.0-alpha14"/>
     </ItemGroup>
     <ItemGroup Label="compileInclude3p">
         <Compile Include="..\..\third_party\playnite-common-plugin\src\CommonHelpers.cs" Link="Shared\CommonHelpers.cs"/>

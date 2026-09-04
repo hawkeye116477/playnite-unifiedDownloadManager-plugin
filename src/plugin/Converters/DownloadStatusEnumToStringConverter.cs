@@ -1,7 +1,6 @@
-﻿using CommonPlugin;
-using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
+using CommonPlugin;
 using UnifiedDownloadManagerApiNS.Models;
 
 namespace UnifiedDownloadManagerNS.Converters

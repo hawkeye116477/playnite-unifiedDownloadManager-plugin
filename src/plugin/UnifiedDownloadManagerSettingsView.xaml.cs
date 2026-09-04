@@ -1,9 +1,7 @@
-﻿using CommonPlugin;
-using CommonPlugin.Enums;
-using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using CommonPlugin;
+using CommonPlugin.Enums;
 using UnifiedDownloadManagerNS.Enums;
 
 namespace UnifiedDownloadManagerNS
